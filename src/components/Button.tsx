@@ -6,7 +6,7 @@ interface Props {
 
 export const Button: React.FC<Props> = ({ text }) => {
   return (
-    <div className="bg-primary hover:bg-primary-light font-medium text-white text-center text-xl py-3.5 px-10 rounded-full w-fit cursor-default">
+    <div className="bg-primary hover:bg-primary-light font-thin text-white text-center text-xl py-3.5 px-10 rounded-full w-fit cursor-default">
       {text.toUpperCase()}
     </div>
   );

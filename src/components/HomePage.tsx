@@ -8,8 +8,8 @@ interface Props {}
 export const HomePage: React.FC<Props> = () => {
   return (
     <Typography
-      fontSize={50}
-      className="text-secondary whitespace-pre-line text-center text-9xl"
+    //   fontSize={50}
+      className="text-secondary whitespace-pre-line font-light text-center text-4xl"
     >
       {toTitleCase("the Platform to\nshowcase, connect,\nand collaborate")}
     </Typography>
