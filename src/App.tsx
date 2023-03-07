@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-function App() {
+import { Button } from "./components/Button";
+import { MenuBar } from "./components/MenuBar/MenuBar";
+import { HomePage } from "./components/HomePage";
+
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      "pop",
+    ].join(","),
+  },
+});
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="bg-main-bg w-screen h-screen">
+        <MenuBar menuItems={["Projects" ,"Support", "About Us"]} userSettings={["Profile", "Settings"]}></MenuBar>
+        <HomePage></HomePage>
+        <Button text="get started"></Button>
+      </div>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
