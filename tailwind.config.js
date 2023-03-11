@@ -1,10 +1,17 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 module.exports = {
   corePlugins: {
     preflight: false,
   },
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    screens:{
+      xs: "100px",
+      ...defaultTheme.screens,
+
+    },
     fontFamily: {
       sans: ["pop"],
     },
@@ -18,5 +25,5 @@ module.exports = {
     },
   },
   plugins: [],
-  important: '#root',
+  important: "#root",
 };

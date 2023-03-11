@@ -42,33 +42,10 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   };
 
   return (
-    <AppBar
-      position="static"
-      color="transparent"
-      style={{ borderBottom: "solid #6e6e6e 1px" }}
-    >
+    <AppBar className="static bg-transparent border-solid border-b-[1px] border-t-0 border-r-0 border-l-0 border-[#6e6e6e]">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "pop",
-              letterSpacing: ".3rem",
-              color: "white",
-              textDecoration: "none",
-              fontWeight:'600'
-            }}
-          >
-            {"Showcase".toUpperCase()}
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+        <Box sx={{display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -104,22 +81,48 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
               ))}
             </Menu>
           </Box>
+          <AdbIcon sx={{ display: "flex", mr: 1 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              // flexGrow: 1,
+              mr: 2,
+              display: "flex"/*{ xs: "none", sm: "flex", md: "flex" }*/,
+              fontFamily: "pop",
+              letterSpacing: ".3rem",
+              color: "white",
+              textDecoration: "none",
+              fontWeight: "600",
+            }}
+          >
+            {"Showcase".toUpperCase()}
+          </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+
+
+          <Box sx={{ flexGrow: 2, display: { xs: "none", md: "flex" } }}>
             {menuItems.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block", fontWeight:'400' }}
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  fontWeight: "400",
+                }}
               >
                 {page}
               </Button>
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0, position:'absolute' , right:'0px'}}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton className="pr-3" onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
