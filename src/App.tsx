@@ -1,28 +1,63 @@
 import React from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { StyledEngineProvider } from "@mui/material/styles";
-
-import { MenuBar } from "./components/MenuBar/MenuBar";
-import { HomePage } from "./components/HomePage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { createTheme } from "@mui/material/styles";
+import {ThemeProvider} from "@mui/material/styles";
+import { StyledEngineProvider } from "@mui/material";
+import { MenuBar } from "./components/MenuBar";
+import { HomePage } from "./pages/HomePage";
 import { Box } from "@mui/material";
+import { SignUp } from "./pages/auth/SignUp";
+import { Login } from "./pages/auth/Login";
+import { Upload } from "./pages/Upload";
+
+const rootElement = document.getElementById("root");
 
 const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#7573C5'
+    }
+  },
   typography: {
     fontFamily: ["pop"].join(","),
   },
+  components: {
+    MuiPopover: {
+      defaultProps: {
+        container: rootElement
+      }
+    },
+    MuiPopper: {
+      defaultProps: {
+        container: rootElement
+      }
+    },
+    MuiDialog: {
+        defaultProps: {
+          container: rootElement,
+        },
+     },
+  }
 });
 
 const App = () => {
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
+        <Router>
           <MenuBar
             menuItems={["Projects", "Support", "About Us"]}
             userSettings={["Profile", "Settings"]}
           ></MenuBar>
           <Box className="xs:mx-[3rem] sm:mx-[5rem] md:mx-[10rem] lg:mx-[18rem] my-[2.5rem]">
-            <HomePage></HomePage>
+            <Routes>
+              <Route index element={<HomePage></HomePage>}/>
+              <Route path="sign_up" element={<SignUp></SignUp>}/>
+              <Route path="login" element={<Login></Login>}/>
+              <Route path="upload" element={<Upload></Upload>}/>
+            </Routes>
           </Box>
+        </Router>
       </ThemeProvider>
     </StyledEngineProvider>
   );

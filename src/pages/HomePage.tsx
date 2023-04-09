@@ -1,12 +1,18 @@
 import React, { ReactNode } from "react";
 import { Box, Typography, Grid } from "@mui/material";
-import { toTitleCase } from "../common/utils";
-import { Button } from "./Button";
+import { toTitleCase } from "../utils/utils";
+import { Button } from "../components/Button";
+import { useNavigate } from "react-router-dom";
 
-const GridItem: React.FC<{ children?: ReactNode; className?: string, xs?:Number, sm?:Number, md?:Number, lg?:Number }> = ({
-  children,
-  className,
-}) => {
+
+const GridItem: React.FC<{
+  children?: ReactNode;
+  className?: string;
+  xs?: Number;
+  sm?: Number;
+  md?: Number;
+  lg?: Number;
+}> = ({ children, className }) => {
   return (
     // From 0 to 600px wide (smart-phones), I take up 12 columns, or the whole device width!
     // From 600-690px wide (tablets), I take up 6 out of 12 columns, so 2 columns fit the screen.
@@ -20,6 +26,8 @@ const GridItem: React.FC<{ children?: ReactNode; className?: string, xs?:Number,
 interface Props {}
 
 export const HomePage: React.FC<Props> = () => {
+  const navigate = useNavigate();
+
   return (
     <Grid container className="py-10">
       <Grid item xs={12} sm={8} md={8}>
@@ -42,8 +50,8 @@ export const HomePage: React.FC<Props> = () => {
               </Typography>
             </Box>
           </GridItem>
-          <GridItem  className="mt-7">
-            <Button text="get started"></Button>
+          <GridItem className="mt-7">
+            <Button round textclassname="" btnsize="xl" onClick={() => navigate("/sign_up")}>get started</Button>
           </GridItem>
         </Grid>
       </Grid>

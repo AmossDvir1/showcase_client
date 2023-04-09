@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -8,10 +8,14 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { Grid } from "@mui/material";
+import { Button as MuiButton } from "@mui/material/";
+import { Button } from "./Button";
+import { useNavigate } from "react-router-dom";
+import { CreateProjectDialog } from "../pages/CreateProjectDialog";
 
 interface Props {
   menuItems: string[];
@@ -19,10 +23,17 @@ interface Props {
 }
 
 export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+  const navigate = useNavigate();
+  // const [] = useState<>();
+  const loggedIn = false; // Todo: replace this with user logged in
+
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(
     null
   );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(
+    null
+  );
+  const [anchorElLogin, setAnchorElLogin] = useState<null | HTMLElement>(
     null
   );
 
@@ -32,6 +43,16 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
+  const handleOpenLogin = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElLogin(event.currentTarget);
+  };
+  const onLoginClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (anchorElLogin === null) {
+      handleOpenLogin(event);
+    } else {
+      handleCloseLogin();
+    }
+  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
@@ -40,12 +61,15 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const handleCloseLogin = () => {
+    setAnchorElLogin(null);
+  };
 
   return (
     <AppBar className="static bg-transparent border-solid border-b-[1px] border-t-0 border-r-0 border-l-0 border-[#6e6e6e]">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-        <Box sx={{display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -75,7 +99,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
               }}
             >
               {menuItems.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem disableRipple key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -90,8 +114,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
             sx={{
               // flexGrow: 1,
               mr: 2,
-              display: "flex"/*{ xs: "none", sm: "flex", md: "flex" }*/,
-              fontFamily: "pop",
+              display: "flex" /*{ xs: "none", sm: "flex", md: "flex" }*/,
               letterSpacing: ".3rem",
               color: "white",
               textDecoration: "none",
@@ -100,14 +123,12 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
           >
             {"Showcase".toUpperCase()}
           </Typography>
-
-
-
           <Box sx={{ flexGrow: 2, display: { xs: "none", md: "flex" } }}>
             {menuItems.map((page) => (
-              <Button
+              <MuiButton
                 key={page}
                 onClick={handleCloseNavMenu}
+                disableRipple
                 sx={{
                   my: 2,
                   color: "white",
@@ -116,16 +137,39 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 }}
               >
                 {page}
-              </Button>
+              </MuiButton>
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0, position:'absolute' , right:'0px'}}>
-            <Tooltip title="Open settings">
-              <IconButton className="pr-3" onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
+          <Box sx={{ flexGrow: 0, position: "absolute", right: "0px" }}>
+            <Grid container>
+              <Grid item>
+                <MenuItem className="cursor-default" disableRipple>
+                  {/* <LoginButton onClick={onLoginClick}>+ Upload</LoginButton> */}
+                  {/* <Button onClick={() => navigate("/upload")}>+ Upload</Button> */}
+                  <CreateProjectDialog></CreateProjectDialog>
+                </MenuItem>
+              </Grid>
+              <Grid
+                className="flex text-center justify-center cursor-default"
+                item
+              >
+                <Tooltip title="Open settings">
+                  <IconButton
+                    className="pr-3"
+                    onClick={handleOpenUserMenu}
+                    sx={{ p: 0 }}
+                  >
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="/static/images/avatar/2.jpg"
+                    />
+                    {/*todo: get user's name and image*/}
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+            </Grid>
+
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
