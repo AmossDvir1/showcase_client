@@ -49,7 +49,7 @@ const App = () => {
             menuItems={["Projects", "Support", "About Us"]}
             userSettings={["Profile", "Settings"]}
           ></MenuBar>
-          <Box className="xs:mx-[3rem] sm:mx-[5rem] md:mx-[10rem] lg:mx-[18rem] my-[2.5rem]">
+          <Box className="xs:mx-[3rem] sm:mx-[5rem] md:mx-[7rem] lg:mx-[7rem] 2xl:mx-[17rem] my-[2.5rem]">
             <Routes>
               <Route index element={<HomePage></HomePage>}/>
               <Route path="sign_up" element={<SignUp></SignUp>}/>

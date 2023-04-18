@@ -1,0 +1,1 @@
+export const technologies = [{value: 'react', name:'React', bgColor: ''}];

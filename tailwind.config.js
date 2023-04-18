@@ -7,10 +7,9 @@ module.exports = {
   },
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    screens:{
+    screens: {
       xs: "100px",
       ...defaultTheme.screens,
-
     },
     fontFamily: {
       sans: ["pop"],
@@ -24,6 +23,6 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [require("@tailwindcss/forms")],
   important: "#root",
 };

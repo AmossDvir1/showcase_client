@@ -36,7 +36,7 @@ export const Login: React.FC<Props> = () => {
         <TextField
           validation={validateUsername}
           placeholder="Username/Email"
-          onChange={(value) => setUsername(value)}
+          // onChange={(value) => setUsername(value)}
           Icon={PersonIcon}
           type="text"
           errorText="Must be Between 2 and 20 Characters in Length"
@@ -46,7 +46,7 @@ export const Login: React.FC<Props> = () => {
         <TextField
           validation={validatePassword}
           placeholder="Password"
-          onChange={(value) => setPassword(value)}
+          // onChange={(value) => setPassword(value)}
           Icon={PasswordIcon}
           type="password"
           errorText="Password Must Combine Lowercase Letters, Uppercase Letters, Numbers, And Special Characters"

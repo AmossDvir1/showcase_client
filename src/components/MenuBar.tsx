@@ -14,8 +14,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { Grid } from "@mui/material";
 import { Button as MuiButton } from "@mui/material/";
 import { Button } from "./Button";
-import { useNavigate } from "react-router-dom";
-import { CreateProjectDialog } from "../pages/CreateProjectDialog";
+import { CreateProjectDialog } from "../pages/createProject/CreateProjectDialog";
 
 interface Props {
   menuItems: string[];
@@ -23,7 +22,6 @@ interface Props {
 }
 
 export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
-  const navigate = useNavigate();
   // const [] = useState<>();
   const loggedIn = false; // Todo: replace this with user logged in
 
@@ -150,11 +148,11 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                   <CreateProjectDialog></CreateProjectDialog>
                 </MenuItem>
               </Grid>
-              <Grid
-                className="flex text-center justify-center cursor-default"
-                item
-              >
-                <Tooltip title="Open settings">
+              {/* <Grid */}
+                {/* // className="flex text-center justify-center cursor-default" */}
+                {/* // item */}
+              {/* // > */}
+                {/* <Tooltip title="Open settings">
                   <IconButton
                     className="pr-3"
                     onClick={handleOpenUserMenu}
@@ -164,10 +162,10 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                       alt="Remy Sharp"
                       src="/static/images/avatar/2.jpg"
                     />
-                    {/*todo: get user's name and image*/}
-                  </IconButton>
-                </Tooltip>
-              </Grid>
+                    todo: get user's name and image */}
+                  {/* </IconButton> */}
+                {/* </Tooltip> */}
+              {/* </Grid> */}
             </Grid>
 
             <Menu

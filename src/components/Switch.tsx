@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box,
   FormControlLabel,
   Switch as MuiSwitch,
   SwitchProps,
@@ -9,12 +8,16 @@ import {
 interface Props extends SwitchProps {
   setSwitch?: (value: boolean) => void;
   label?: string;
+  value: boolean;
+  register?: any;
+  name?: string
 }
 
 export const Switch: React.FC<Props> = (props) => {
-  const { setSwitch, label, ...rest } = props;
-  const [checked, setChecked] = useState<boolean>(false);
+  const { setSwitch, label, value, register, name, ...rest } = props;
+  const [checked, setChecked] = useState<boolean>(value);
 
+  useEffect(() => setChecked(value), [value]);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
@@ -37,8 +40,11 @@ export const Switch: React.FC<Props> = (props) => {
   ) : (
     <MuiSwitch
       checked={checked}
-      onClick={() => setChecked(!checked)}
+      // onClick={() => setChecked(!checked)}
       color="primary"
+      {...(name && {...register(name)})}
+
+      
       {...rest}
     ></MuiSwitch>
   );
