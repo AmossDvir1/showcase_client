@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select, { SelectProps } from "@mui/material/Select";
 import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
 import { Chip } from "../../../../components/Chip";
@@ -13,141 +11,117 @@ import {
   generateRandomColorString,
   getAvarageRGBValue,
 } from "../../../../utils/utils";
-
-const ITEM_HEIGHT = 52;
-const ITEM_PADDING_TOP = 80;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+import {
+  Controller,
+  FieldValues,
+  UseFormRegister,
+  useFormContext,
+} from "react-hook-form";
+import { OutlinedInput } from "@mui/material";
 
 var colors = new Array(1000)
   .fill(null)
   .map((elem) => generateRandomColorString(0.7));
 
-interface Props {
-  setSelectedChips: (list:(ColoredChip | undefined)[]|[]) => void;
+interface Props extends SelectProps {
+  setSelectedChips?: (list: (ColoredChip | undefined)[] | []) => void;
+  register: UseFormRegister<FieldValues>;
   items: string[];
+  name: string;
+  defaultValue: never[];
 }
 
 export const TechnologiesSelector: React.FC<Props> = ({
   items,
-  setSelectedChips,
+  name,
+  defaultValue = [],
 }) => {
-  const theme = useTheme();
-  const [chipsPicked, setChipsPicked] = useState<string[] | never[]>([]);
-  const [availableGenres, setAvailableGenres] = useState<ColoredChip[]|[]>([]);
+  const [availableChips, setAvailableChips] = useState<ColoredChip[] | []>([]);
+  const { setValue, watch, control } = useFormContext(); // retrieve all hook methods
+  const selected = watch(name) ?? [];
 
   useEffect(() => {
     const colorSets = items.map((item, index: number) => {
       let color = colors[index];
       return {
         value: item,
-        color: getAvarageRGBValue(color) > 127 ? "rgb(0,0,0)" : "rgb(255,255,255)",
+        color:
+          getAvarageRGBValue(color) > 127 ? "rgb(0,0,0)" : "rgb(255,255,255)",
         bgColor: color,
       };
     });
-    setAvailableGenres(colorSets);
+    setAvailableChips(colorSets);
   }, [items]);
 
   const onChipDelete = (e: any, value: string) => {
-    onUpdateGenres(chipsPicked.filter((chip) => chip !== value));
-  };
-
-  const onUpdateGenres = (chips: string[]) => {
-    setChipsPicked(chips);
-    const chipsWithColors = chips.map((chip) => availableGenres.find((colorSet) => colorSet.value === chip));
-
-    setSelectedChips(chipsWithColors??[]);
-  };
-
-  const onChipChange = (event: SelectChangeEvent<never[]>) => {
-    const {
-      target: { value },
-    } = event;
-    // On autofill we get a stringified value.
-    const chips = typeof value === "string" ? value.split(",") : value;
-
-    const chipsWithColors = chips.map((chip) =>
-      availableGenres.find((colorSet) => colorSet.value === chip)
+    setValue(
+      name,
+      selected.filter((chip: string) => chip !== value)
     );
-    setChipsPicked(chips);
-    chipsWithColors && setSelectedChips(chipsWithColors??[]);
   };
 
   return (
     <div className="pt-12">
       <FormControl sx={{ width: "100%" }} size="medium">
-        <InputLabel sx={{ fontWeight: 400 }} id="demo-multiple-chip-label">
-          Pick Genres
-        </InputLabel>
-        <Select
-        className="rounded-[30px]"
-          required
-          sx={{
-            fontWeight: 400,
-            "& .MuiSelect-iconOutlined": {
-              display: chipsPicked.length === 0 ? "" : "none",
-            },
-
-          }}
-          labelId="demo-multiple-chip-label"
-          id="demo-multiple-chip"
-          multiple
-        //   value={''}
-          value={(chipsPicked as Array<never>)}
-          onChange={onChipChange}
-          input={<OutlinedInput id="select-multiple-chip" label="pickgenre" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-              {selected.map((value, index) => (
-                <Chip
-                  key={`${index}_${value}`}
-                  value={value}
-                  onGenreDelete={onChipDelete}
-                  labelColor={
-                    availableGenres?.find(
-                      (colorSet) => colorSet.value === value
-                    )?.color ?? ""
-                  }
-                  bgColor={
-                    availableGenres?.find(
-                      (colorSet) => colorSet?.value === value
-                    )?.bgColor ?? ""
-                  }
-                ></Chip>
-              ))}
-            </Box>
-          )}
-          endAdornment={
-            <IconButton
-              sx={{ visibility: chipsPicked ? "visible" : "hidden" }}
-              onClick={() => onUpdateGenres([])}
-            >
-              <ClearIcon
-                sx={{
-                  display: chipsPicked.length === 0 ? "none" : "",
-                  position: "absolute",
-                }}
-              />
-            </IconButton>
-          }
-          MenuProps={MenuProps}
+        <InputLabel
+          sx={{ fontWeight: 400 }}
+          className=""
+          id="demo-multiple-chip-label"
         >
-          {items.map((item: string | number) => (
-            <MenuItem
-              key={item}
-              value={item}
-              //   style={getStyles(item, chipsPicked, theme)}
+          Pick Technologies
+        </InputLabel>
+        <Controller
+          control={control}
+          name={name}
+          defaultValue={defaultValue}
+          render={({ field }) => (
+            <Select
+              multiple
+              input={<OutlinedInput className="w-full" id="select-multiple-chip" label="PickTechnologies" />}
+              className="rounded-[30px]"
+              {...field}
+              renderValue={(value) => (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                  {selected.map((value: string, index: number) => (
+                    <Chip
+                      key={`${index}_${value}`}
+                      value={value}
+                      onChipDelete={onChipDelete}
+                      labelColor={
+                        availableChips?.find(
+                          (colorSet) => colorSet.value === value
+                        )?.color ?? ""
+                      }
+                      bgColor={
+                        availableChips?.find(
+                          (colorSet) => colorSet?.value === value
+                        )?.bgColor ?? ""
+                      }
+                    ></Chip>
+                  ))}
+                </Box>
+              )}
+              endAdornment={
+                selected.length > 0 && (
+                  <IconButton
+                    className={`${selected ? "visible" : "invisible"}`}
+                    onClick={() => setValue(name, [])}
+                  >
+                    {selected.length > 0 && <ClearIcon />}
+                  </IconButton>
+                )
+              }
+              value={selected}
+              onChange={(e) => setValue(name, e.target.value)}
             >
-              {item}
-            </MenuItem>
-          ))}
-        </Select>
+              {items.map((item: string | number) => (
+                <MenuItem key={item} value={item} selected={false}>
+                  {item}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+        ></Controller>
       </FormControl>
     </div>
   );

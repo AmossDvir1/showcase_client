@@ -48,9 +48,18 @@ const generateRandomColorString = (alpha = 1) => {
   const rgb = `rgb(${r},${g},${b}, ${alpha})`; // Collect all to a css color string
   return rgb;
 };
+
+const truncateText = (text:string, chars:number ) => {
+  if (chars > 3){
+    return (text.slice(0, chars - 3) + "...")
+  }
+  return text;
+}
+
 export {
   toTitleCase,
   randomBetween,
   getAvarageRGBValue,
   generateRandomColorString,
+  truncateText
 };

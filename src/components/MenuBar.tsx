@@ -15,6 +15,7 @@ import { Grid } from "@mui/material";
 import { Button as MuiButton } from "@mui/material/";
 import { Button } from "./Button";
 import { CreateProjectDialog } from "../pages/createProject/CreateProjectDialog";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   menuItems: string[];
@@ -25,15 +26,22 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   // const [] = useState<>();
   const loggedIn = false; // Todo: replace this with user logged in
 
-  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElLogin, setAnchorElLogin] = useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [anchorElLogin, setAnchorElLogin] = useState<null | HTMLElement>(null);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const onClose = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    reason?: string
+  ) => {
+    if (reason && reason === "backdropClick") return;
+    setCreateDialogOpen(false);
+  };
+  const onClickOpen = () => {
+    setCreateDialogOpen(true);
+  };
+
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -141,31 +149,22 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
 
           <Box sx={{ flexGrow: 0, position: "absolute", right: "0px" }}>
             <Grid container>
+              <Grid
+                item
+                className="flex text-center justify-center cursor-default"
+              >
+                <MenuItem disableRipple>
+                  <Typography onClick={() => navigate("/my_projects")} textAlign="center">{"MY PROJECTS"}</Typography>
+                </MenuItem>
+              </Grid>
               <Grid item>
                 <MenuItem className="cursor-default" disableRipple>
                   {/* <LoginButton onClick={onLoginClick}>+ Upload</LoginButton> */}
                   {/* <Button onClick={() => navigate("/upload")}>+ Upload</Button> */}
-                  <CreateProjectDialog></CreateProjectDialog>
+                  <Button onClick={onClickOpen}>+ Create</Button>
+                  <CreateProjectDialog open={createDialogOpen} onClose={onClose}></CreateProjectDialog>
                 </MenuItem>
               </Grid>
-              {/* <Grid */}
-                {/* // className="flex text-center justify-center cursor-default" */}
-                {/* // item */}
-              {/* // > */}
-                {/* <Tooltip title="Open settings">
-                  <IconButton
-                    className="pr-3"
-                    onClick={handleOpenUserMenu}
-                    sx={{ p: 0 }}
-                  >
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
-                    />
-                    todo: get user's name and image */}
-                  {/* </IconButton> */}
-                {/* </Tooltip> */}
-              {/* </Grid> */}
             </Grid>
 
             <Menu

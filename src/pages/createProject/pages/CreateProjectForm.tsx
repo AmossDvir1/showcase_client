@@ -5,22 +5,23 @@ import { TextBox } from "../../../components/TextBox";
 import { Switch } from "../../../components/Switch";
 import PublicIcon from "@mui/icons-material/Public";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
-import { useFormContext } from "react-hook-form";
+import { useController, useFormContext, Controller } from "react-hook-form";
 
 interface Props {
   onProjectNameChange?: (value: string) => void;
 }
 
-export const CreateProjectForm: React.FC<Props> = ({ onProjectNameChange }) => {
+export const CreateProjectForm: React.FC<Props> = ({  }) => {
   const [projectName, setProjectName] = useState<string>("");
   const [projectDesc, setProjectDesc] = useState<string>("");
   const [isExposed, SetIsExposed] = useState<boolean>(true);
-  const { register } = useFormContext(); // retrieve all hook methods
+  const { register, control, setValue, watch } = useFormContext(); // retrieve all hook methods
+  const exposureLevel = watch("exposureLevel");
 
-  useEffect(
-    () => onProjectNameChange && onProjectNameChange(projectName),
-    [onProjectNameChange, projectName]
-  );
+  // useEffect(
+  //   () => onProjectNameChange && onProjectNameChange(projectName),
+  //   [onProjectNameChange, projectName]
+  // );
   return (
     <Box className="pt-14 pl-10 pr-10">
       <Box className="pb-12">
@@ -30,8 +31,6 @@ export const CreateProjectForm: React.FC<Props> = ({ onProjectNameChange }) => {
             errorText="Must Be Filled"
             validation={(value) => !!value}
             placeholder="Project Name"
-            // onChange={setProjectName}
-            // {...register("projectName")}
             register={register}
             name="projectName"
           ></TextField>
@@ -45,34 +44,39 @@ export const CreateProjectForm: React.FC<Props> = ({ onProjectNameChange }) => {
           className="resize-none pt-10"
           register={register}
           name="projectDescription"
-
-          // onChange={setProjectDesc}
-          // {...register("projectDescription")}
         ></TextBox>
       </Box>
-      <Box className="text-center">
-        <Typography>
+      <Box
+        className="text-center"
+        onClick={(e) => {setValue("exposureLevel", !exposureLevel); e.preventDefault()}}
+      >
+        <Typography className="cursor-default">
           Expose to {isExposed ? "World" : "Friends Only"}
         </Typography>
         <Box className="flex justify-center">
           <Grid container className="flex justify-center items-center">
             <Grid item>
-              <Switch
-                value={isExposed}
-                setSwitch={SetIsExposed}
-                register={register}
-                name="exposureLEvel"
-                // {...register("exposureLEvel")}
-              ></Switch>
+              <Controller
+                control={control}
+                name="exposureLevel"
+                defaultValue={false}
+                render={({ field: { onChange, value } }) => (
+                  <Switch
+                    checked={value}
+                    setSwitch={SetIsExposed}
+                    onChange={onChange}
+                  />
+                )}
+              ></Controller>
             </Grid>
             <Grid item>
-              {isExposed ? (
+              {exposureLevel ? (
                 <PublicIcon
-                  onClick={() => SetIsExposed && SetIsExposed(!isExposed)}
+                  onClick={() => setValue("exposureLevel", !exposureLevel)}
                 />
               ) : (
                 <Diversity3Icon
-                  onClick={() => SetIsExposed && SetIsExposed(!isExposed)}
+                  onClick={() => setValue("exposureLevel", !exposureLevel)}
                 />
               )}
             </Grid>

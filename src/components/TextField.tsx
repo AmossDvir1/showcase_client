@@ -8,7 +8,7 @@ import { SvgIconComponent } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { Tooltip } from "./Tooltip";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { UseFormRegister } from "react-hook-form";
+import { FieldValues, UseFormRegister } from "react-hook-form";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   Icon?: SvgIconComponent;
@@ -16,8 +16,8 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   defaultValue?: string;
   validation?: (value: string | undefined) => boolean;
   errorText?: string;
-  register?: any;
-  name?: string
+  register?: UseFormRegister<FieldValues>;
+  // name?: string
 }
 
 export const TextField: React.FC<Props> = ({
@@ -50,6 +50,7 @@ export const TextField: React.FC<Props> = ({
           )}
         </div>
         <input
+        // autoFocus 
           // value={value}
           type={type ?? ""}
           // name={type?? ''}
@@ -69,7 +70,7 @@ export const TextField: React.FC<Props> = ({
           // onChange={(e) => {
           //   setValue(e.currentTarget.value);
           // }}
-          {...(name && {...register(name)})}
+          {...(name && register && {...register(name)})}
           {...rest}
         />
       </div>

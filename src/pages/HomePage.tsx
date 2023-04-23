@@ -51,7 +51,7 @@ export const HomePage: React.FC<Props> = () => {
             </Box>
           </GridItem>
           <GridItem className="mt-7">
-            <Button round textclassname="" btnsize="xl" onClick={() => navigate("/sign_up")}>get started</Button>
+            <Button round btnsize="xl" onClick={() => navigate("/sign_up")}>get started</Button>
           </GridItem>
         </Grid>
       </Grid>
