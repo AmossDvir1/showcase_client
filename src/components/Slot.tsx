@@ -9,7 +9,7 @@ interface Props {
 
 export const Slot: React.FC<Props> = ({ value, children }) => {
   return (
-    <Box className="flex h-full w-full bg-primary">
+    <Box className="flex h-full w-full bg-primary hover:bg-primary-light">
       {children}
     </Box>
   );

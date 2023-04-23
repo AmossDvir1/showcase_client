@@ -53,46 +53,51 @@ export const UserProjectsDashboard: React.FC<Props> = () => {
   useEffect(() => initializeSlots(), []);
 
   return (
-    <Box className="mt-32 flex sm:h-[30vh] xs:h-[20vh]">
-      <Grid
-        container
-        spacing={{ xs: 4, md: 8 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        {Array.from(Array(VISIBLE_PROJECTS_NUM)).map((_, index) => (
-          <Grid item className="h-full flex" xs={2} sm={4} md={4} key={index}>
-            {slots &&
-              (index < slots.length ? (
-                <Slot>
-                  <Box max-width="200px" className="py-5 px-2 ">
-                    <Box className="mb-4">
-                      <Typography className="xs:text-3xl sm:text-7xl">
-                        {slots[index].projectName}
-                      </Typography>
+    <Box className="pt-5">
+      <Typography className="xs:text-4xl md:text-5xl lg:text-8xl">Dashboard</Typography>
+      <Box className="mt-12 flex sm:h-[30vh] xs:h-[20vh]">
+        <Grid
+          container
+          spacing={{ xs: 4, md: 8 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+        >
+          {Array.from(Array(VISIBLE_PROJECTS_NUM)).map((_, index) => (
+            <Grid item className="h-full flex" xs={2} sm={4} md={4} key={index}>
+              {slots &&
+                (index < slots.length ? (
+                  <Slot>
+                    <Box max-width="200px" className="py-5 px-2 ">
+                      <Box className="mb-4">
+                        <Typography className="xs:text-3xl sm:text-7xl">
+                          {slots[index].projectName}
+                        </Typography>
+                      </Box>
+                      <Box className="">
+                        <Typography
+                          sx={{}}
+                          className="xs:text-lg md:text-xl lg:text-xl 2xl:text-2xl"
+                        >
+                          {slots[index].projectDesc.length > windowWidth / 15
+                            ? truncateText(
+                                slots[index].projectDesc,
+                                windowWidth / 15
+                              )
+                            : slots[index].projectDesc}
+                        </Typography>
+                      </Box>
                     </Box>
-                    <Box className="">
-                      <Typography
-                        sx={{}}
-                        className="xs:text-lg md:text-xl lg:text-xl 2xl:text-2xl"
-                      >
-                        {slots[index].projectDesc.length > windowWidth / 15 ? truncateText(
-                          slots[index].projectDesc,
-                          windowWidth / 15
-                        ):slots[index].projectDesc}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Slot>
-              ) : (
-                <EmptySlot onClick={() => onClickOpen()}></EmptySlot>
-              ))}
-          </Grid>
-        ))}
-      </Grid>
-      <CreateProjectDialog
-        open={createDialogOpen}
-        onClose={onClose}
-      ></CreateProjectDialog>
+                  </Slot>
+                ) : (
+                  <EmptySlot onClick={() => onClickOpen()}></EmptySlot>
+                ))}
+            </Grid>
+          ))}
+        </Grid>
+        <CreateProjectDialog
+          open={createDialogOpen}
+          onClose={onClose}
+        ></CreateProjectDialog>
+      </Box>
     </Box>
   );
 };
