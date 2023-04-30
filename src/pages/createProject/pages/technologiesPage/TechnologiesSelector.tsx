@@ -6,11 +6,6 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectProps } from "@mui/material/Select";
 import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
-import { Chip } from "../../../../components/Chip";
-import {
-  generateRandomColorString,
-  getAvarageRGBValue,
-} from "../../../../utils/utils";
 import {
   Controller,
   FieldValues,
@@ -18,13 +13,17 @@ import {
   useFormContext,
 } from "react-hook-form";
 import { OutlinedInput } from "@mui/material";
+import { Chip } from "../../../../components/Chip";
+import {
+  generateRandomColorString,
+  getAvarageRGBValue,
+} from "../../../../utils/utils";
 
 var colors = new Array(1000)
   .fill(null)
   .map((elem) => generateRandomColorString(0.7));
 
 interface Props extends SelectProps {
-  setSelectedChips?: (list: (ColoredChip | undefined)[] | []) => void;
   register: UseFormRegister<FieldValues>;
   items: string[];
   name: string;

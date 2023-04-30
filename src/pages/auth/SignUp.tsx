@@ -11,6 +11,7 @@ import {
   validateUsername,
 } from "../../utils/stringValidation";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 interface Props {}
 
@@ -94,12 +95,20 @@ export const SignUp: React.FC<Props> = () => {
           </Box>
           <Box className="pt-12">
             <Button
-              disabled={!formValid ?? true}
+              // disabled={!formValid ?? true}
               loading={isLoading}
               round
               className="w-64"
               textclassname=""
-              onClick={() => setIsLoading(true)}
+              onClick={() => {const temp = async () => await axios.post("http://localhost:3200/user/create",{
+               username: "userData.username",
+                password: "userData.password",
+                firstName: "userData.firstName",
+                lastName: "userData.lastName",
+                email: "userData.email@walla.com",
+              },);temp(); 
+              // setIsLoading(true)
+            }}
             >
               Submit
             </Button>

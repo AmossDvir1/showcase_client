@@ -4,10 +4,6 @@ import { Box, Typography } from "@mui/material";
 interface Props {
   steps: Array<{ label: string; content: JSX.Element }>;
   activeStep: number;
-  onProjectNameChange?: (value: string) => void;
-  onBackStep?: (value: string) => void;
-  onNextStep?: (value: string) => void;
-  setCurrentStep?: (value: number) => void;
 }
 
 export const Stepper: React.FC<Props> = ({ steps, activeStep }) => {

@@ -8,7 +8,6 @@ import { HomePage } from "./pages/HomePage";
 import { Box } from "@mui/material";
 import { SignUp } from "./pages/auth/SignUp";
 import { Login } from "./pages/auth/Login";
-import { Upload } from "./pages/Upload";
 import { UserProjectsDashboard } from "./pages/UserProjectsDashboard";
 
 const rootElement = document.getElementById("root");
@@ -55,7 +54,6 @@ const App = () => {
               <Route index element={<HomePage></HomePage>} />
               <Route path="sign_up" element={<SignUp></SignUp>} />
               <Route path="login" element={<Login></Login>} />
-              <Route path="upload" element={<Upload></Upload>} />
               <Route
                 path="my_projects"
                 element={<UserProjectsDashboard></UserProjectsDashboard>}

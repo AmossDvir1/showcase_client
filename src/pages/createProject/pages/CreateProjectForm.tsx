@@ -1,27 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { TextField } from "../../../components/TextField";
 import { TextBox } from "../../../components/TextBox";
 import { Switch } from "../../../components/Switch";
 import PublicIcon from "@mui/icons-material/Public";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
-import { useController, useFormContext, Controller } from "react-hook-form";
+import { useFormContext, Controller } from "react-hook-form";
 
-interface Props {
-  onProjectNameChange?: (value: string) => void;
-}
+interface Props {}
 
-export const CreateProjectForm: React.FC<Props> = ({  }) => {
-  const [projectName, setProjectName] = useState<string>("");
-  const [projectDesc, setProjectDesc] = useState<string>("");
-  const [isExposed, SetIsExposed] = useState<boolean>(true);
+export const CreateProjectForm: React.FC<Props> = () => {
   const { register, control, setValue, watch } = useFormContext(); // retrieve all hook methods
   const exposureLevel = watch("exposureLevel");
 
-  // useEffect(
-  //   () => onProjectNameChange && onProjectNameChange(projectName),
-  //   [onProjectNameChange, projectName]
-  // );
   return (
     <Box className="pt-14 pl-10 pr-10">
       <Box className="pb-12">
@@ -48,10 +39,13 @@ export const CreateProjectForm: React.FC<Props> = ({  }) => {
       </Box>
       <Box
         className="text-center"
-        onClick={(e) => {setValue("exposureLevel", !exposureLevel); e.preventDefault()}}
+        onClick={(e) => {
+          setValue("exposureLevel", !exposureLevel);
+          e.preventDefault();
+        }}
       >
         <Typography className="cursor-default">
-          Expose to {isExposed ? "World" : "Friends Only"}
+          Expose to {exposureLevel ? "World" : "Friends Only"}
         </Typography>
         <Box className="flex justify-center">
           <Grid container className="flex justify-center items-center">
@@ -61,11 +55,7 @@ export const CreateProjectForm: React.FC<Props> = ({  }) => {
                 name="exposureLevel"
                 defaultValue={false}
                 render={({ field: { onChange, value } }) => (
-                  <Switch
-                    checked={value}
-                    setSwitch={SetIsExposed}
-                    onChange={onChange}
-                  />
+                  <Switch checked={value} onChange={onChange} />
                 )}
               ></Controller>
             </Grid>

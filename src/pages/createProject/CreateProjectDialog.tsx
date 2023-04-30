@@ -9,8 +9,7 @@ import { useTheme } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-
+import { FormProvider, useForm } from "react-hook-form";
 import { CreateProjectForm } from "./pages/CreateProjectForm";
 import { createProject } from "../../controllers/createProjectController";
 import { Stepper } from "./Stepper";
@@ -20,18 +19,16 @@ import { Popup } from "../../components/Popup";
 
 interface Props {
   open: boolean;
-  onClose: (event: React.MouseEvent<HTMLButtonElement>, reason?: string) => void
+  onClose: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    reason?: string
+  ) => void;
 }
 
 export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
-  const [projectName, setProjectName] = useState<string>("");
-  const [projectDesc, setProjectDesc] = useState<string>("");
-  const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
   const methods = useForm<FormData>();
   const {
-    register,
     handleSubmit,
-    control,
     getValues,
     formState: { isDirty, dirtyFields },
   } = methods;
@@ -42,11 +39,7 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
     () => [
       {
         label: "Project Details",
-        content: (
-          <CreateProjectForm
-            onProjectNameChange={setProjectName}
-          ></CreateProjectForm>
-        ),
+        content: <CreateProjectForm></CreateProjectForm>,
       },
       {
         label: "Technologies",
@@ -62,7 +55,7 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
         ),
       },
     ],
-    [setProjectName]
+    []
   );
 
   // useEffect(() => console.log(isDirty), [isDirty]);
@@ -72,13 +65,14 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
   const [createLoading, setCreateLoading] = useState(false);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [maxSteps, setMaxSteps] = useState<number>(steps.length);
+  const values = getValues();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
+
   const onSubmit = async (formValues: any) => {
-    console.log(formValues);
     setCreateLoading(true);
-    const res = await createProject({ projectName });
+    const res = await createProject({ formValues });
     setCreateLoading(false);
   };
   const onNext = () => {
@@ -107,12 +101,7 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
         <Divider></Divider>
         <DialogContent>
           <FormProvider {...methods}>
-            <Stepper
-              activeStep={activeStep}
-              steps={steps}
-              onProjectNameChange={setProjectName}
-              setCurrentStep={setActiveStep}
-            ></Stepper>
+            <Stepper activeStep={activeStep} steps={steps}></Stepper>
           </FormProvider>
         </DialogContent>
         <DialogActions>
@@ -182,7 +171,7 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
                 loadingText="Creating"
                 // autoFocus
                 type="submit"
-                // disabled={!projectName}
+                disabled={!(values)}
                 // disabled={!getValues()}
               >
                 Create
