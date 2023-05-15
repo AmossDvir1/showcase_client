@@ -8,7 +8,6 @@ import { SvgIconComponent } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { Tooltip } from "./Tooltip";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { FieldValues, UseFormRegister } from "react-hook-form";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   Icon?: SvgIconComponent;
@@ -16,24 +15,22 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   defaultValue?: string;
   validation?: (value: string | undefined) => boolean;
   errorText?: string;
-  register?: UseFormRegister<FieldValues>;
   // name?: string
 }
 
 export const TextField: React.FC<Props> = ({
   defaultValue,
-  // onChange,
+  onChange,
   placeholder,
   Icon,
   type,
   validation,
   errorText,
-  register,
-  name,
+  // name,
   ...rest
 }) => {
   const [isValid, setIsValid] = useState<SetStateAction<boolean>>(true);
-  // const [value, setValue] = useState<string>(defaultValue ?? "");
+  const [value, setValue] = useState<string>(defaultValue ?? "");
 
   // useEffect(() => onChange && onChange(value ?? ""), [onChange, value]);
   return (
@@ -50,8 +47,7 @@ export const TextField: React.FC<Props> = ({
           )}
         </div>
         <input
-        // autoFocus 
-          // value={value}
+          value={value}
           type={type ?? ""}
           // name={type?? ''}
           className={`font-sans block ${
@@ -64,13 +60,10 @@ export const TextField: React.FC<Props> = ({
               : "focus:ring-inset focus:ring-indigo-600 hover:ring-indigo-400"
           }  ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 sm:text-sm sm:leading-6 `}
           placeholder={placeholder ?? ""}
-          // onBlur={(e) =>
-          //   validation && setIsValid(!!validation(e.currentTarget.value))
-          // }
-          // onChange={(e) => {
-          //   setValue(e.currentTarget.value);
-          // }}
-          {...(name && register && {...register(name)})}
+          onBlur={(e) =>
+            validation && setIsValid(!!validation(e.currentTarget.value))
+          }
+          onChange={onChange}
           {...rest}
         />
       </div>

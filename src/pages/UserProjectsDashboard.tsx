@@ -10,14 +10,14 @@ interface Props {}
 const VISIBLE_PROJECTS_NUM = 6;
 
 export const UserProjectsDashboard: React.FC<Props> = () => {
-  // const [slots, setSlots] = useState<ProjectSlotDetails[] | null>();
+  const [slots, setSlots] = useState<ProjectSlotDetails[] | null>();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const projectSlots = useFetchProjectSlots();
 
-  // useEffect(() => {
-  //   setSlots(projectSlots);
-  //   console.log(projectSlots)
-  // }, [projectSlots]);
+  useEffect(() => {
+    setSlots(projectSlots);
+    console.log(projectSlots)
+  }, [projectSlots]);
 
   const onClose = (
     event: React.MouseEvent<HTMLButtonElement>,

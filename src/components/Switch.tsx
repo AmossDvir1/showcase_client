@@ -5,21 +5,32 @@ import {
   SwitchProps,
 } from "@mui/material";
 
-interface Props extends SwitchProps {
+interface Props extends Omit<SwitchProps, "onChange"> {
   label?: string;
-  value?: boolean;
-  name?: string;
+  onChange: (checked: boolean) => void;
 }
 
 export const Switch: React.FC<Props> = (props) => {
-  const { label, ...rest } = props;
+  const { label, onChange, value, name, checked, ...rest } = props;
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(event.target.checked);
+  };
 
   return (
     <FormControlLabel
       value="top"
       labelPlacement="top"
       label={label ?? ""}
-      control={<MuiSwitch color="primary" {...rest}></MuiSwitch>}
+      control={
+        <MuiSwitch
+          value="active"
+          color="primary"
+          onChange={handleChange}
+          checked={checked}
+          {...rest}
+        ></MuiSwitch>
+      }
     ></FormControlLabel>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEventHandler } from "react";
 import { Box, Typography } from "@mui/material";
 import { TextField } from "../../components/TextField";
 import EmailIcon from "@mui/icons-material/Email";
@@ -11,6 +11,7 @@ import {
   validateUsername,
 } from "../../utils/stringValidation";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../controllers/auth/loginUser";
 
 interface Props {}
 
@@ -22,6 +23,11 @@ export const Login: React.FC<Props> = () => {
   const [password, setPassword] = useState<string>("");
   const [formValid, setFormValid] = useState<boolean>(false);
 
+
+  const onLogin = async () => {
+    // setIsLoading(true);
+    await login({username, password });
+  }
   useEffect(
     () =>
       setFormValid(validateUsername(username) && validatePassword(password)),
@@ -36,7 +42,8 @@ export const Login: React.FC<Props> = () => {
         <TextField
           validation={validateUsername}
           placeholder="Username/Email"
-          // onChange={(value) => setUsername(value)}
+          onChange={(e:React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+          value={username}
           Icon={PersonIcon}
           type="text"
           errorText="Must be Between 2 and 20 Characters in Length"
@@ -46,7 +53,8 @@ export const Login: React.FC<Props> = () => {
         <TextField
           validation={validatePassword}
           placeholder="Password"
-          // onChange={(value) => setPassword(value)}
+          onChange={(e:React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+          value={password}
           Icon={PasswordIcon}
           type="password"
           errorText="Password Must Combine Lowercase Letters, Uppercase Letters, Numbers, And Special Characters"
@@ -68,7 +76,7 @@ export const Login: React.FC<Props> = () => {
           round
           className="w-72"
           textclassname=""
-          onClick={() => setIsLoading(true)}
+          onClick={onLogin}
         >
           Submit
         </Button>

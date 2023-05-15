@@ -6,15 +6,15 @@ interface Props extends ChipProps {
     value: string;
     labelColor: string;
     bgColor: string;
-    onChipDelete?: (e:any, value:string) => void;
+    onGenreDelete?: (e:any, value:string) => void;
 
 }
-export const Chip: React.FC<Props>  = ({ value, labelColor, bgColor, onChipDelete, ...rest }) => {
+export const Chip: React.FC<Props>  = ({ value, labelColor, bgColor, onGenreDelete, ...rest }) => {
   return (
     <MuiChip
-      {...(onChipDelete ? { deleteIcon: <CancelIcon /> } : {})}
+      {...(onGenreDelete ? { deleteIcon: <CancelIcon /> } : {})}
       onMouseDown={(event) => event.stopPropagation()}
-      {...(onChipDelete ? { onDelete: (e) => onChipDelete(e, value) } : {})}
+      {...(onGenreDelete ? { onDelete: (e) => onGenreDelete(e, value) } : {})}
       key={value}
       label={value}
       sx={{

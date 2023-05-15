@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Button } from "../../components/Button";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -9,13 +8,16 @@ import { useTheme } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import { FormProvider, useForm } from "react-hook-form";
+import { Box, Typography, MobileStepper } from "@mui/material";
+import { Button } from "../../components/Button";
 import { CreateProjectForm } from "./pages/CreateProjectForm";
 import { createProject } from "../../controllers/createProjectController";
 import { Stepper } from "./Stepper";
-import { Box, Typography, MobileStepper } from "@mui/material";
 import { TechnologiesTagsPage } from "./pages/technologiesPage/TechnologiesTagsPage";
 import { Popup } from "../../components/Popup";
+import {
+  CreateProjectProvider,
+} from "../../context/CreateProjectContext";
 
 interface Props {
   open: boolean;
@@ -26,20 +28,22 @@ interface Props {
 }
 
 export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
-  const methods = useForm<FormData>();
-  const {
-    handleSubmit,
-    getValues,
-    formState: { isDirty, dirtyFields },
-  } = methods;
-  useEffect(() => console.log(isDirty), [isDirty]);
-  // const isDirty = false;
+  const isDirty = false;
+  const [data, setData] = useState({
+    projectName: "",
+    projectDesc: "",
+    isExposed: "",
+  });
 
   const steps = useMemo(
     () => [
       {
         label: "Project Details",
-        content: <CreateProjectForm></CreateProjectForm>,
+        content: (
+          <CreateProjectForm
+            setData={setData ?? (() => {})}
+          ></CreateProjectForm>
+        ),
       },
       {
         label: "Technologies",
@@ -58,21 +62,17 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
     []
   );
 
-  // useEffect(() => console.log(isDirty), [isDirty]);
-
   useEffect(() => setMaxSteps(steps.length), [steps]);
-
   const [createLoading, setCreateLoading] = useState(false);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [maxSteps, setMaxSteps] = useState<number>(steps.length);
-  const values = getValues();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-
-  const onSubmit = async (formValues: any) => {
+  const onSubmit = async () => {
+    console.log(data);
     setCreateLoading(true);
-    const res = await createProject({ formValues });
+    const res = await createProject({ data });
     setCreateLoading(false);
   };
   const onNext = () => {
@@ -83,103 +83,106 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
   };
 
   return (
-    <Box>
-      {/* <Button onClick={onClickOpen}>+ Create</Button> */}
-      <Dialog
-        fullScreen={fullScreen}
-        // maxWidth={"xl"}
-        open={open}
-        onClose={onClose}
-        PaperProps={{
-          className:
-            "w-[1000px] h-[800px] sm:max-h-[85%] xs:max-h-[95%] bg-zinc-100",
-        }}
-      >
-        <DialogTitle id="responsive-dialog-title">
-          {"Create New Project"}
-        </DialogTitle>
-        <Divider></Divider>
-        <DialogContent>
-          <FormProvider {...methods}>
-            <Stepper activeStep={activeStep} steps={steps}></Stepper>
-          </FormProvider>
-        </DialogContent>
-        <DialogActions>
-          <Box className="flex-col w-full">
-            <Divider />
-            <Box className="flex">
-              <MobileStepper
-                className="flex justify-between w-full bg-zinc-100"
-                variant="progress"
-                steps={maxSteps}
-                position="static"
-                activeStep={activeStep}
-                nextButton={
+    <CreateProjectProvider>
+      <Box>
+        <Dialog
+          fullScreen={fullScreen}
+          // maxWidth={"xl"}
+          open={open}
+          onClose={onClose}
+          PaperProps={{
+            className:
+              "w-[1000px] h-[800px] sm:max-h-[85%] xs:max-h-[95%] bg-zinc-100",
+          }}
+        >
+          <DialogTitle id="responsive-dialog-title">
+            {"Create New Project"}
+          </DialogTitle>
+          s<Divider></Divider>
+          <DialogContent>
+            <Stepper
+              activeStep={activeStep}
+              steps={steps}
+              setData={setData}
+            ></Stepper>
+          </DialogContent>
+          <DialogActions>
+            <Box className="flex-col w-full">
+              <Divider />
+              <Box className="flex">
+                <MobileStepper
+                  className="flex justify-between w-full bg-zinc-100"
+                  variant="progress"
+                  steps={maxSteps}
+                  position="static"
+                  activeStep={activeStep}
+                  nextButton={
+                    <Button
+                      // round
+                      btnsize="xs"
+                      onClick={onNext}
+                      disabled={activeStep === maxSteps - 1}
+                    >
+                      <Box className="flex items-center">
+                        Next
+                        <KeyboardArrowRight />
+                      </Box>
+                    </Button>
+                  }
+                  backButton={
+                    <Button
+                      btnsize="xs"
+                      // round
+                      onClick={onBack}
+                      disabled={activeStep === 0}
+                    >
+                      <Box className="flex items-center">
+                        <KeyboardArrowLeft />
+                        Back
+                      </Box>
+                    </Button>
+                  }
+                />
+              </Box>
+              <Divider />
+              <Box className="flex justify-between w-full mt-2">
+                {isDirty ? (
+                  <Popup label="close"></Popup>
+                ) : (
                   <Button
-                    // round
-                    btnsize="xs"
-                    onClick={onNext}
-                    disabled={activeStep === maxSteps - 1}
+                    className="ml-2"
+                    bgcolor="bg-[rgb(204,0,0)]"
+                    bgcolorhover="hover:bg-[rgb(230,0,0)]"
+                    round
+                    // autoFocus
+                    btnsize="sm"
+                    onClick={onClose}
                   >
-                    <Box className="flex items-center">
-                      Next
-                      <KeyboardArrowRight />
-                    </Box>
+                    Close
                   </Button>
-                }
-                backButton={
-                  <Button
-                    btnsize="xs"
-                    // round
-                    onClick={onBack}
-                    disabled={activeStep === 0}
-                  >
-                    <Box className="flex items-center">
-                      <KeyboardArrowLeft />
-                      Back
-                    </Box>
-                  </Button>
-                }
-              />
-            </Box>
-            <Divider />
-            <Box className="flex justify-between w-full mt-2">
-              {isDirty ? (
-                <Popup label="close"></Popup>
-              ) : (
+                )}
                 <Button
-                  className="ml-2"
-                  bgcolor="bg-[rgb(204,0,0)]"
-                  bgcolorhover="hover:bg-[rgb(230,0,0)]"
+                  className="mr-2 bg-green-600"
+                  bgcolor="bg-green-600"
+                  bgcolorhover="hover:bg-green-500"
+                  bgdisabledcolor="rgb(22,163,74,0.25)"
                   round
-                  // autoFocus
                   btnsize="sm"
-                  onClick={onClose}
+                  onClick={onSubmit}
+                  loading={createLoading}
+                  loadingText="Creating"
+                  // autoFocus
+                  type="submit"
+                  // disabled={!(values)}
+                  // disabled={!getValues()}
                 >
-                  Close
+                  Create
                 </Button>
-              )}
-              <Button
-                className="mr-2 bg-green-600"
-                bgcolor="bg-green-600"
-                bgcolorhover="hover:bg-green-500"
-                bgdisabledcolor="rgb(22,163,74,0.25)"
-                round
-                btnsize="sm"
-                onClick={handleSubmit(onSubmit)}
-                loading={createLoading}
-                loadingText="Creating"
-                // autoFocus
-                type="submit"
-                disabled={!(values)}
-                // disabled={!getValues()}
-              >
-                Create
-              </Button>
+              </Box>
             </Box>
-          </Box>
-        </DialogActions>
-      </Dialog>
-    </Box>
+          </DialogActions>
+        </Dialog>
+      </Box>
+    </CreateProjectProvider>
   );
 };

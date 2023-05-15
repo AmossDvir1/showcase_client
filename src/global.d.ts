@@ -20,6 +20,13 @@ interface ProjectSlotDetails {
   projectDesc: string;
 }
 
+interface UserDetails {
+  usernme: string;
+  firstName: string;
+  lastName: string;
+  id: string;
+  accessToken?: string;
+}
 
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";

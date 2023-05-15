@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import { TechnologiesSelector } from "./TechnologiesSelector";
-import { useFormContext } from "react-hook-form";
 interface Props {}
 
 export const TechnologiesTagsPage: React.FC<Props> = () => {
+  const [selectedChips, setSelectedChips] = useState<
+    [] | (ColoredChip | undefined)[]
+  >([]);
   const [availableChips, setAvailableChips] = useState<string[]>([]);
-  const { register } = useFormContext(); // retrieve all hook methods
-
 
   useEffect(
     () =>
@@ -18,6 +18,7 @@ export const TechnologiesTagsPage: React.FC<Props> = () => {
         "Python",
         "Java",
         "JavaScript",
+        ".NET"
       ]),
     []
   );
@@ -25,13 +26,9 @@ export const TechnologiesTagsPage: React.FC<Props> = () => {
     <Box>
       <Typography>Which Technologies Did You Use?</Typography>
       <TechnologiesSelector
-                  items={availableChips}
-                  register={register}
-                  name="techSelector"
-                  defaultValue={[]}
-
-                ></TechnologiesSelector>
-
+        items={availableChips}
+        setSelectedChips={setSelectedChips}
+      ></TechnologiesSelector>
     </Box>
   );
 };

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Box, Typography } from "@mui/material";
 
 interface Props {
   steps: Array<{ label: string; content: JSX.Element }>;
   activeStep: number;
+  setData: Dispatch<SetStateAction<{ projectName: string; projectDesc: string; isExposed: string; }>>;
 }
 
 export const Stepper: React.FC<Props> = ({ steps, activeStep }) => {
