@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useFetchProjectSlots = (): ProjectSlotDetails[] => {
+function useFetchProjectSlots(): ProjectSlotDetails[] {
   const [projectSlots, setProjectSlots] = useState<ProjectSlotDetails[] | null>(
     null
   );
@@ -18,6 +18,6 @@ const useFetchProjectSlots = (): ProjectSlotDetails[] => {
   }, []);
 
   return projectSlots ?? [];
-};
+}
 
 export default useFetchProjectSlots;

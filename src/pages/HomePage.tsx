@@ -3,6 +3,7 @@ import { Box, Typography, Grid } from "@mui/material";
 import { toTitleCase } from "../utils/utils";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import ProtectedComponent from "../components/ProtectedComponent";
 
 
 const GridItem: React.FC<{
@@ -51,7 +52,9 @@ export const HomePage: React.FC<Props> = () => {
             </Box>
           </GridItem>
           <GridItem className="mt-7">
-            <Button round btnsize="xl" onClick={() => navigate("/sign_up")}>get started</Button>
+          <ProtectedComponent fallback={<Button round btnsize="xl" onClick={() => navigate("/sign_up")}>get started</Button>}>
+          <Button round btnsize="xl" onClick={() => navigate("/explore")}>explore</Button>
+          </ProtectedComponent>
           </GridItem>
         </Grid>
       </Grid>

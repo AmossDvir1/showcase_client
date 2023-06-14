@@ -16,6 +16,8 @@ import { Button as MuiButton } from "@mui/material/";
 import { Button } from "./Button";
 import { CreateProjectDialog } from "../pages/createProject/CreateProjectDialog";
 import { useNavigate } from "react-router-dom";
+import ProtectedComponent from "./ProtectedComponent";
+import { useAuth } from "../controllers/auth/useAuth";
 
 interface Props {
   menuItems: string[];
@@ -23,9 +25,7 @@ interface Props {
 }
 
 export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
-  // const [] = useState<>();
-  const loggedIn = false; // Todo: replace this with user logged in
-
+  const { setIsAuthenticated } = useAuth();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [anchorElLogin, setAnchorElLogin] = useState<null | HTMLElement>(null);
@@ -41,6 +41,10 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
     setCreateDialogOpen(true);
   };
 
+  const onLogOut = () => {
+    localStorage.removeItem("auth");
+    setIsAuthenticated(false);
+  };
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -148,25 +152,73 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
           </Box>
 
           <Box sx={{ flexGrow: 0, position: "absolute", right: "0px" }}>
-            <Grid container>
-              <Grid
-                item
-                className="flex text-center justify-center cursor-default"
-              >
-                <MenuItem disableRipple>
-                  <Typography onClick={() => navigate("/my_projects")} textAlign="center">{"MY PROJECTS"}</Typography>
-                </MenuItem>
+            <ProtectedComponent
+              fallback={
+                <Grid container className="flex items-center">
+                  <Grid
+                    item
+                    className="flex text-center justify-center cursor-default"
+                  >
+                    <MenuItem disableRipple>
+                      <MuiButton
+                        onClick={() => navigate("/login")}
+                        disableRipple
+                        sx={{
+                          my: 2,
+                          color: "white",
+                          display: "block",
+                          fontWeight: "400",
+                        }}
+                      >
+                        Login
+                      </MuiButton>
+                    </MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem className="cursor-default" disableRipple>
+                      <Button round onClick={() => navigate("/sign_up")}>
+                        sign up
+                      </Button>
+                    </MenuItem>
+                  </Grid>
+                </Grid>
+              }
+            >
+              <Grid container className="flex items-center">
+                <Grid
+                  item
+                  className="flex text-center justify-center cursor-default"
+                >
+                  <MenuItem disableRipple>
+                    <Typography
+                      onClick={() => navigate("/my_projects")}
+                      textAlign="center"
+                    >
+                      {"MY PROJECTS"}
+                    </Typography>
+                  </MenuItem>
+                </Grid>
+                <Grid item>
+                  <MenuItem className="cursor-default" disableRipple>
+                    <Button btnsize="sm" onClick={onClickOpen}>+ Create</Button>
+                    <CreateProjectDialog
+                      open={createDialogOpen}
+                      onClose={onClose}
+                    ></CreateProjectDialog>
+                  </MenuItem>
+                </Grid>
+                <Grid item>
+                  <MenuItem className="cursor-default" disableRipple>
+                    <MuiButton onClick={onLogOut} disableRipple sx={{
+                          my: 2,
+                          color: "white",
+                          display: "block",
+                          fontWeight: "400",
+                        }}>log out</MuiButton>
+                  </MenuItem>
+                </Grid>
               </Grid>
-              <Grid item>
-                <MenuItem className="cursor-default" disableRipple>
-                  {/* <LoginButton onClick={onLoginClick}>+ Upload</LoginButton> */}
-                  {/* <Button onClick={() => navigate("/upload")}>+ Upload</Button> */}
-                  <Button onClick={onClickOpen}>+ Create</Button>
-                  <CreateProjectDialog open={createDialogOpen} onClose={onClose}></CreateProjectDialog>
-                </MenuItem>
-              </Grid>
-            </Grid>
-
+            </ProtectedComponent>
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"

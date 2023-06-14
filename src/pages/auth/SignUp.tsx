@@ -14,11 +14,15 @@ import { useNavigate } from "react-router-dom";
 import { reduxForm } from "redux-form";
 import { serverReq } from "../../API/utils/axiosConfig";
 import { SignUpFormContext, SignUpFormProvider } from "../../context/SignUpFormContext";
-
+import { signUp } from "../../controllers/auth/signUp";
+import { saveToLocalStorage } from "../../API/utils/saveToLocalStorage";
+import { useAuth } from "../../controllers/auth/useAuth";
 
 interface Props {}
 
 export const SignUp: React.FC<Props> = () => {
+  const { setIsAuthenticated } = useAuth();
+
   const navigate = useNavigate();
   const { formData, setFormData } = useContext(SignUpFormContext);
 
@@ -26,28 +30,20 @@ export const SignUp: React.FC<Props> = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>("hh");
+  const [lastName, setLastName] = useState<string>("hh");
   const [formValid, setFormValid] = useState<boolean>(false);
   const onSubmitForm = async () => {
     setIsLoading(true);
 
-    const fetchUserInfo = async () => {
-      try {
-        let res = await serverReq.post("user/create", {
-          username: "amoss",
-          password: "amoss2812",
-          firstName: "userData.firstName",
-          lastName: "userData.lastName",
-          email: "dvir.amoss@gmail.com",
-        });
-        return res;
-      } catch (err: any) {
-        return false;
-      }
-    };
-    const res = await fetchUserInfo();
-    if (res && res?.data?.success) {
+    const res = await signUp({username, email, password, firstName, lastName});
+    if (res && res?.success) {
       console.log("success");
+      saveToLocalStorage("auth", {accessToken: res.accessToken, isLoggedIn: true});
+      setIsAuthenticated(true);
+      navigate("/", { replace:true });
     } else {
+      setIsAuthenticated(false);
       console.error("error", res);
     }
     setIsLoading(false);
@@ -55,7 +51,6 @@ export const SignUp: React.FC<Props> = () => {
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>): void => {
     console.log(e.currentTarget.name)
-    debugger;
     setFormData({
       
       ...formData,
@@ -97,7 +92,6 @@ export const SignUp: React.FC<Props> = () => {
         className="min-w-fit flex justify-center"
       >
         <Box className="flex flex-col w-fit min-w-[20rem] max-w-[28rem] bg-white rounded-[50px] text-center p-10 ">
-          <SignUpFormProvider>
             <Typography className="text-black text-3xl mt-7 mb-7">
               Sign up to Showcase
             </Typography>
@@ -106,10 +100,10 @@ export const SignUp: React.FC<Props> = () => {
                 validation={validateUsername}
                 placeholder="Username"
                 name="username"
-                // value={username}
-                value={formData.username}
-                // onChange={setUsername}
-                onChange={handleChange}
+                value={username}
+                // value={formData.username}
+                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+                // onChange={handleChange}
                 Icon={PersonIcon}
                 type="text"
                 errorText="Must be Between 2 and 20 Characters in Length"
@@ -120,10 +114,10 @@ export const SignUp: React.FC<Props> = () => {
                 validation={validateEmail}
                 placeholder="Email"
                 name="email"
-                // onChange={setEmail}
-                // value={email}
-                value={formData.email}
-                onChange={handleChange}
+                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                value={email}
+                // value={formData.email}
+                // onChange={handleChange}
                 Icon={EmailIcon}
                 type="email"
                 errorText="Not a Valid Email Address"
@@ -134,10 +128,10 @@ export const SignUp: React.FC<Props> = () => {
                 validation={validatePassword}
                 placeholder="Password"
                 name="password"
-                // value={password}
-                value={formData.password}
-                // onChange={setPassword}
-                onChange={handleChange}
+                value={password}
+                // value={formData.password}
+                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                // onChange={handleChange}
                 Icon={PasswordIcon}
                 type="password"
                 errorText="Password Must Combine Lowercase Letters, Uppercase Letters, Numbers, And Special Characters"
@@ -164,7 +158,6 @@ export const SignUp: React.FC<Props> = () => {
                 Submit
               </Button>
             </Box>
-          </SignUpFormProvider>
         </Box>
       </Grid>
 

@@ -9,6 +9,7 @@ import { Box } from "@mui/material";
 import { SignUp } from "./pages/auth/SignUp";
 import { Login } from "./pages/auth/Login";
 import { UserProjectsDashboard } from "./pages/UserProjectsDashboard";
+import { AuthProvider } from "./controllers/auth/useAuth";
 
 const rootElement = document.getElementById("root");
 
@@ -43,25 +44,27 @@ const theme = createTheme({
 const App = () => {
   return (
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <Router>
-          <MenuBar
-            menuItems={["Projects", "Support", "About Us"]}
-            userSettings={["Profile", "Settings"]}
-          ></MenuBar>
-          <Box className="xs:mx-[3rem] sm:mx-[5rem] md:mx-[7rem] lg:mx-[7rem] 2xl:mx-[17rem] my-[2.5rem]">
-            <Routes>
-              <Route index element={<HomePage></HomePage>} />
-              <Route path="sign_up" element={<SignUp></SignUp>} />
-              <Route path="login" element={<Login></Login>} />
-              <Route
-                path="my_projects"
-                element={<UserProjectsDashboard></UserProjectsDashboard>}
-              />
-            </Routes>
-          </Box>
-        </Router>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider theme={theme}>
+          <Router>
+            <MenuBar
+              menuItems={["Projects", "Support", "About Us"]}
+              userSettings={["Profile", "Settings"]}
+            ></MenuBar>
+            <Box className="xs:mx-[3rem] sm:mx-[5rem] md:mx-[7rem] lg:mx-[7rem] 2xl:mx-[17rem] my-[2.5rem]">
+              <Routes>
+                <Route index element={<HomePage></HomePage>} />
+                <Route path="sign_up" element={<SignUp></SignUp>} />
+                <Route path="login" element={<Login></Login>} />
+                <Route
+                  path="my_projects"
+                  element={<UserProjectsDashboard></UserProjectsDashboard>}
+                />
+              </Routes>
+            </Box>
+          </Router>
+        </ThemeProvider>
+      </AuthProvider>
     </StyledEngineProvider>
   );
 };

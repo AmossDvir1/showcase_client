@@ -12,12 +12,15 @@ import {
 } from "../../utils/stringValidation";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../controllers/auth/loginUser";
+import { saveToLocalStorage } from "../../API/utils/saveToLocalStorage";
+import { useAuth } from "../../controllers/auth/useAuth";
+
 
 interface Props {}
 
 export const Login: React.FC<Props> = () => {
+  const { setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -25,8 +28,18 @@ export const Login: React.FC<Props> = () => {
 
 
   const onLogin = async () => {
-    // setIsLoading(true);
-    await login({username, password });
+    setIsLoading(true);
+    const res = await login({username, password });
+    if (res && res?.success) {
+      console.log("successful login");
+      saveToLocalStorage("auth", {accessToken: res.accessToken, isLoggedIn: true});
+      setIsAuthenticated(true);
+      navigate("/", { replace:true });
+    } else {
+      setIsAuthenticated(false);
+      console.error("error", res);
+    }
+    setIsLoading(false);
   }
   useEffect(
     () =>
