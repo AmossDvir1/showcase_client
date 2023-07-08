@@ -11,14 +11,14 @@ const AuthContext = createContext<AuthContextValue>({
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('auth'));
 
   useEffect(() => {
     const authData = localStorage.getItem('auth');
     if (authData) {
       setIsAuthenticated(true);
     }
-  }, []);
+  }, [localStorage.getItem('auth')]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>

@@ -10,6 +10,8 @@ import { SignUp } from "./pages/auth/SignUp";
 import { Login } from "./pages/auth/Login";
 import { UserProjectsDashboard } from "./pages/UserProjectsDashboard";
 import { AuthProvider } from "./controllers/auth/useAuth";
+import ProtectedRoute from "./pages/ProtectedRoute";
+import UserValidation from "./pages/auth/UserValidation";
 
 const rootElement = document.getElementById("root");
 
@@ -53,6 +55,12 @@ const App = () => {
             ></MenuBar>
             <Box className="xs:mx-[3rem] sm:mx-[5rem] md:mx-[7rem] lg:mx-[7rem] 2xl:mx-[17rem] my-[2.5rem]">
               <Routes>
+                <Route element={<ProtectedRoute></ProtectedRoute>}>
+                  <Route
+                    path="validation"
+                    element={<UserValidation></UserValidation>}
+                  ></Route>
+                </Route>
                 <Route index element={<HomePage></HomePage>} />
                 <Route path="sign_up" element={<SignUp></SignUp>} />
                 <Route path="login" element={<Login></Login>} />

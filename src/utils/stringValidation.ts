@@ -34,7 +34,6 @@ export const validateEmail = (email: string | undefined): boolean => {
  * @returns True if the password is valid, false otherwise.
  */
 export const validatePassword = (password: string | undefined): boolean => {
-  const regex: RegExp =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const regex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
   return password ? regex.test(password) : false;
 };

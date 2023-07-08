@@ -13,7 +13,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { reduxForm } from "redux-form";
 import { serverReq } from "../../API/utils/axiosConfig";
-import { SignUpFormContext, SignUpFormProvider } from "../../context/SignUpFormContext";
+import {
+  SignUpFormContext,
+  SignUpFormProvider,
+} from "../../context/SignUpFormContext";
 import { signUp } from "../../controllers/auth/signUp";
 import { saveToLocalStorage } from "../../API/utils/saveToLocalStorage";
 import { useAuth } from "../../controllers/auth/useAuth";
@@ -33,15 +36,25 @@ export const SignUp: React.FC<Props> = () => {
   const [firstName, setFirstName] = useState<string>("hh");
   const [lastName, setLastName] = useState<string>("hh");
   const [formValid, setFormValid] = useState<boolean>(false);
+
   const onSubmitForm = async () => {
     setIsLoading(true);
 
-    const res = await signUp({username, email, password, firstName, lastName});
+    const res = await signUp({
+      username,
+      email,
+      password,
+      firstName,
+      lastName,
+    });
     if (res && res?.success) {
       console.log("success");
-      saveToLocalStorage("auth", {accessToken: res.accessToken, isLoggedIn: true});
+      saveToLocalStorage("auth", {
+        accessToken: res.accessToken,
+        isLoggedIn: true,
+      });
       setIsAuthenticated(true);
-      navigate("/", { replace:true });
+      navigate("/validation", { replace: true });
     } else {
       setIsAuthenticated(false);
       console.error("error", res);
@@ -50,9 +63,8 @@ export const SignUp: React.FC<Props> = () => {
   };
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    console.log(e.currentTarget.name)
+    console.log(e.currentTarget.name);
     setFormData({
-      
       ...formData,
       [e.currentTarget.name]: e.currentTarget.value,
     });
@@ -92,72 +104,78 @@ export const SignUp: React.FC<Props> = () => {
         className="min-w-fit flex justify-center"
       >
         <Box className="flex flex-col w-fit min-w-[20rem] max-w-[28rem] bg-white rounded-[50px] text-center p-10 ">
-            <Typography className="text-black text-3xl mt-7 mb-7">
-              Sign up to Showcase
-            </Typography>
-            <Box className="py-3">
-              <TextField
-                validation={validateUsername}
-                placeholder="Username"
-                name="username"
-                value={username}
-                // value={formData.username}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
-                // onChange={handleChange}
-                Icon={PersonIcon}
-                type="text"
-                errorText="Must be Between 2 and 20 Characters in Length"
-              ></TextField>
-            </Box>
-            <Box className="py-3">
-              <TextField
-                validation={validateEmail}
-                placeholder="Email"
-                name="email"
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                value={email}
-                // value={formData.email}
-                // onChange={handleChange}
-                Icon={EmailIcon}
-                type="email"
-                errorText="Not a Valid Email Address"
-              ></TextField>
-            </Box>
-            <Box className="py-3">
-              <TextField
-                validation={validatePassword}
-                placeholder="Password"
-                name="password"
-                value={password}
-                // value={formData.password}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                // onChange={handleChange}
-                Icon={PasswordIcon}
-                type="password"
-                errorText="Password Must Combine Lowercase Letters, Uppercase Letters, Numbers, And Special Characters"
-              ></TextField>
-            </Box>
+          <Typography className="text-black text-3xl mt-7 mb-7">
+            Sign up to Showcase
+          </Typography>
+          <Box className="py-3">
+            <TextField
+              validation={validateUsername}
+              placeholder="Username"
+              name="username"
+              value={username}
+              // value={formData.username}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setUsername(e.target.value)
+              }
+              // onChange={handleChange}
+              Icon={PersonIcon}
+              type="text"
+              errorText="Must be Between 2 and 20 Characters in Length"
+            ></TextField>
+          </Box>
+          <Box className="py-3">
+            <TextField
+              validation={validateEmail}
+              placeholder="Email"
+              name="email"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
+              value={email}
+              // value={formData.email}
+              // onChange={handleChange}
+              Icon={EmailIcon}
+              type="email"
+              errorText="Not a Valid Email Address"
+            ></TextField>
+          </Box>
+          <Box className="py-3">
+            <TextField
+              validation={validatePassword}
+              placeholder="Password"
+              name="password"
+              value={password}
+              // value={formData.password}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setPassword(e.target.value)
+              }
+              // onChange={handleChange}
+              Icon={PasswordIcon}
+              type="password"
+              errorText="Password Must Combine Lowercase Letters, Uppercase Letters, Numbers, And Special Characters"
+            ></TextField>
+          </Box>
 
-            <Box>
-              <Typography
-                onClick={() => navigate("/login")}
-                className="text-black cursor-pointer"
-              >
-                Already Have an Account? Log In
-              </Typography>
-            </Box>
-            <Box className="pt-12">
-              <Button
-                // disabled={!formValid || isLoading}
-                loading={isLoading}
-                round
-                className="w-64"
-                textclassname=""
-                onClick={onSubmitForm}
-              >
-                Submit
-              </Button>
-            </Box>
+          <Box>
+            <Typography
+              onClick={() => navigate("/login")}
+              className="text-black cursor-pointer"
+            >
+              Already Have an Account? Log In
+            </Typography>
+          </Box>
+          <Box className="pt-12">
+            <Button
+              disabled={!formValid || isLoading}
+              loading={isLoading}
+              round
+              className="w-64"
+              textclassname=""
+              onClick={onSubmitForm}
+            >
+              Submit
+            </Button>
+          </Box>
         </Box>
       </Grid>
 

@@ -1,9 +1,9 @@
-import axios from "axios";
 import { UserSignUpData } from "./interfaces";
+import { serverReq } from "../../API/utils/axiosConfig";
 
 export const signUp = async (data: UserSignUpData) => {
   try {
-    const res = await axios.post(
+    const res = await serverReq.post(
       process.env.REACT_APP_API_BASE_URL + "/user/create",
       {
         username: data.username,

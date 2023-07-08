@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEventHandler } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import { Box, Typography } from "@mui/material";
 import { TextField } from "../../components/TextField";
 import EmailIcon from "@mui/icons-material/Email";
@@ -27,7 +27,8 @@ export const Login: React.FC<Props> = () => {
   const [formValid, setFormValid] = useState<boolean>(false);
 
 
-  const onLogin = async () => {
+  const onLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsLoading(true);
     const res = await login({username, password });
     if (res && res?.success) {
@@ -51,6 +52,7 @@ export const Login: React.FC<Props> = () => {
       <Typography className="text-black text-3xl mt-7 mb-7">
         Log in to Showcase
       </Typography>
+        <form onSubmit={onLogin}>
       <Box className="py-3">
         <TextField
           validation={validateUsername}
@@ -87,13 +89,15 @@ export const Login: React.FC<Props> = () => {
           disabled={!formValid ?? true}
           loading={isLoading}
           round
+          type="submit"
           className="w-72"
           textclassname=""
-          onClick={onLogin}
+          // onClick={onLogin}
         >
           Submit
         </Button>
       </Box>
+      </form>
     </Box>
   );
 };

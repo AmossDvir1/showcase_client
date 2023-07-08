@@ -1,20 +1,15 @@
 import React from "react";
-import { Route, Navigate } from "react-router-dom";
-import {useAuth} from "../controllers/auth/useAuth";
+import { Navigate, RouteProps, Outlet } from "react-router-dom";
+import { useAuth } from "../controllers/auth/useAuth";
 
-interface ProtectedRouteProps {
-  path: string;
-  children: React.ReactNode;
-}
+const ProtectedRoute: React.FC<RouteProps> = () => {
+  const auth = useAuth();
 
-function ProtectedRoute({ children, path }: ProtectedRouteProps) {
-  const isAuthenticated = useAuth();
-
-  if (!isAuthenticated) {
+  if (!auth?.isAuthenticated) {
     return <Navigate to="/login" />;
   }
 
-  return <Route path={path}>{children}</Route>;
-}
+  return <Outlet />;
+};
 
 export default ProtectedRoute;
