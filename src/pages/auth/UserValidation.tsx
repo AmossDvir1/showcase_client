@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { showToast } from "../../utils/toast";
 
 const LEGAL_CHARS = "0123456789";
 
@@ -33,6 +34,7 @@ const UserValidation: React.FC = () => {
 
   const handleSendEmail = async () => {
     const res = await sendValidationEmail();
+    showToast("Email Sent Successfully", "Email Sent Successfully", "success");
     setEmailSent(true);
     // Focus the first input after email is sent
     if (verificationCodeInputs.current[0]) {

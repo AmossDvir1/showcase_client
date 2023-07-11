@@ -56,13 +56,6 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   const handleOpenLogin = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElLogin(event.currentTarget);
   };
-  const onLoginClick = (event: React.MouseEvent<HTMLElement>) => {
-    if (anchorElLogin === null) {
-      handleOpenLogin(event);
-    } else {
-      handleCloseLogin();
-    }
-  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
@@ -200,7 +193,9 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 </Grid>
                 <Grid item>
                   <MenuItem className="cursor-default" disableRipple>
-                    <Button btnsize="sm" onClick={onClickOpen}>+ Create</Button>
+                    <Button btnsize="sm" onClick={onClickOpen}>
+                      + Create
+                    </Button>
                     <CreateProjectDialog
                       open={createDialogOpen}
                       onClose={onClose}
@@ -209,12 +204,29 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 </Grid>
                 <Grid item>
                   <MenuItem className="cursor-default" disableRipple>
-                    <MuiButton onClick={onLogOut} disableRipple sx={{
-                          my: 2,
+                    <MuiButton
+                      onClick={onLogOut}
+                      disableRipple
+                      sx={{
+                        my: 2,
+                        color: "white",
+                        display: "block",
+                        fontWeight: "400",
+                      }}
+                    >
+                      <Typography
+                        noWrap
+                        component="a"
+                        href="/"
+                        sx={{
+                          display: "flex",
                           color: "white",
-                          display: "block",
-                          fontWeight: "400",
-                        }}>log out</MuiButton>
+                          textDecoration: "none",
+                        }}
+                      >
+                        log out
+                      </Typography>
+                    </MuiButton>
                   </MenuItem>
                 </Grid>
               </Grid>

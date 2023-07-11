@@ -1,5 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import { useNotificationCenter } from "react-toastify/addons/use-notification-center";
+import "react-toastify/dist/ReactToastify.css";
+
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material";
@@ -44,6 +48,10 @@ const theme = createTheme({
 });
 
 const App = () => {
+  const { notifications, clear, markAllAsRead, markAsRead } =
+    useNotificationCenter();
+
+
   return (
     <StyledEngineProvider injectFirst>
       <AuthProvider>
@@ -71,6 +79,7 @@ const App = () => {
               </Routes>
             </Box>
           </Router>
+          <ToastContainer />
         </ThemeProvider>
       </AuthProvider>
     </StyledEngineProvider>

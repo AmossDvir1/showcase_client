@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../controllers/auth/loginUser";
 import { saveToLocalStorage } from "../../API/utils/saveToLocalStorage";
 import { useAuth } from "../../controllers/auth/useAuth";
+import { showToast } from "../../utils/toast";
 
 
 interface Props {}
@@ -32,6 +33,7 @@ export const Login: React.FC<Props> = () => {
     setIsLoading(true);
     const res = await login({username, password });
     if (res && res?.success) {
+      showToast("Successfully Logged In", "Login Success", "success");
       console.log("successful login");
       saveToLocalStorage("auth", {accessToken: res.accessToken, isLoggedIn: true});
       setIsAuthenticated(true);

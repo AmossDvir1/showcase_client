@@ -76,7 +76,7 @@ export const TechnologiesSelector: React.FC<Props> = ({
     <div className="pt-12">
       <FormControl sx={{ width: "100%" }} size="medium">
         <InputLabel sx={{ fontWeight: 400 }} id="demo-multiple-chip-label">
-          Pick Genres
+          Pick Technologies
         </InputLabel>
         <Select
           className="rounded-[30px]"
@@ -93,7 +93,7 @@ export const TechnologiesSelector: React.FC<Props> = ({
           //   value={''}
           value={chipsPicked as Array<never>}
           onChange={onChipChange}
-          input={<OutlinedInput id="select-multiple-chip" label="pickgenre" />}
+          input={<OutlinedInput id="select-multiple-chip" label="technologygenre" />}
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
               {selected.map((value, index) => (
