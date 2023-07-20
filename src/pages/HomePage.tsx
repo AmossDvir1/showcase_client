@@ -5,7 +5,6 @@ import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import ProtectedComponent from "../components/ProtectedComponent";
 
-
 const GridItem: React.FC<{
   children?: ReactNode;
   className?: string;
@@ -52,9 +51,17 @@ export const HomePage: React.FC<Props> = () => {
             </Box>
           </GridItem>
           <GridItem className="mt-7">
-          <ProtectedComponent fallback={<Button round btnsize="xl" onClick={() => navigate("/sign_up")}>get started</Button>}>
-          <Button round btnsize="xl" onClick={() => navigate("/explore")}>explore</Button>
-          </ProtectedComponent>
+            <ProtectedComponent
+              fallback={
+                <Button round btnsize="xl" onClick={() => navigate("/sign_up")}>
+                  get started
+                </Button>
+              }
+            >
+              <Button round btnsize="xl" onClick={() => navigate("/explore")}>
+                explore
+              </Button>
+            </ProtectedComponent>
           </GridItem>
         </Grid>
       </Grid>

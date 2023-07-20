@@ -44,6 +44,8 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   const onLogOut = () => {
     localStorage.removeItem("auth");
     setIsAuthenticated(false);
+    navigate(0);
+    
   };
   const navigate = useNavigate();
 
@@ -146,6 +148,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
 
           <Box sx={{ flexGrow: 0, position: "absolute", right: "0px" }}>
             <ProtectedComponent
+            checkActivation={false}
               fallback={
                 <Grid container className="flex items-center">
                   <Grid
@@ -184,7 +187,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 >
                   <MenuItem disableRipple>
                     <Typography
-                      onClick={() => navigate("/my_projects")}
+                      onClick={() => navigate("/my-projects")}
                       textAlign="center"
                     >
                       {"MY PROJECTS"}

@@ -20,7 +20,6 @@ import { showToast } from "../../utils/toast";
 interface Props {}
 
 export const Login: React.FC<Props> = () => {
-  const { setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
@@ -36,18 +35,16 @@ export const Login: React.FC<Props> = () => {
       showToast("Successfully Logged In", "Login Success", "success");
       console.log("successful login");
       saveToLocalStorage("auth", {accessToken: res.accessToken, isLoggedIn: true});
-      setIsAuthenticated(true);
       navigate("/", { replace:true });
     } else {
-      setIsAuthenticated(false);
       console.error("error", res);
     }
     setIsLoading(false);
   }
   useEffect(
     () =>
-      setFormValid(validateUsername(username) && validatePassword(password)),
-    [username, password]
+      setFormValid(validateUsername(username) && validatePassword(password) && !isLoading),
+    [username, password, isLoading]
   );
   return (
     <Box className="flex-col w-96 h-96 bg-white rounded-[50px] text-center p-10 mt-28 flex">
@@ -94,7 +91,6 @@ export const Login: React.FC<Props> = () => {
           type="submit"
           className="w-72"
           textclassname=""
-          // onClick={onLogin}
         >
           Submit
         </Button>

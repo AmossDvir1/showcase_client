@@ -44,7 +44,7 @@ export const UserProjectsDashboard: React.FC<Props> = () => {
           {Array.from(Array(VISIBLE_PROJECTS_NUM)).map((_, index) => (
             <Grid item className="h-full flex" xs={2} sm={4} md={4} key={index}>
               {projectSlots &&
-                (index < projectSlots.length ? (
+                (index < projectSlots?.length + 1 ? (
                   <Slot
                     details={{
                       projectName: "reoiio",

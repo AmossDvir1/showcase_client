@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, FormEvent } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { TextField } from "../../components/TextField";
 import EmailIcon from "@mui/icons-material/Email";
@@ -11,7 +11,6 @@ import {
   validateUsername,
 } from "../../utils/stringValidation";
 import { useNavigate } from "react-router-dom";
-import { reduxForm } from "redux-form";
 import { serverReq } from "../../API/utils/axiosConfig";
 import {
   SignUpFormContext,
@@ -37,7 +36,8 @@ export const SignUp: React.FC<Props> = () => {
   const [lastName, setLastName] = useState<string>("hh");
   const [formValid, setFormValid] = useState<boolean>(false);
 
-  const onSubmitForm = async () => {
+  const onSubmitForm = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsLoading(true);
 
     const res = await signUp({
@@ -54,7 +54,7 @@ export const SignUp: React.FC<Props> = () => {
         isLoggedIn: true,
       });
       setIsAuthenticated(true);
-      navigate("/validation", { replace: true });
+      navigate("/user-activation", { replace: true });
     } else {
       setIsAuthenticated(false);
       console.error("error", res);
@@ -107,75 +107,78 @@ export const SignUp: React.FC<Props> = () => {
           <Typography className="text-black text-3xl mt-7 mb-7">
             Sign up to Showcase
           </Typography>
-          <Box className="py-3">
-            <TextField
-              validation={validateUsername}
-              placeholder="Username"
-              name="username"
-              value={username}
-              // value={formData.username}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setUsername(e.target.value)
-              }
-              // onChange={handleChange}
-              Icon={PersonIcon}
-              type="text"
-              errorText="Must be Between 2 and 20 Characters in Length"
-            ></TextField>
-          </Box>
-          <Box className="py-3">
-            <TextField
-              validation={validateEmail}
-              placeholder="Email"
-              name="email"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
-              value={email}
-              // value={formData.email}
-              // onChange={handleChange}
-              Icon={EmailIcon}
-              type="email"
-              errorText="Not a Valid Email Address"
-            ></TextField>
-          </Box>
-          <Box className="py-3">
-            <TextField
-              validation={validatePassword}
-              placeholder="Password"
-              name="password"
-              value={password}
-              // value={formData.password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPassword(e.target.value)
-              }
-              // onChange={handleChange}
-              Icon={PasswordIcon}
-              type="password"
-              errorText="Password Must Combine Lowercase Letters, Uppercase Letters, Numbers, And Special Characters"
-            ></TextField>
-          </Box>
+          <form onSubmit={onSubmitForm}>
+            <Box className="py-3">
+              <TextField
+                validation={validateUsername}
+                placeholder="Username"
+                name="username"
+                value={username}
+                // value={formData.username}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setUsername(e.target.value)
+                }
+                // onChange={handleChange}
+                Icon={PersonIcon}
+                type="text"
+                errorText="Must be Between 2 and 20 Characters in Length"
+              ></TextField>
+            </Box>
+            <Box className="py-3">
+              <TextField
+                validation={validateEmail}
+                placeholder="Email"
+                name="email"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setEmail(e.target.value)
+                }
+                value={email}
+                // value={formData.email}
+                // onChange={handleChange}
+                Icon={EmailIcon}
+                type="email"
+                errorText="Not a Valid Email Address"
+              ></TextField>
+            </Box>
+            <Box className="py-3">
+              <TextField
+                validation={validatePassword}
+                placeholder="Password"
+                name="password"
+                value={password}
+                // value={formData.password}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setPassword(e.target.value)
+                }
+                // onChange={handleChange}
+                Icon={PasswordIcon}
+                type="password"
+                errorText="Password Must Combine Lowercase Letters, Uppercase Letters, Numbers, And Special Characters"
+              ></TextField>
+            </Box>
 
-          <Box>
-            <Typography
-              onClick={() => navigate("/login")}
-              className="text-black cursor-pointer"
-            >
-              Already Have an Account? Log In
-            </Typography>
-          </Box>
-          <Box className="pt-12">
-            <Button
-              disabled={!formValid || isLoading}
-              loading={isLoading}
-              round
-              className="w-64"
-              textclassname=""
-              onClick={onSubmitForm}
-            >
-              Submit
-            </Button>
-          </Box>
+            <Box>
+              <Typography
+                onClick={() => navigate("/login")}
+                className="text-black cursor-pointer"
+              >
+                Already Have an Account? Log In
+              </Typography>
+            </Box>
+            <Box className="pt-12">
+              <Button
+                type="submit"
+                disabled={!formValid || isLoading}
+                loading={isLoading}
+                round
+                className="w-64"
+                textclassname=""
+                // onClick={onSubmitForm}
+              >
+                Submit
+              </Button>
+            </Box>
+          </form>
         </Box>
       </Grid>
 
