@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { useNotificationCenter } from "react-toastify/addons/use-notification-center";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,9 +18,13 @@ import { Box } from "@mui/material";
 import { SignUp } from "./pages/auth/SignUp";
 import { Login } from "./pages/auth/Login";
 import { UserProjectsDashboard } from "./pages/UserProjectsDashboard";
-import { AuthProvider } from "./controllers/auth/useAuth";
+import { AuthProvider, useAuth } from "./controllers/auth/useAuth";
 import ProtectedRoute from "./pages/ProtectedRoute";
-import UserValidation from "./pages/auth/UserValidation";
+import UserValidation from "./pages/auth/UserActivation";
+import ActivationBar from "./components/ActivationBar";
+import Layout from "./components/Layout";
+import UserAlreadyActivated from "./pages/auth/UserAlreadyActivated";
+import ActivationLayout from "./pages/auth/ActivationLayout";
 
 const rootElement = document.getElementById("root");
 
@@ -50,34 +59,36 @@ const theme = createTheme({
 const App = () => {
   const { notifications, clear, markAllAsRead, markAsRead } =
     useNotificationCenter();
-
-
   return (
     <StyledEngineProvider injectFirst>
       <AuthProvider>
         <ThemeProvider theme={theme}>
           <Router>
-            <MenuBar
-              menuItems={["Projects", "Support", "About Us"]}
-              userSettings={["Profile", "Settings"]}
-            ></MenuBar>
-            <Box className="xs:mx-[3rem] sm:mx-[5rem] md:mx-[7rem] lg:mx-[7rem] 2xl:mx-[17rem] my-[2.5rem]">
-              <Routes>
-                <Route element={<ProtectedRoute></ProtectedRoute>}>
-                  <Route
-                    path="validation"
-                    element={<UserValidation></UserValidation>}
-                  ></Route>
-                </Route>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route
+                  element={
+                    <ProtectedRoute checkActivation={false}></ProtectedRoute>
+                  }
+                ></Route>
                 <Route index element={<HomePage></HomePage>} />
                 <Route path="sign_up" element={<SignUp></SignUp>} />
                 <Route path="login" element={<Login></Login>} />
+                <Route element={<ProtectedRoute></ProtectedRoute>}>
+                  <Route
+                    path="my-projects"
+                    element={<UserProjectsDashboard></UserProjectsDashboard>}
+                  ></Route>
+                </Route>
+              </Route>
+              <Route element={<Layout withMenu={false} />}>
                 <Route
-                  path="my_projects"
-                  element={<UserProjectsDashboard></UserProjectsDashboard>}
-                />
-              </Routes>
-            </Box>
+                  path="user-activation"
+                  element={<ActivationLayout/>}
+                ></Route>
+              </Route>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
           </Router>
           <ToastContainer />
         </ThemeProvider>

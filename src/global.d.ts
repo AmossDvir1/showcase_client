@@ -28,5 +28,8 @@ interface UserDetails {
   accessToken?: string;
 }
 
+interface GlobalState {
+isActivationToastShown: boolean;
+}
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";

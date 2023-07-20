@@ -15,7 +15,7 @@ serverReq.defaults.withCredentials = true;
 serverReq.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const { data } = error.response;
+    const data = error?.response?.data;
     console.log(error);
 
     if (data?.error === ACCESS_TOKEN_EXPIRED) {
@@ -32,6 +32,8 @@ serverReq.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axios(originalRequest);
       } catch (error) {
+        if (ERRORS_TO_DISPLAY.includes(data?.error)){showToast(data?.message || "Error", "Error", "error");}
+        
         // Handle refresh token request failure
         // Display error message, logout user, etc.
       }

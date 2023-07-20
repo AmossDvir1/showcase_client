@@ -13,15 +13,19 @@ import { showToast } from "../../utils/toast";
 const LEGAL_CHARS = "0123456789";
 
 interface RequestProccess {
-  sent:boolean,
-  processed: boolean,
-  success: boolean
+  sent: boolean;
+  processed: boolean;
+  success: boolean;
 }
-const UserValidation: React.FC = () => {
+const UserActivation: React.FC = () => {
   const navigate = useNavigate();
 
   const [emailSent, setEmailSent] = useState(false);
-  const [reqState, setReqState] = useState<RequestProccess>({sent:false, processed:false, success:false});
+  const [reqState, setReqState] = useState<RequestProccess>({
+    sent: false,
+    processed: false,
+    success: false,
+  });
   const [verificationCode, setVerificationCode] = useState([
     "",
     "",
@@ -34,11 +38,30 @@ const UserValidation: React.FC = () => {
 
   const handleSendEmail = async () => {
     const res = await sendValidationEmail();
-    showToast("Email Sent Successfully", "Email Sent Successfully", "success");
-    setEmailSent(true);
-    // Focus the first input after email is sent
-    if (verificationCodeInputs.current[0]) {
-      verificationCodeInputs.current[0].focus();
+    if (res) {
+      showToast(
+        "Email Sent Successfully",
+        "Email Sent Successfully",
+        "success"
+      );
+      setEmailSent(true);
+      // Focus the first input after email is sent
+      if (verificationCodeInputs.current[0]) {
+        verificationCodeInputs.current[0].focus();
+      }
+    } else {
+      showToast(
+        "There was an error while sending the Email",
+        "There was an error while sending the Email",
+        "error"
+      );
+    }
+  };
+
+  const onPaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedData = event.clipboardData.getData("text/plain");
+    if (/^\d{6}$/.test(pastedData)) {
+      setVerificationCode(pastedData.split(""));
     }
   };
 
@@ -118,33 +141,30 @@ const UserValidation: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => console.log(reqState), [reqState]);
-
   useEffect(() => {
     if (checkFullyTyped(verificationCode)) {
-      setReqState({sent:true, processed: false, success:false});
+      setReqState({ sent: true, processed: false, success: false });
       const activateUser = async () => {
-        
-          console.log(verificationCode);
-          const res = await activateUserWithOtp(verificationCode.join(""));
-          setReqState({sent:true, processed: true, success:false});
-          if (res?.success) {
-            setReqState({sent:true, processed: true, success:true});
-            console.log("User is activated");
-            setTimeout(() => navigate("/"), 2000);
-          }
-          else{
-            setReqState({sent:true, processed: true, success:false});
-          }
-        
-        
+        console.log(verificationCode);
+        const res = await activateUserWithOtp(verificationCode.join(""));
+        setReqState({ sent: true, processed: true, success: false });
+        if (res?.success) {
+          setReqState({ sent: true, processed: true, success: true });
+          console.log("User is activated");
+          setTimeout(() => {
+            navigate("/");
+            window.location.reload();
+          }, 1500);
+        } else {
+          setReqState({ sent: true, processed: true, success: false });
+        }
       };
       activateUser();
     }
   }, [verificationCode]);
 
   return (
-    <div className="bg-gray-100 flex flex-col items-center justify-center rounded-3xl p-7">
+    <div className="bg-gray-100 flex flex-col items-center justify-center rounded-3xl p-7 mt-10">
       <Typography className="text-primary text-5xl font-normal mb-4">
         Activate Your Account
       </Typography>
@@ -157,12 +177,15 @@ const UserValidation: React.FC = () => {
           <div className="flex items-center">
             {verificationCode.map((value, index) => (
               <input
+                onPaste={onPaste}
                 key={index}
                 ref={(el) => (verificationCodeInputs.current[index] = el)}
                 type="text"
                 className="border border-gray-300 px-4 py-2 rounded-md w-9 mx-1 text-center"
                 value={value}
-                disabled={reqState.sent && reqState.processed && reqState.success}
+                disabled={
+                  reqState.sent && reqState.processed && reqState.success
+                }
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   handleVerificationCodeChange(index, e.target.value)
                 }
@@ -182,8 +205,8 @@ const UserValidation: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div>
-          <Typography className="text-gray-700 mb-4 text-lg">
+        <div className="flex flex-col items-center">
+          <Typography className="text-gray-700 mb-4 text-lg text-center">
             Thank you for registering!<br></br>
             To complete the registration process, please click the button below
             to receive a verification email:
@@ -195,4 +218,4 @@ const UserValidation: React.FC = () => {
   );
 };
 
-export default UserValidation;
+export default UserActivation;

@@ -10,6 +10,7 @@ const sendValidationEmail = async () => {
     return res.data;
   } catch (err: any) {
     console.error(err);
+    return false;
   }
 };
 
