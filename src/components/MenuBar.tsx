@@ -18,6 +18,9 @@ import { CreateProjectDialog } from "../pages/createProject/CreateProjectDialog"
 import { useNavigate } from "react-router-dom";
 import ProtectedComponent from "./ProtectedComponent";
 import { useAuth } from "../controllers/auth/useAuth";
+import LiveSearch from "./search/LiveSearch";
+import Search from "./search/Search";
+import ResponsiveComponent from "./ResponsiveComponent";
 
 interface Props {
   menuItems: string[];
@@ -25,10 +28,9 @@ interface Props {
 }
 
 export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
-  const { setIsAuthenticated } = useAuth();
+  const auth = useAuth();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [anchorElLogin, setAnchorElLogin] = useState<null | HTMLElement>(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const onClose = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -43,20 +45,13 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
 
   const onLogOut = () => {
     localStorage.removeItem("auth");
-    setIsAuthenticated(false);
+    auth.setIsAuthenticated(false);
     navigate(0);
-    
   };
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-  const handleOpenLogin = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElLogin(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
@@ -66,13 +61,10 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const handleCloseLogin = () => {
-    setAnchorElLogin(null);
-  };
 
   return (
     <AppBar className="static bg-transparent border-solid border-b-[1px] border-t-0 border-r-0 border-l-0 border-[#6e6e6e]">
-      <Container maxWidth="xl">
+      <Container className="xl:max-w-full 2xl:max-w-[80%]">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -100,7 +92,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: "block", md: "none" },
+                display: { sm: "block", md: "none" },
               }}
             >
               {menuItems.map((page) => (
@@ -128,27 +120,33 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
           >
             {"Showcase".toUpperCase()}
           </Typography>
-          <Box sx={{ flexGrow: 2, display: { xs: "none", md: "flex" } }}>
-            {menuItems.map((page) => (
-              <MuiButton
-                key={page}
-                onClick={handleCloseNavMenu}
-                disableRipple
-                sx={{
-                  my: 2,
-                  color: "white",
-                  display: "block",
-                  fontWeight: "400",
-                }}
-              >
-                {page}
-              </MuiButton>
-            ))}
+          <Box
+            className="flex items-center justify-start"
+            sx={{ flexGrow: 2, display: { xs: "none", md: "flex" } }}
+          >
+            <ResponsiveComponent breakpoint="md">
+              {menuItems.map((page) => (
+                <MuiButton
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  disableRipple
+                  sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                    fontWeight: "400",
+                  }}
+                >
+                  {page}
+                </MuiButton>
+              ))}
+            </ResponsiveComponent>
+            <Search></Search>
           </Box>
 
           <Box sx={{ flexGrow: 0, position: "absolute", right: "0px" }}>
             <ProtectedComponent
-            checkActivation={false}
+              checkActivation={false}
               fallback={
                 <Grid container className="flex items-center">
                   <Grid
@@ -185,7 +183,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                   item
                   className="flex text-center justify-center cursor-default"
                 >
-                  <MenuItem disableRipple>
+                  <MenuItem disableRipple disabled={!auth.isActivated}>
                     <Typography
                       onClick={() => navigate("/my-projects")}
                       textAlign="center"
@@ -194,9 +192,14 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                     </Typography>
                   </MenuItem>
                 </Grid>
+
                 <Grid item>
                   <MenuItem className="cursor-default" disableRipple>
-                    <Button btnsize="sm" onClick={onClickOpen}>
+                    <Button
+                      btnsize="sm"
+                      onClick={onClickOpen}
+                      disabled={!auth.isActivated}
+                    >
                       + Create
                     </Button>
                     <CreateProjectDialog
