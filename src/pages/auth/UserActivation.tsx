@@ -4,7 +4,7 @@ import { Button } from "../../components/Button";
 import {
   activateUserWithOtp,
   sendValidationEmail,
-} from "../../controllers/auth/validation";
+} from "../../controllers/auth/activation";
 import { useNavigate } from "react-router-dom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -21,6 +21,7 @@ const UserActivation: React.FC = () => {
   const navigate = useNavigate();
 
   const [emailSent, setEmailSent] = useState(false);
+  const [emailButtonDisabled, setEmailButtonDisabled] = useState(false);
   const [reqState, setReqState] = useState<RequestProccess>({
     sent: false,
     processed: false,
@@ -37,6 +38,7 @@ const UserActivation: React.FC = () => {
   const verificationCodeInputs = useRef<Array<HTMLInputElement | null>>([]);
 
   const handleSendEmail = async () => {
+    setEmailButtonDisabled(true);
     const res = await sendValidationEmail();
     if (res) {
       showToast(
@@ -50,6 +52,7 @@ const UserActivation: React.FC = () => {
         verificationCodeInputs.current[0].focus();
       }
     } else {
+      setEmailButtonDisabled(false);
       showToast(
         "There was an error while sending the Email",
         "There was an error while sending the Email",
@@ -211,7 +214,7 @@ const UserActivation: React.FC = () => {
             To complete the registration process, please click the button below
             to receive a verification email:
           </Typography>
-          <Button onClick={handleSendEmail}>Send Verification Email</Button>
+          <Button onClick={handleSendEmail} disabled={emailButtonDisabled}>Send Verification Email</Button>
         </div>
       )}
     </div>

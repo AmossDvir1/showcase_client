@@ -33,3 +33,15 @@ isActivationToastShown: boolean;
 }
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+
+ResultsItemTypes = "profile" | "post" | "project";
+
+
+
+interface ResultsItem {
+  id: string;
+  title: string;
+  content: string;
+  type: ResultsItemTypes;
+  // Add other properties as needed
+}

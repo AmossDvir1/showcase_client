@@ -30,7 +30,7 @@ export const HomePage: React.FC<Props> = () => {
 
   return (
     <Grid container className="py-10">
-      <Grid item xs={12} sm={8} md={8}>
+      <Grid item xs={12} sm={4} md={4}>
         <Grid container direction="column">
           <GridItem>
             <Box className="pb-6">
@@ -61,6 +61,15 @@ export const HomePage: React.FC<Props> = () => {
               <Button round btnsize="xl" onClick={() => navigate("/explore")}>
                 explore
               </Button>
+            </ProtectedComponent>
+          </GridItem>
+        </Grid>
+      </Grid>
+      <Grid item xs={12} sm={4} md={4}>
+        <Grid container direction="column">
+          <GridItem className="mt-7">
+            <ProtectedComponent>
+              
             </ProtectedComponent>
           </GridItem>
         </Grid>

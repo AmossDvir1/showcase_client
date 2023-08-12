@@ -4,6 +4,7 @@ import { TextField } from "../../components/TextField";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 import PasswordIcon from "@mui/icons-material/Password";
+import AbcIcon from '@mui/icons-material/Abc';
 import { Button } from "../../components/Button";
 import {
   validateEmail,
@@ -11,7 +12,6 @@ import {
   validateUsername,
 } from "../../utils/stringValidation";
 import { useNavigate } from "react-router-dom";
-import { serverReq } from "../../API/utils/axiosConfig";
 import {
   SignUpFormContext,
   SignUpFormProvider,
@@ -32,8 +32,8 @@ export const SignUp: React.FC<Props> = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [firstName, setFirstName] = useState<string>("hh");
-  const [lastName, setLastName] = useState<string>("hh");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
   const [formValid, setFormValid] = useState<boolean>(false);
 
   const onSubmitForm = async (e: FormEvent<HTMLFormElement>) => {
@@ -156,6 +156,28 @@ export const SignUp: React.FC<Props> = () => {
                 errorText="Password Must Combine Lowercase Letters, Uppercase Letters, Numbers, And Special Characters"
               ></TextField>
             </Box>
+            <Box className="py-3">
+              <TextField
+                placeholder="First Name"
+                name="firstName"
+                value={firstName}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setFirstName(e.target.value)
+                }
+                Icon={AbcIcon}
+              ></TextField>
+            </Box>
+            <Box className="py-3">
+              <TextField
+                placeholder="Last Name"
+                name="lastName"
+                value={lastName}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setLastName(e.target.value)
+                }
+                Icon={AbcIcon}
+              ></TextField>
+            </Box>
 
             <Box>
               <Typography
@@ -173,7 +195,6 @@ export const SignUp: React.FC<Props> = () => {
                 round
                 className="w-64"
                 textclassname=""
-                // onClick={onSubmitForm}
               >
                 Submit
               </Button>
