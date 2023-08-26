@@ -4,6 +4,7 @@ import { Search as SearchIcon } from "@mui/icons-material";
 import ResultItem from "./resultItem/ResultItem";
 import SearchValueItem from "./resultItem/itemsTypes/SearchValueItem";
 import ResponsiveComponent from "../ResponsiveComponent";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface Props<T> {
   results?: T[];
@@ -18,21 +19,19 @@ const LiveSearch = <T extends ResultsItem>({
   onChange,
   onSelect,
 }: Props<T>): JSX.Element => {
+  const navigate = useNavigate();
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const resultContainer = useRef<HTMLDivElement>(null);
   const [showResults, setShowResults] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const handleSelection = (selectedIndex: number) => {
-    const selectedItem = results[selectedIndex];
-    if (!selectedItem) return resetSearchComplete();
-    if (onChange) {
-      if (selectedItem) {
-        onChange(selectedItem.title ?? "");
-      }
-    }
-    onSelect && onSelect(selectedItem);
-    resetSearchComplete();
+  const onItemClick = (index: number) => {
+    const selectedItem = results[index];
+    // if (!selectedItem) return resetSearchComplete();
+    onSelect?.(selectedItem);
+    // resetSearchComplete();
+    navigate(`/${selectedItem.type}/${selectedItem.urlMapping}`);
+    // onChange("") // reset the search bar
   };
 
   const resetSearchComplete = useCallback(() => {
@@ -66,7 +65,7 @@ const LiveSearch = <T extends ResultsItem>({
     // select the current item
     if (key === "Enter") {
       e.preventDefault();
-      handleSelection(focusedIndex);
+      onItemClick(focusedIndex);
     }
 
     setFocusedIndex(nextIndexCount);
@@ -104,6 +103,8 @@ const LiveSearch = <T extends ResultsItem>({
           />
         </div>
         <ResponsiveComponent>
+        <div className=" ml-[30px] m-4 rounded-full max-w-sm bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500">
+
           <InputBase
             onKeyDown={handleKeyDown}
             onFocus={() => setIsExpanded(true)}
@@ -111,12 +112,13 @@ const LiveSearch = <T extends ResultsItem>({
             value={value}
             onChange={handleChange}
             placeholder="Search..."
-            className="ml-[30px] pr-[25px] w-full bg-transparent rounded-full focus:outline-none"
+            className="w-full bg-transparent rounded-full focus:outline-none p-[3px] active:outline-none "
             inputProps={{
               "aria-label": "search",
-              style: { borderRadius: "100px" },
+              style: { borderRadius: "100px"},
             }}
           />
+        </div>
 
           {showResults && value && value.length > 0 && (
             <div className="absolute mt-1 w-[calc(100%_-_30px)] ml-8 py-2 bg-white shadow-lg rounded-2xl max-h-96 overflow-y-auto">
@@ -127,7 +129,7 @@ const LiveSearch = <T extends ResultsItem>({
                     isFocused={index === focusedIndex}
                     key={index}
                     itemDetails={res}
-                    handleSelection={handleSelection}
+                    onItemClick={onItemClick}
                     index={index}
                     containerRef={
                       index === focusedIndex ? resultContainer : null
@@ -140,7 +142,7 @@ const LiveSearch = <T extends ResultsItem>({
                   <SearchValueItem
                     isFocused={results.length === focusedIndex}
                     value={value}
-                    handleSelection={handleSelection}
+                    handleSelection={onItemClick}
                     index={results.length}
                     containerRef={
                       results.length === focusedIndex ? resultContainer : null

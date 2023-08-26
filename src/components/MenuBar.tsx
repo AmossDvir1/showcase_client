@@ -21,6 +21,7 @@ import { useAuth } from "../controllers/auth/useAuth";
 import LiveSearch from "./search/LiveSearch";
 import Search from "./search/Search";
 import ResponsiveComponent from "./ResponsiveComponent";
+import NotificationIcon from "./NotificationIcon";
 
 interface Props {
   menuItems: string[];
@@ -206,6 +207,11 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                       open={createDialogOpen}
                       onClose={onClose}
                     ></CreateProjectDialog>
+                  </MenuItem>
+                </Grid>
+                <Grid item>
+                  <MenuItem className="cursor-default" disableRipple>
+                    <NotificationIcon></NotificationIcon>
                   </MenuItem>
                 </Grid>
                 <Grid item>

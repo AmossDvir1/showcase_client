@@ -29,19 +29,26 @@ interface UserDetails {
 }
 
 interface GlobalState {
-isActivationToastShown: boolean;
+  isActivationToastShown: boolean;
 }
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 
-ResultsItemTypes = "profile" | "post" | "project";
-
-
+type ResultsItemTypes = "profile" | "post" | "project";
 
 interface ResultsItem {
   id: string;
   title: string;
   content: string;
   type: ResultsItemTypes;
+  urlMapping: string;
   // Add other properties as needed
 }
+
+type RelationshipState =
+  | "no_relationship"
+  | "pending_first_second"
+  | "pending_second_first"
+  | "friends"
+  | "block_first_second"
+  | "block_second_first";
