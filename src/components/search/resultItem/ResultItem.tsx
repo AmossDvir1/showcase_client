@@ -4,7 +4,7 @@ import Post from "./itemsTypes/Post";
 import Project from "./itemsTypes/Project";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  handleSelection: (selectedIndex: number) => void;
+  onItemClick: (selectedIndex: number) => void;
   index: number;
   itemDetails: ResultsItem;
   containerRef: RefObject<HTMLDivElement> | null | undefined;
@@ -12,7 +12,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const ResultItem: FC<Props> = ({
-  handleSelection,
+  onItemClick,
   index,
   containerRef,
   itemDetails,
@@ -41,7 +41,7 @@ const ResultItem: FC<Props> = ({
   return (
     <div
       className="cursor-pointer hover:bg-gray-200 p-2"
-      onMouseDown={() => handleSelection(index)}
+      onMouseDown={() => onItemClick && onItemClick(index)}
       ref={containerRef}
       style={{
         backgroundColor: isFocused ? "rgba(40,0,0,0.1)" : "",

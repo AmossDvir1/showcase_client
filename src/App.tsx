@@ -25,6 +25,7 @@ import ActivationBar from "./components/ActivationBar";
 import Layout from "./components/Layout";
 import UserAlreadyActivated from "./pages/auth/UserAlreadyActivated";
 import ActivationLayout from "./pages/auth/ActivationLayout";
+import Profile from "./pages/profile/ProfilePage";
 
 const rootElement = document.getElementById("root");
 
@@ -79,6 +80,8 @@ const App = () => {
                     path="my-projects"
                     element={<UserProjectsDashboard></UserProjectsDashboard>}
                   ></Route>
+                   <Route path="/:type/:urlName" element={<Profile />} />
+
                 </Route>
               </Route>
               <Route element={<Layout withMenu={false} />}>
@@ -87,7 +90,7 @@ const App = () => {
                   element={<ActivationLayout/>}
                 ></Route>
               </Route>
-              <Route path="*" element={<Navigate to="/" replace />} />
+              {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
             </Routes>
           </Router>
           <ToastContainer />
