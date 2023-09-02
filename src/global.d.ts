@@ -47,8 +47,15 @@ interface ResultsItem {
 
 type RelationshipState =
   | "no_relationship"
-  | "pending_first_second"
-  | "pending_second_first"
+  | "pending_approval"
+  | "request_sent"
   | "friends"
   | "block_first_second"
   | "block_second_first";
+
+
+  interface UserProfile {
+    firstName: string;
+    lastName: string;
+    username: string;
+  }

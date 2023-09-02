@@ -7,8 +7,6 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Grid } from "@mui/material";
@@ -18,7 +16,6 @@ import { CreateProjectDialog } from "../pages/createProject/CreateProjectDialog"
 import { useNavigate } from "react-router-dom";
 import ProtectedComponent from "./ProtectedComponent";
 import { useAuth } from "../controllers/auth/useAuth";
-import LiveSearch from "./search/LiveSearch";
 import Search from "./search/Search";
 import ResponsiveComponent from "./ResponsiveComponent";
 import NotificationIcon from "./NotificationIcon";
@@ -65,7 +62,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
 
   return (
     <AppBar className="static bg-transparent border-solid border-b-[1px] border-t-0 border-r-0 border-l-0 border-[#6e6e6e]">
-      <Container className="xl:max-w-full 2xl:max-w-[80%]">
+      <Container className="xl:max-w-full 2xl:max-w-[80%] px-0">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -103,27 +100,21 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: "flex", mr: 1 }} />
+          <ResponsiveComponent breakpoint="md">
+            <AdbIcon sx={{ display: "flex", mr: 1 }} />
+          </ResponsiveComponent>
           <Typography
+            className="mr-2 flex flex-nowrap xs:tracking-[0.2em] sm:tracking-[0.2em] lg:tracking-[0.4em] xs:text-sm sm:text-sm lg:text-lg text-white decoration-transparent font-semibold"
             variant="h6"
             noWrap
             component="a"
             href="/"
-            sx={{
-              // flexGrow: 1,
-              mr: 2,
-              display: "flex" /*{ xs: "none", sm: "flex", md: "flex" }*/,
-              letterSpacing: ".3rem",
-              color: "white",
-              textDecoration: "none",
-              fontWeight: "600",
-            }}
           >
             {"Showcase".toUpperCase()}
           </Typography>
           <Box
             className="flex items-center justify-start"
-            sx={{ flexGrow: 2, display: { xs: "none", md: "flex" } }}
+            // sx={{ flexGrow: 2 }}
           >
             <ResponsiveComponent breakpoint="md">
               {menuItems.map((page) => (
@@ -142,7 +133,10 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 </MuiButton>
               ))}
             </ResponsiveComponent>
+            <div className="pl-3 xs:max-sm:pl-0">
             <Search></Search>
+
+            </div>
           </Box>
 
           <Box sx={{ flexGrow: 0, position: "absolute", right: "0px" }}>
@@ -180,35 +174,41 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
               }
             >
               <Grid container className="flex items-center">
-                <Grid
-                  item
-                  className="flex text-center justify-center cursor-default"
-                >
-                  <MenuItem disableRipple disabled={!auth.isActivated}>
-                    <Typography
-                      onClick={() => navigate("/my-projects")}
-                      textAlign="center"
-                    >
-                      {"MY PROJECTS"}
-                    </Typography>
-                  </MenuItem>
-                </Grid>
+                <ResponsiveComponent breakpoint="md">
+                  <Grid
+                    item
+                    className="flex text-center justify-center cursor-default"
+                  >
+                    <MenuItem disableRipple disabled={!auth.isActivated}>
+                      <Typography
+                        onClick={() => navigate("/my-projects")}
+                        textAlign="center"
+                      >
+                        {"MY PROJECTS"}
+                      </Typography>
+                    </MenuItem>
+                  </Grid>
+                </ResponsiveComponent>
 
-                <Grid item>
-                  <MenuItem className="cursor-default" disableRipple>
-                    <Button
-                      btnsize="sm"
-                      onClick={onClickOpen}
-                      disabled={!auth.isActivated}
-                    >
-                      + Create
-                    </Button>
-                    <CreateProjectDialog
-                      open={createDialogOpen}
-                      onClose={onClose}
-                    ></CreateProjectDialog>
-                  </MenuItem>
-                </Grid>
+                <ResponsiveComponent breakpoint="md">
+                  <Grid item>
+                    <MenuItem className="cursor-default" disableRipple>
+                      <Button
+                        className="w-[80px]"
+                        btnsize="sm"
+                        textclassname="text-sm"
+                        onClick={onClickOpen}
+                        disabled={!auth.isActivated}
+                      >
+                        + Create
+                      </Button>
+                      <CreateProjectDialog
+                        open={createDialogOpen}
+                        onClose={onClose}
+                      ></CreateProjectDialog>
+                    </MenuItem>
+                  </Grid>
+                </ResponsiveComponent>
                 <Grid item>
                   <MenuItem className="cursor-default" disableRipple>
                     <NotificationIcon></NotificationIcon>
@@ -228,13 +228,9 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                     >
                       <Typography
                         noWrap
+                        className="flex text-white decoration-transparent text-sm"
                         component="a"
                         href="/"
-                        sx={{
-                          display: "flex",
-                          color: "white",
-                          textDecoration: "none",
-                        }}
                       >
                         log out
                       </Typography>
