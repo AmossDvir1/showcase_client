@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
-    "@types/redux-form": "^8.3.5"
+    "@types/redux-form": "^8.3.5",
+    "tailwindcss": "^3.3.3"
   }
 }

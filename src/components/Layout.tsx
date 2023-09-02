@@ -20,7 +20,7 @@ const Layout: React.FC<RouteProps & LayoutProps> = ({ withMenu = true }) => {
           />
         </>
       )}
-      <Box className="xs:mx-[3rem] sm:mx-[5rem] md:mx-[7rem] lg:mx-[7rem] 2xl:mx-[17rem] my-[2.5rem]">
+      <Box className="xs:mx-[2rem] sm:mx-[2rem] md:mx-[2rem] lg:mx-[2rem] 2xl:mx-[17rem] my-[2.5rem]">
         <Outlet />
       </Box>
     </>

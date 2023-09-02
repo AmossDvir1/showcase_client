@@ -3,12 +3,8 @@ import { useParams } from "react-router-dom";
 import { serverReq } from "../../API/utils/axiosConfig";
 import { Avatar, Typography } from "@mui/material";
 import { Button } from "../../components/Button";
+import RelationshipStatusButton from "../../components/RelationshipStatusButton";
 
-interface UserProfile {
-  firstName: string;
-  lastName: string;
-  username: string;
-}
 
 const Profile: React.FC = () => {
   const { urlName, type } = useParams<{
@@ -79,13 +75,7 @@ const Profile: React.FC = () => {
         <Typography className="text-xl font-light">{`${userData?.username}`}</Typography>
         <Typography className="text-xl font-light">{`${userData?.firstName} ${userData?.lastName}`}</Typography>
       </div>
-      {relationship === "no_relationship" ? (
-        <Button onClick={onAddUserClick}>+Add friend</Button>
-      ) : (
-        <div className="flex items-center justify-center p-4 w-64 bg-transparent border-solid border-primary border-[1px] rounded-lg">
-          <Typography>Request Sent</Typography>
-        </div>
-      )}
+      <RelationshipStatusButton relationship={relationship} setRelationship={setRelationship} userData={userData}></RelationshipStatusButton>
     </div>
   );
 };

@@ -1,29 +1,22 @@
-import React from "react";
+
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import { useNotificationCenter } from "react-toastify/addons/use-notification-center";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material";
-import { MenuBar } from "./components/MenuBar";
 import { HomePage } from "./pages/HomePage";
-import { Box } from "@mui/material";
 import { SignUp } from "./pages/auth/SignUp";
 import { Login } from "./pages/auth/Login";
 import { UserProjectsDashboard } from "./pages/UserProjectsDashboard";
-import { AuthProvider, useAuth } from "./controllers/auth/useAuth";
+import { AuthProvider } from "./controllers/auth/useAuth";
 import ProtectedRoute from "./pages/ProtectedRoute";
-import UserValidation from "./pages/auth/UserActivation";
-import ActivationBar from "./components/ActivationBar";
 import Layout from "./components/Layout";
-import UserAlreadyActivated from "./pages/auth/UserAlreadyActivated";
 import ActivationLayout from "./pages/auth/ActivationLayout";
 import Profile from "./pages/profile/ProfilePage";
 
@@ -58,8 +51,6 @@ const theme = createTheme({
 });
 
 const App = () => {
-  const { notifications, clear, markAllAsRead, markAsRead } =
-    useNotificationCenter();
   return (
     <StyledEngineProvider injectFirst>
       <AuthProvider>

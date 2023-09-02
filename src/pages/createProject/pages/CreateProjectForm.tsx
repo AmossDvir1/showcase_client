@@ -1,6 +1,5 @@
 import React, {
   ChangeEvent,
-  ChangeEventHandler,
   Dispatch,
   SetStateAction,
   useContext,
@@ -17,8 +16,6 @@ import { CreateProjectContext } from "../../../context/CreateProjectContext";
 interface Props {setData: Dispatch<SetStateAction<{ projectName: string; projectDesc: string; isExposed: string; }>>}
 
 export const CreateProjectForm: React.FC<Props> = ({setData}) => {
-  const [projectName, setProjectName] = useState<string>("");
-  const [projectDesc, setProjectDesc] = useState<string>("");
   const [isExposed, setIsExposed] = useState<boolean>(false);
   const { formData, updateFormData } = useContext(CreateProjectContext);
 

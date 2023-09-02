@@ -1,13 +1,11 @@
-import React, { useState, useEffect, TextareaHTMLAttributes } from "react";
+import React, { useState, TextareaHTMLAttributes } from "react";
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  // onChange?: (str: any) => void;
   defaultValue?: string;
   [rest: string]: any;
   resizable?: boolean;
   rows?: number;
   cols?: number;
-  // name?: string;
 
 }
 
@@ -18,21 +16,16 @@ export const TextBox: React.FC<Props> = ({
   resizable,
   rows,
   cols,
-  
-  // name,
   ...rest
 }) => {
   const [value, setValue] = useState<string>(defaultValue ?? "");
 
-  // useEffect(() => onChange && onChange(value ?? ""), [onChange, value]);
   return (
     <textarea
       value={value}
       placeholder={placeholder ?? ""}
       onChange={onChange}
-      // onChange={(e) => {
-      //   setValue(e.currentTarget.value);
-      // }}
+
       {...rest}
       className={`${cols ? "" : "w-full"} font-sans ${
         resizable ? "" : "resize-none"

@@ -93,18 +93,11 @@ const LiveSearch = <T extends ResultsItem>({
         onKeyDown={handleKeyDown}
         onFocus={() => setShowResults(true)}
         className={`relative ${
-          isExpanded || (value && value.length > 10) ? "w-[14vw]" : "w-[12vw]"
-        } bg-opacity-15 transition-width duration-300 rounded-full`}
+          isExpanded || (value && value.length > 10) ? "w-[17vw]" : "w-[14vw]"
+        } bg-opacity-15 transition-width duration-300 rounded-full min-w-[135px] z-10`}
       >
-        <div className="absolute inset-y-0 pr-12 flex items-center cursor-pointer">
-          <SearchIcon
-            className="text-white cursor-pointer"
-            onClick={() => {}}
-          />
-        </div>
-        <ResponsiveComponent>
-        <div className=" ml-[30px] m-4 rounded-full max-w-sm bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500">
 
+        <div className="flex rounded-full  bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500">
           <InputBase
             onKeyDown={handleKeyDown}
             onFocus={() => setIsExpanded(true)}
@@ -112,46 +105,48 @@ const LiveSearch = <T extends ResultsItem>({
             value={value}
             onChange={handleChange}
             placeholder="Search..."
-            className="w-full bg-transparent rounded-full focus:outline-none p-[3px] active:outline-none "
+            className="w-full bg-transparent rounded-full focus:outline-none p-[3px] active:outline-none"
             inputProps={{
               "aria-label": "search",
-              style: { borderRadius: "100px"},
+              style: {
+                borderRadius: "100px",
+                paddingTop: 0,
+                paddingBottom: 0,
+                height: "32px",
+              },
             }}
           />
         </div>
 
-          {showResults && value && value.length > 0 && (
-            <div className="absolute mt-1 w-[calc(100%_-_30px)] ml-8 py-2 bg-white shadow-lg rounded-2xl max-h-96 overflow-y-auto">
-              {showResults &&
-                results.length > 0 &&
-                results.map((res, index) => (
-                  <ResultItem
-                    isFocused={index === focusedIndex}
-                    key={index}
-                    itemDetails={res}
-                    onItemClick={onItemClick}
-                    index={index}
-                    containerRef={
-                      index === focusedIndex ? resultContainer : null
-                    }
-                  ></ResultItem>
-                ))}
-              {(showResults || results.length === 0) &&
-                value &&
-                value.length > 0 && (
-                  <SearchValueItem
-                    isFocused={results.length === focusedIndex}
-                    value={value}
-                    handleSelection={onItemClick}
-                    index={results.length}
-                    containerRef={
-                      results.length === focusedIndex ? resultContainer : null
-                    }
-                  ></SearchValueItem>
-                )}
-            </div>
-          )}
-        </ResponsiveComponent>
+        {showResults && value && value.length > 0 && (
+          <div className="absolute mt-1 w-full py-2 bg-white shadow-lg rounded-2xl max-h-96 overflow-y-auto">
+            {showResults &&
+              results.length > 0 &&
+              results.map((res, index) => (
+                <ResultItem
+                  isFocused={index === focusedIndex}
+                  key={index}
+                  itemDetails={res}
+                  onItemClick={onItemClick}
+                  index={index}
+                  containerRef={index === focusedIndex ? resultContainer : null}
+                ></ResultItem>
+              ))}
+            {(showResults || results.length === 0) &&
+              value &&
+              value.length > 0 && (
+                <SearchValueItem
+                  isFocused={results.length === focusedIndex}
+                  value={value}
+                  handleSelection={onItemClick}
+                  index={results.length}
+                  containerRef={
+                    results.length === focusedIndex ? resultContainer : null
+                  }
+                ></SearchValueItem>
+              )}
+          </div>
+        )}
       </div>
     </div>
   );
