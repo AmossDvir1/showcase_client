@@ -17,9 +17,9 @@ import { useNavigate } from "react-router-dom";
 import ProtectedComponent from "./ProtectedComponent";
 import { useAuth } from "../controllers/auth/useAuth";
 import Search from "./search/Search";
-import ResponsiveComponent from "./ResponsiveComponent";
+import ResponsiveComponent from "./responsiveness/ResponsiveComponent";
 import NotificationIcon from "./NotificationIcon";
-
+import useMediaQuery from "./responsiveness/useMediaQuery";
 interface Props {
   menuItems: string[];
   userSettings: string[];
@@ -27,6 +27,9 @@ interface Props {
 
 export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   const auth = useAuth();
+  const isMobile = useMediaQuery(500);
+  const isTablet = useMediaQuery(600);
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -110,7 +113,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
             component="a"
             href="/"
           >
-            {"Showcase".toUpperCase()}
+            {isTablet? "S".toUpperCase():"Showcase".toUpperCase()}
           </Typography>
           <Box
             className="flex items-center justify-start"
@@ -165,7 +168,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                   </Grid>
                   <Grid item>
                     <MenuItem className="cursor-default" disableRipple>
-                      <Button round onClick={() => navigate("/sign_up")}>
+                      <Button round btnsize={isMobile? "xs": "sm"} onClick={() => navigate("/sign_up")}>
                         sign up
                       </Button>
                     </MenuItem>
@@ -190,17 +193,19 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                   </Grid>
                 </ResponsiveComponent>
 
-                <ResponsiveComponent breakpoint="md">
+                {/* <ResponsiveComponent breakpoint="md"> */}
                   <Grid item>
                     <MenuItem className="cursor-default" disableRipple>
                       <Button
-                        className="w-[80px]"
-                        btnsize="sm"
-                        textclassname="text-sm"
+                      className="outline outline-1 w-0"
+                        btnsize="xs"
+                        transparent
+                        round={isMobile}
+                        textclassname="text-xs"
                         onClick={onClickOpen}
                         disabled={!auth.isActivated}
                       >
-                        + Create
+                        {isMobile ? '+': '+ Create'}
                       </Button>
                       <CreateProjectDialog
                         open={createDialogOpen}
@@ -208,7 +213,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                       ></CreateProjectDialog>
                     </MenuItem>
                   </Grid>
-                </ResponsiveComponent>
+                {/* </ResponsiveComponent> */}
                 <Grid item>
                   <MenuItem className="cursor-default" disableRipple>
                     <NotificationIcon></NotificationIcon>

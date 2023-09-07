@@ -16,8 +16,9 @@ interface ProjectSlot {
 
 interface ProjectSlotDetails {
   id?: number;
-  projectName: string;
-  projectDesc: string;
+  title: string;
+  description: string;
+  isExposed: boolean;
 }
 
 interface UserDetails {

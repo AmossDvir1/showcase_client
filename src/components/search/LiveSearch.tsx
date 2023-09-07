@@ -3,7 +3,7 @@ import { InputBase, Typography } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import ResultItem from "./resultItem/ResultItem";
 import SearchValueItem from "./resultItem/itemsTypes/SearchValueItem";
-import ResponsiveComponent from "../ResponsiveComponent";
+import ResponsiveComponent from "../responsiveness/ResponsiveComponent";
 import { Navigate, useNavigate } from "react-router-dom";
 
 interface Props<T> {
@@ -93,11 +93,11 @@ const LiveSearch = <T extends ResultsItem>({
         onKeyDown={handleKeyDown}
         onFocus={() => setShowResults(true)}
         className={`relative ${
-          isExpanded || (value && value.length > 10) ? "w-[17vw]" : "w-[14vw]"
+          isExpanded || (value && value.length > 10) ? "w-[17vw]" : "w-[13vw]"
         } bg-opacity-15 transition-width duration-300 rounded-full min-w-[135px] z-10`}
       >
 
-        <div className="flex rounded-full  bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500">
+        <div className="flex rounded-full mr-4 bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500">
           <InputBase
             onKeyDown={handleKeyDown}
             onFocus={() => setIsExpanded(true)}

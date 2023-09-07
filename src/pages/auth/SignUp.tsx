@@ -54,7 +54,8 @@ export const SignUp: React.FC<Props> = () => {
         isLoggedIn: true,
       });
       setIsAuthenticated(true);
-      navigate("/user-activation", { replace: true });
+      navigate("/user-activation");
+      navigate(0);
     } else {
       setIsAuthenticated(false);
       console.error("error", res);

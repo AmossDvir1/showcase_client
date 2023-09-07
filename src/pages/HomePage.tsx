@@ -53,12 +53,12 @@ export const HomePage: React.FC<Props> = () => {
           <GridItem className="mt-7">
             <ProtectedComponent
               fallback={
-                <Button round btnsize="xl" onClick={() => navigate("/sign_up")}>
+                <Button round btnsize="lg" onClick={() => navigate("/sign_up")}>
                   get started
                 </Button>
               }
             >
-              <Button round btnsize="xl" onClick={() => navigate("/explore")}>
+              <Button round btnsize="lg" onClick={() => navigate("/explore")}>
                 explore
               </Button>
             </ProtectedComponent>

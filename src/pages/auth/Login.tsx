@@ -33,7 +33,8 @@ export const Login: React.FC<Props> = () => {
         accessToken: res.accessToken,
         isLoggedIn: true,
       });
-      navigate("/", { replace: true });
+      navigate("/");
+      navigate(0);
     } else {
       console.error("error", res);
     }

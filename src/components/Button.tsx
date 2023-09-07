@@ -45,7 +45,7 @@ export const Button: React.FC<Props> = ({
   switch (btnsize) {
     case "xs":
       bgSizeY = "py-0.5";
-      bgSizeX = "px-3";
+      bgSizeX = "px-2";
       txtSize = "text-sm";
       fontWeight = "font-thin";
       break;

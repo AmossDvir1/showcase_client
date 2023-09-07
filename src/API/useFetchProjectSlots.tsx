@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { serverReq } from "./utils/axiosConfig";
 
-function useFetchProjectSlots(): ProjectSlotDetails[] {
+const useFetchProjectSlots = (): ProjectSlotDetails[] => {
   const [projectSlots, setProjectSlots] = useState<ProjectSlotDetails[] | null>(
     null
   );
@@ -9,9 +9,9 @@ function useFetchProjectSlots(): ProjectSlotDetails[] {
   useEffect(() => {
     const fetchProjectSlots = async () => {
       const response = await serverReq.get(
-        process.env.REACT_APP_API_BASE_URL + "/project/projects_previews"
+        process.env.REACT_APP_API_BASE_URL + "/project/projects_previews",
       );
-      setProjectSlots(response.data);
+      setProjectSlots(response.data.projects);
     };
 
     fetchProjectSlots();
