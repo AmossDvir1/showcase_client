@@ -58,11 +58,11 @@ const App = () => {
           <Router>
             <Routes>
               <Route element={<Layout />}>
-                <Route
+                {/* <Route
                   element={
                     <ProtectedRoute checkActivation={false}></ProtectedRoute>
                   }
-                ></Route>
+                ></Route> */}
                 <Route index element={<HomePage></HomePage>} />
                 <Route path="sign_up" element={<SignUp></SignUp>} />
                 <Route path="login" element={<Login></Login>} />

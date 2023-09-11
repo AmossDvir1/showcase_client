@@ -31,7 +31,7 @@ const ResultItem: FC<Props> = ({
   };
 
   useEffect(() => {
-    if (isFocused && containerRef && containerRef.current) {
+    if (isFocused && containerRef?.current) {
       containerRef.current.scrollIntoView({
         block: "center",
       });

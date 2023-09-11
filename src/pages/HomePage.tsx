@@ -1,9 +1,11 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import { toTitleCase } from "../utils/utils";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import ProtectedComponent from "../components/ProtectedComponent";
+import { WritePost } from "../components/posts/WritePost";
+import { useAuth } from "../controllers/auth/useAuth";
 
 const GridItem: React.FC<{
   children?: ReactNode;
@@ -26,8 +28,9 @@ const GridItem: React.FC<{
 interface Props {}
 
 export const HomePage: React.FC<Props> = () => {
+  const [postValue, setPostValue] = useState("");
   const navigate = useNavigate();
-
+  const auth = useAuth();
   return (
     <Grid container className="py-10">
       <Grid item xs={12} sm={4} md={4}>
@@ -69,13 +72,15 @@ export const HomePage: React.FC<Props> = () => {
         <Grid container direction="column">
           <GridItem className="mt-7">
             <ProtectedComponent>
-              
+              <WritePost
+
+              ></WritePost>
             </ProtectedComponent>
           </GridItem>
         </Grid>
       </Grid>
 
-      <Grid item xs={12} sm={4} md={4} lg={4} className="self-center">
+      {auth?.checkFinished && !auth.isActivated && <Grid item xs={12} sm={4} md={4} lg={4} className="self-center">
         <GridItem>
           <Box
             draggable={false}
@@ -85,7 +90,7 @@ export const HomePage: React.FC<Props> = () => {
             alt="homepage-img"
           ></Box>
         </GridItem>
-      </Grid>
+      </Grid>}
     </Grid>
   );
 };
