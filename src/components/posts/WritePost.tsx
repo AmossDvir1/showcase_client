@@ -3,12 +3,14 @@ import React, { TextareaHTMLAttributes, useRef, useState } from "react";
 import useUserInfo from "../../pages/auth/useUserInfo";
 import { Button } from "../Button";
 import { createPost } from "../../controllers/createPostController";
+import { useNavigate } from "react-router-dom";
 
 interface WritePostProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
 export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null); // Ref for the textarea element
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const { userInfo } = useUserInfo();
 const [postValue, setPostValue] = useState('');
   const handleBlur = () => {
@@ -25,6 +27,7 @@ const [postValue, setPostValue] = useState('');
     e.preventDefault();
     setLoading(true);
     createPost(postValue);
+    navigate(0);
   };
 
   return (
@@ -33,7 +36,7 @@ const [postValue, setPostValue] = useState('');
         isExpanded ? "min-h-[150px]" : "min-h-[100px]"
       } bg-slate-50 flex flex-col rounded-lg p-[35px] ${
         isExpanded ? "h-[18vh]" : "h-0"
-      } transition-width duration-300`}
+      } transition-width duration-300 my-2`}
     >
       {userInfo?.username && (
         <div className="flex w-full">

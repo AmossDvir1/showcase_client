@@ -1,11 +1,13 @@
-import React, { ReactNode, useState } from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import React, { ReactNode, useEffect, useState } from "react";
+import { Box, Typography, Grid, Divider } from "@mui/material";
 import { toTitleCase } from "../utils/utils";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import ProtectedComponent from "../components/ProtectedComponent";
 import { WritePost } from "../components/posts/WritePost";
 import { useAuth } from "../controllers/auth/useAuth";
+import { serverReq } from "../API/utils/axiosConfig";
+import { Post } from "../components/posts/Post";
 
 const GridItem: React.FC<{
   children?: ReactNode;
@@ -29,8 +31,20 @@ interface Props {}
 
 export const HomePage: React.FC<Props> = () => {
   const [postValue, setPostValue] = useState("");
+  const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
   const auth = useAuth();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await serverReq.get("/post/me");
+      const data = res?.data?.posts;
+      if (data?.length > 0) {
+        setPosts(data);
+      }
+    };
+    fetchPosts();
+  }, []);
   return (
     <Grid container className="py-10">
       <Grid item xs={12} sm={4} md={4}>
@@ -72,25 +86,30 @@ export const HomePage: React.FC<Props> = () => {
         <Grid container direction="column">
           <GridItem className="mt-7">
             <ProtectedComponent>
-              <WritePost
+              <WritePost></WritePost>
 
-              ></WritePost>
+              {posts?.length > 0 && posts?.map((post:Post) => {
+                
+                return <div><Divider /><Post content={post?.content}></Post></div>
+              })}
             </ProtectedComponent>
           </GridItem>
         </Grid>
       </Grid>
 
-      {auth?.checkFinished && !auth.isActivated && <Grid item xs={12} sm={4} md={4} lg={4} className="self-center">
-        <GridItem>
-          <Box
-            draggable={false}
-            className="w-48 md:w-64 lg:w-[30rem]"
-            component="img"
-            src={require("../assets/homepage-img.png")}
-            alt="homepage-img"
-          ></Box>
-        </GridItem>
-      </Grid>}
+      {auth?.checkFinished && !auth.isActivated && (
+        <Grid item xs={12} sm={4} md={4} lg={4} className="self-center">
+          <GridItem>
+            <Box
+              draggable={false}
+              className="w-48 md:w-64 lg:w-[30rem]"
+              component="img"
+              src={require("../assets/homepage-img.png")}
+              alt="homepage-img"
+            ></Box>
+          </GridItem>
+        </Grid>
+      )}
     </Grid>
   );
 };

@@ -60,3 +60,7 @@ type RelationshipState =
     lastName: string;
     username: string;
   }
+
+  interface Post {
+    content: string;
+  }
