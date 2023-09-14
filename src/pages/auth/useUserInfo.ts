@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react';
 import { serverReq } from '../../API/utils/axiosConfig';
 
-interface UserInfo {
-    username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  // Add other user info properties as needed
-}
+
 
 interface UseUserInfo {
   userInfo: UserInfo | null;

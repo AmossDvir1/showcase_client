@@ -2,8 +2,9 @@ import { Avatar, Divider } from "@mui/material";
 import React, { TextareaHTMLAttributes, useRef, useState } from "react";
 import useUserInfo from "../../pages/auth/useUserInfo";
 import { Button } from "../Button";
-import { createPost } from "../../controllers/createPostController";
+import { createPost } from "../../controllers/postsController/createPostController";
 import { useNavigate } from "react-router-dom";
+import PostInput from "./PostInput";
 
 interface WritePostProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
 export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
@@ -12,7 +13,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { userInfo } = useUserInfo();
-const [postValue, setPostValue] = useState('');
+  const [postValue, setPostValue] = useState("");
   const handleBlur = () => {
     // if (!value || value.length < 10) {
     setIsExpanded(false);
@@ -23,10 +24,10 @@ const [postValue, setPostValue] = useState('');
     // }
   };
 
-  const onCreatePost = (e: React.MouseEvent) => {
+  const onCreatePost = async (e: React.MouseEvent) => {
     e.preventDefault();
     setLoading(true);
-    createPost(postValue);
+    const res = await createPost(postValue);
     navigate(0);
   };
 
@@ -34,7 +35,7 @@ const [postValue, setPostValue] = useState('');
     <div
       className={`w-full ${
         isExpanded ? "min-h-[150px]" : "min-h-[100px]"
-      } bg-slate-50 flex flex-col rounded-lg p-[35px] ${
+      } bg-slate-50 flex flex-col rounded-lg p-[20px] ${
         isExpanded ? "h-[18vh]" : "h-0"
       } transition-width duration-300 my-2`}
     >
@@ -46,29 +47,15 @@ const [postValue, setPostValue] = useState('');
             className="bg-gradient-to-b from-rose-400 via-fuchsia-500 to-indigo-500 mx-2"
             sx={{ width: 40, height: 40 }}
           />
-          <textarea
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-              setPostValue(e.target.value)
-            }
-            value={postValue}
-            ref={textareaRef} // Attach the ref to the textarea element
-            onBlur={() => handleBlur()}
-            onClick={() => setIsExpanded(true)}
-            placeholder={`${
-              userInfo?.username
-                ? "What's on your mind, " + userInfo?.firstName + "?"
-                : ""
-            }`}
-            className={`${
-              isExpanded ? "h-[13vh]" : "h-0"
-            }  mx-2 min-h-[40px] min-w-[250px] resize-none transition-width duration-300 w-full font-sans rounded-3xl border-0
-            py-1 focus:ring-inset focus:ring-indigo-600
-            bg-gray-200
-            hover:ring-indigo-400 text-gray-900 ring-1
-        ring-gray-300 placeholder:text-gray-400
-         focus:ring-2 sm:text-sm sm:leading-6`}
-            {...rest}
-          ></textarea>
+          <PostInput
+            postValue={postValue}
+            setPostValue={setPostValue}
+            textareaRef={textareaRef}
+            handleBlur={handleBlur}
+            isExpanded={isExpanded}
+            setIsExpanded={setIsExpanded}
+            userInfo={userInfo}
+          ></PostInput>
         </div>
       )}
       <Divider className="py-2" />

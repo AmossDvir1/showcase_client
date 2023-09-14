@@ -54,13 +54,21 @@ type RelationshipState =
   | "block_first_second"
   | "block_second_first";
 
+interface UserProfile {
+  firstName: string;
+  lastName: string;
+  username: string;
+}
 
-  interface UserProfile {
-    firstName: string;
-    lastName: string;
-    username: string;
-  }
+interface Post {
+  content: string;
+  postId:string
+}
 
-  interface Post {
-    content: string;
-  }
+interface UserInfo {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  // Add other user info properties as needed
+}

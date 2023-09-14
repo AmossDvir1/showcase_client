@@ -8,6 +8,7 @@ import { WritePost } from "../components/posts/WritePost";
 import { useAuth } from "../controllers/auth/useAuth";
 import { serverReq } from "../API/utils/axiosConfig";
 import { Post } from "../components/posts/Post";
+import { getMyPosts } from "../controllers/postsController/getMyPostsController";
 
 const GridItem: React.FC<{
   children?: ReactNode;
@@ -37,8 +38,7 @@ export const HomePage: React.FC<Props> = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await serverReq.get("/post/me");
-      const data = res?.data?.posts;
+      const data = await getMyPosts();
       if (data?.length > 0) {
         setPosts(data);
       }
@@ -88,10 +88,13 @@ export const HomePage: React.FC<Props> = () => {
             <ProtectedComponent>
               <WritePost></WritePost>
 
-              {posts?.length > 0 && posts?.map((post:Post) => {
-                
-                return <div><Divider /><Post content={post?.content}></Post></div>
-              })}
+              {posts?.length > 0 &&
+                posts?.map((post: Post, index: number) => (
+                  <div key={index}>
+                    <Divider />
+                    <Post content={post?.content} postId={post?.postId}></Post>
+                  </div>
+                ))}
             </ProtectedComponent>
           </GridItem>
         </Grid>

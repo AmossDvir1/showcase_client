@@ -1,4 +1,4 @@
-import { serverReq } from "../API/utils/axiosConfig";
+import { serverReq } from "../../API/utils/axiosConfig";
 
 const createPost = async (content: string) => {
   try {
