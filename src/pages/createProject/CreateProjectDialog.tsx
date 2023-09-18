@@ -9,15 +9,16 @@ import Divider from "@mui/material/Divider";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import { Box, Typography, MobileStepper } from "@mui/material";
-import { Button } from "../../components/Button";
+import { Button } from "../../components/sharedComponents/Button";
 import { CreateProjectForm } from "./pages/CreateProjectForm";
 import { createProject } from "../../controllers/createProjectController";
 import { Stepper } from "./Stepper";
 import { TechnologiesTagsPage } from "./pages/technologiesPage/TechnologiesTagsPage";
-import { Popup } from "../../components/Popup";
+import { Popup } from "../../components/sharedComponents/Popup";
 import {
   CreateProjectProvider,
 } from "../../context/CreateProjectContext";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   open: boolean;
@@ -63,6 +64,7 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
   );
 
   useEffect(() => setMaxSteps(steps.length), [steps]);
+  const navigate = useNavigate();
   const [createLoading, setCreateLoading] = useState(false);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [maxSteps, setMaxSteps] = useState<number>(steps.length);
@@ -74,6 +76,10 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
     setCreateLoading(true);
     const res = await createProject({ data });
     setCreateLoading(false);
+    if (res){
+      navigate("/my-projects");
+      navigate(0);
+    }
   };
   const onNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);

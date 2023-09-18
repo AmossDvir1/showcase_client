@@ -41,7 +41,7 @@ export const TextField: React.FC<Props> = ({
         </div>
         <div className={`cursor-default absolute inset-y-0 right-0 flex items-center ${type === "password" ? 'mr-8': ''}`}>
           {!isValid && (
-            <Tooltip isError title={errorText} arrow>
+            <Tooltip isError title={errorText || ""} arrow>
               <ErrorOutlineIcon className="text-red-700 sm:text-md" />
             </Tooltip>
           )}

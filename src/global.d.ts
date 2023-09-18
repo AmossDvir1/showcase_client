@@ -16,8 +16,9 @@ interface ProjectSlot {
 
 interface ProjectSlotDetails {
   id?: number;
-  projectName: string;
-  projectDesc: string;
+  title: string;
+  description: string;
+  isExposed: boolean;
 }
 
 interface UserDetails {
@@ -53,9 +54,23 @@ type RelationshipState =
   | "block_first_second"
   | "block_second_first";
 
+interface UserProfile {
+  firstName: string;
+  lastName: string;
+  username: string;
+}
 
-  interface UserProfile {
-    firstName: string;
-    lastName: string;
-    username: string;
-  }
+interface Post {
+  content: string;
+  postId:string;
+  fullName: string;
+  userId: string;
+}
+
+interface UserInfo {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  // Add other user info properties as needed
+}

@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { Button } from "../../components/Button";
+import { Button } from "../../components/sharedComponents/Button";
 import {
   activateUserWithOtp,
   sendValidationEmail,

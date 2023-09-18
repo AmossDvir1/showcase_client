@@ -9,6 +9,16 @@ const RequestSent = () => {
     </div>
   );
 };
+const PendingApproval = () => {
+  return (
+    <div className="flex flex-col items-center justify-center p-4 w-64 bg-transparent border-solid border-primary border-[1px] rounded-lg">
+      <Typography>Wants to be your friend</Typography>
+      <div className="flex flex-row">      <Button >confirm</Button>
+      <Button>delete</Button></div>
+
+    </div>
+  );
+};
 
 interface RelationshipStatusButtonProps {
   relationship: RelationshipState;
@@ -41,6 +51,8 @@ const RelationshipStatusButton: React.FC<RelationshipStatusButtonProps> = ({
       return <Typography>You are friends</Typography>;
     case "request_sent":
       return <RequestSent></RequestSent>;
+    case "pending_approval":
+      return <PendingApproval></PendingApproval>
   }
   return <div></div>
 };

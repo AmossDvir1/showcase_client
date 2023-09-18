@@ -10,14 +10,8 @@ interface Props {}
 const VISIBLE_PROJECTS_NUM = 6;
 
 export const UserProjectsDashboard: React.FC<Props> = () => {
-  const [slots, setSlots] = useState<ProjectSlotDetails[] | null>();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const projectSlots = useFetchProjectSlots();
-
-  useEffect(() => {
-    setSlots(projectSlots);
-    console.log(projectSlots)
-  }, [projectSlots]);
 
   const onClose = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -44,12 +38,12 @@ export const UserProjectsDashboard: React.FC<Props> = () => {
           {Array.from(Array(VISIBLE_PROJECTS_NUM)).map((_, index) => (
             <Grid item className="h-full flex" xs={2} sm={4} md={4} key={index}>
               {projectSlots &&
-                (index < projectSlots?.length + 1 ? (
+                (index < projectSlots?.length ? (
                   <Slot
                     details={{
-                      projectName: "reoiio",
-                      projectDesc:
-                        "rgioiuhiuhiuhieru fhiuhreifhriuhrigurhgiuhiruhg riuhgiruhgirghrighiurghrighri ughirughiruhgirghiuhjriojro ijroijroijroij",
+                      title: projectSlots[index]?.title || "",
+                      description: projectSlots[index]?.description || "",
+                      isExposed: projectSlots[index]?.isExposed
                     }}
                   ></Slot>
                 ) : (

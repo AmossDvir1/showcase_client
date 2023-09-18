@@ -3,24 +3,26 @@ import { Tooltip as MuiTooltip, TooltipProps } from "@mui/material";
 
 interface Props extends TooltipProps{
 isError?:boolean;
+title: string;
   }
-export const Tooltip: React.FC<Props> = (props) => {
+
+export const Tooltip: React.FC<Props> = ({isError, title, children, ...rest}) => {
   return (
     <MuiTooltip
       arrow
-      title={props.title}
+      title={title}
       componentsProps={{
         tooltip: {
           sx: {
-            bgcolor: `${props.isError ? "rgb(185 28 28)":'#7573C5'}`,
+            bgcolor: `${isError ? "rgb(185 28 28)":'#7573C5'}`,
             "& .MuiTooltip-arrow": {
-              color: `${props.isError? "rgb(185 28 28)":"#7573C5"}`,
+              color: `${isError? "rgb(185 28 28)":"#7573C5"}`,
             },
           },
         },
       }}
     >
-      {props.children}
+      {children}
     </MuiTooltip>
   );
 };

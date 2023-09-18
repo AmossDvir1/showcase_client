@@ -1,9 +1,14 @@
-import React, { ReactNode } from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import React, { ReactNode, useEffect, useState } from "react";
+import { Box, Typography, Grid, Divider } from "@mui/material";
 import { toTitleCase } from "../utils/utils";
-import { Button } from "../components/Button";
+import { Button } from "../components/sharedComponents/Button";
 import { useNavigate } from "react-router-dom";
-import ProtectedComponent from "../components/ProtectedComponent";
+import ProtectedComponent from "../components/sharedComponents/ProtectedComponent";
+import { WritePost } from "../components/posts/WritePost";
+import { useAuth } from "../controllers/auth/useAuth";
+import { serverReq } from "../API/utils/axiosConfig";
+import { Post } from "../components/posts/Post";
+import { getMyPosts } from "../controllers/postsController/getMyPostsController";
 
 const GridItem: React.FC<{
   children?: ReactNode;
@@ -26,8 +31,20 @@ const GridItem: React.FC<{
 interface Props {}
 
 export const HomePage: React.FC<Props> = () => {
+  const [postValue, setPostValue] = useState("");
+  const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
+  const auth = useAuth();
 
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const data = await getMyPosts();
+      if (data?.length > 0) {
+        setPosts(data);
+      }
+    };
+    fetchPosts();
+  }, []);
   return (
     <Grid container className="py-10">
       <Grid item xs={12} sm={4} md={4}>
@@ -53,12 +70,12 @@ export const HomePage: React.FC<Props> = () => {
           <GridItem className="mt-7">
             <ProtectedComponent
               fallback={
-                <Button round btnsize="xl" onClick={() => navigate("/sign_up")}>
+                <Button round btnsize="lg" onClick={() => navigate("/sign_up")}>
                   get started
                 </Button>
               }
             >
-              <Button round btnsize="xl" onClick={() => navigate("/explore")}>
+              <Button round btnsize="lg" onClick={() => navigate("/explore")}>
                 explore
               </Button>
             </ProtectedComponent>
@@ -69,23 +86,33 @@ export const HomePage: React.FC<Props> = () => {
         <Grid container direction="column">
           <GridItem className="mt-7">
             <ProtectedComponent>
-              
+              <WritePost></WritePost>
+
+              {posts?.length > 0 &&
+                posts?.map((post: any, index: number) => (
+                  <div key={index}>
+                    <Divider />
+                    <Post content={post?.content} postId={post?.postId} userId={post?.user?.userId} fullName={post?.user?.fullName}></Post>
+                  </div>
+                ))}
             </ProtectedComponent>
           </GridItem>
         </Grid>
       </Grid>
 
-      <Grid item xs={12} sm={4} md={4} lg={4} className="self-center">
-        <GridItem>
-          <Box
-            draggable={false}
-            className="w-48 md:w-64 lg:w-[30rem]"
-            component="img"
-            src={require("../assets/homepage-img.png")}
-            alt="homepage-img"
-          ></Box>
-        </GridItem>
-      </Grid>
+      {auth?.checkFinished && !auth.isActivated && (
+        <Grid item xs={12} sm={4} md={4} lg={4} className="self-center">
+          <GridItem>
+            <Box
+              draggable={false}
+              className="w-48 md:w-64 lg:w-[30rem]"
+              component="img"
+              src={require("../assets/homepage-img.png")}
+              alt="homepage-img"
+            ></Box>
+          </GridItem>
+        </Grid>
+      )}
     </Grid>
   );
 };

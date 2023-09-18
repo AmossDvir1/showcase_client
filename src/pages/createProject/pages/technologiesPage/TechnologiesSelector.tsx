@@ -8,7 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
-import { Chip } from "../../../../components/Chip";
+import { Chip } from "../../../../components/sharedComponents/Chip";
 import {
   generateRandomColorString,
   getAvarageRGBValue,
