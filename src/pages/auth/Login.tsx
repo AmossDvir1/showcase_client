@@ -1,9 +1,9 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { Box, Typography } from "@mui/material";
-import { TextField } from "../../components/TextField";
+import { TextField } from "../../components/sharedComponents/TextField";
 import PersonIcon from "@mui/icons-material/Person";
 import PasswordIcon from "@mui/icons-material/Password";
-import { Button } from "../../components/Button";
+import { Button } from "../../components/sharedComponents/Button";
 import {
   validatePassword,
   validateUsername,

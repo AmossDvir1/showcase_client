@@ -1,9 +1,9 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { Box, Typography, Grid, Divider } from "@mui/material";
 import { toTitleCase } from "../utils/utils";
-import { Button } from "../components/Button";
+import { Button } from "../components/sharedComponents/Button";
 import { useNavigate } from "react-router-dom";
-import ProtectedComponent from "../components/ProtectedComponent";
+import ProtectedComponent from "../components/sharedComponents/ProtectedComponent";
 import { WritePost } from "../components/posts/WritePost";
 import { useAuth } from "../controllers/auth/useAuth";
 import { serverReq } from "../API/utils/axiosConfig";
@@ -89,10 +89,10 @@ export const HomePage: React.FC<Props> = () => {
               <WritePost></WritePost>
 
               {posts?.length > 0 &&
-                posts?.map((post: Post, index: number) => (
+                posts?.map((post: any, index: number) => (
                   <div key={index}>
                     <Divider />
-                    <Post content={post?.content} postId={post?.postId}></Post>
+                    <Post content={post?.content} postId={post?.postId} userId={post?.user?.userId} fullName={post?.user?.fullName}></Post>
                   </div>
                 ))}
             </ProtectedComponent>

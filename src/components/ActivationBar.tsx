@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../controllers/auth/useAuth";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { Typography } from "@mui/material";
-import { Button } from "./Button";
+import { Button } from "./sharedComponents/Button";
 
 interface Props {
   visible?: boolean;

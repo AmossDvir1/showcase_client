@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import React from "react";
 
 import { useNavigate } from "react-router-dom";
-import { Button } from "../../components/Button";
+import { Button } from "../../components/sharedComponents/Button";
 
 const UserAlreadyActivated: React.FC = () => {
   const navigate = useNavigate();

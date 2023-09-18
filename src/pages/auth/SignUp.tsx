@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext, FormEvent } from "react";
 import { Box, Grid, Typography } from "@mui/material";
-import { TextField } from "../../components/TextField";
+import { TextField } from "../../components/sharedComponents/TextField";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 import PasswordIcon from "@mui/icons-material/Password";
 import AbcIcon from '@mui/icons-material/Abc';
-import { Button } from "../../components/Button";
+import { Button } from "../../components/sharedComponents/Button";
 import {
   validateEmail,
   validatePassword,

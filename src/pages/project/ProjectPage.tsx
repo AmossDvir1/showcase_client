@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { serverReq } from '../../API/utils/axiosConfig';
 import { Typography } from '@mui/material';
-import { Button } from '../../components/Button';
+import { Button } from '../../components/sharedComponents/Button';
 
 interface IProject {
   firstName: string;

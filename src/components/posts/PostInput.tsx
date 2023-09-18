@@ -4,7 +4,7 @@ interface PostInputProps {
     setPostValue:React.Dispatch<React.SetStateAction<string>>;
     postValue: string;
     textareaRef?: React.MutableRefObject<HTMLTextAreaElement | null>;
-    handleBlur?:() => void;
+    handleBlur?:(e: React.FocusEvent) => void;
     setIsExpanded?:React.Dispatch<React.SetStateAction<boolean>> ;
     userInfo?: UserInfo | null;
     isExpanded?:boolean;

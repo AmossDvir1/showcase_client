@@ -1,7 +1,7 @@
 import { Avatar, Divider } from "@mui/material";
 import React, { TextareaHTMLAttributes, useRef, useState } from "react";
 import useUserInfo from "../../pages/auth/useUserInfo";
-import { Button } from "../Button";
+import { Button } from "../sharedComponents/Button";
 import { createPost } from "../../controllers/postsController/createPostController";
 import { useNavigate } from "react-router-dom";
 import PostInput from "./PostInput";
@@ -14,20 +14,29 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
   const navigate = useNavigate();
   const { userInfo } = useUserInfo();
   const [postValue, setPostValue] = useState("");
-  const handleBlur = () => {
-    // if (!value || value.length < 10) {
+  const handleBlur = (e: React.FocusEvent) => {
+    // Check if the related target (the element clicked) is the "Post" button
+    if (e.relatedTarget && e.relatedTarget instanceof HTMLElement) {
+      const isPostButton = e.relatedTarget.getAttribute("data-post-button");
+      if (isPostButton === "true") {
+        return;
+      }
+    }
+  
+    // For other cases (clicking outside the textarea), collapse the component
     setIsExpanded(false);
+  
     // Scroll the textarea to the top
     if (textareaRef.current) {
       textareaRef.current.scrollTop = 0;
     }
-    // }
   };
 
   const onCreatePost = async (e: React.MouseEvent) => {
     e.preventDefault();
     setLoading(true);
     const res = await createPost(postValue);
+    setIsExpanded(false);
     navigate(0);
   };
 
@@ -60,7 +69,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
       )}
       <Divider className="py-2" />
       <div className="flex items-end justify-center pt-4">
-        <Button disabled={!postValue} round onClick={onCreatePost}>
+        <Button disabled={!postValue}  data-post-button="true" onMouseDown={(e) => {e.stopPropagation()}} round onClick={onCreatePost}>
           Post
         </Button>
       </div>

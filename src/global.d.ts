@@ -62,7 +62,9 @@ interface UserProfile {
 
 interface Post {
   content: string;
-  postId:string
+  postId:string;
+  fullName: string;
+  userId: string;
 }
 
 interface UserInfo {

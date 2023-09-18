@@ -6,9 +6,9 @@ import React, {
   useState,
 } from "react";
 import { Box, Grid, Typography } from "@mui/material";
-import { TextField } from "../../../components/TextField";
-import { TextBox } from "../../../components/TextBox";
-import { Switch } from "../../../components/Switch";
+import { TextField } from "../../../components/sharedComponents/TextField";
+import { TextBox } from "../../../components/sharedComponents/TextBox";
+import { Switch } from "../../../components/sharedComponents/Switch";
 import PublicIcon from "@mui/icons-material/Public";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import { CreateProjectContext } from "../../../context/CreateProjectContext";

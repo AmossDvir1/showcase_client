@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../controllers/auth/useAuth";
-import { showToast } from "../utils/toast";
+import { useAuth } from "../../controllers/auth/useAuth";
+import { showToast } from "../../utils/toast";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/rootReducer";
-import { setActivationToastShown } from "../redux/slices/globalState";
+import { RootState } from "../../redux/rootReducer";
+import { setActivationToastShown } from "../../redux/slices/globalState";
 
 interface ProtectedComponentProps {
   children: React.ReactNode;
