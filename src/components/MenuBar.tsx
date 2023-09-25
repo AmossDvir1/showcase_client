@@ -18,8 +18,10 @@ import ProtectedComponent from "./sharedComponents/ProtectedComponent";
 import { useAuth } from "../controllers/auth/useAuth";
 import Search from "./search/Search";
 import ResponsiveComponent from "./responsiveness/ResponsiveComponent";
-import NotificationIcon from "./NotificationIcon";
+import NotificationIcon from "./notifications/NotificationIcon";
 import useMediaQuery from "./responsiveness/useMediaQuery";
+import { showToast } from "../utils/toast";
+import { logout } from "../controllers/auth/logoutUser";
 interface Props {
   menuItems: string[];
   userSettings: string[];
@@ -30,6 +32,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   const isMobile = useMediaQuery(500);
   const isTablet = useMediaQuery(600);
 
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -44,12 +47,24 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
     setCreateDialogOpen(true);
   };
 
-  const onLogOut = () => {
-    localStorage.removeItem("auth");
-    auth.setIsAuthenticated(false);
-    navigate(0);
+  const onLogOut = async () => {
+    const res = await logout();
+    if (res) {
+      localStorage.removeItem("auth");
+      auth.setIsAuthenticated(false);
+      showToast(
+        "Successfully logged out",
+        "Successfully logged out",
+        "success"
+      );
+    } else {
+      showToast(
+        "Error during logging out",
+        "Error during logging out",
+        "error"
+      );
+    }
   };
-  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -113,7 +128,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
             component="a"
             href="/"
           >
-            {isTablet? "S".toUpperCase():"Showcase".toUpperCase()}
+            {isTablet ? "S".toUpperCase() : "Showcase".toUpperCase()}
           </Typography>
           <Box
             className="flex items-center justify-start"
@@ -137,8 +152,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
               ))}
             </ResponsiveComponent>
             <div className="pl-3 xs:max-sm:pl-0">
-            <Search></Search>
-
+              <Search></Search>
             </div>
           </Box>
 
@@ -168,7 +182,11 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                   </Grid>
                   <Grid item>
                     <MenuItem className="cursor-default" disableRipple>
-                      <Button round btnsize={isMobile? "xs": "sm"} onClick={() => navigate("/sign_up")}>
+                      <Button
+                        round
+                        btnsize={isMobile ? "xs" : "sm"}
+                        onClick={() => navigate("/sign_up")}
+                      >
                         sign up
                       </Button>
                     </MenuItem>
@@ -194,25 +212,25 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 </ResponsiveComponent>
 
                 {/* <ResponsiveComponent breakpoint="md"> */}
-                  <Grid item>
-                    <MenuItem className="cursor-default" disableRipple>
-                      <Button
+                <Grid item>
+                  <MenuItem className="cursor-default" disableRipple>
+                    <Button
                       className="outline outline-1 w-0"
-                        btnsize="xs"
-                        transparent
-                        round={isMobile}
-                        textclassname="text-xs"
-                        onClick={onClickOpen}
-                        disabled={!auth.isActivated}
-                      >
-                        {isMobile ? '+': '+ Create'}
-                      </Button>
-                      <CreateProjectDialog
-                        open={createDialogOpen}
-                        onClose={onClose}
-                      ></CreateProjectDialog>
-                    </MenuItem>
-                  </Grid>
+                      btnsize="xs"
+                      transparent
+                      round={isMobile}
+                      textclassname="text-xs"
+                      onClick={onClickOpen}
+                      disabled={!auth.isActivated}
+                    >
+                      {isMobile ? "+" : "+ Create"}
+                    </Button>
+                    <CreateProjectDialog
+                      open={createDialogOpen}
+                      onClose={onClose}
+                    ></CreateProjectDialog>
+                  </MenuItem>
+                </Grid>
                 {/* </ResponsiveComponent> */}
                 <Grid item>
                   <MenuItem className="cursor-default" disableRipple>
@@ -234,8 +252,8 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                       <Typography
                         noWrap
                         className="flex text-white decoration-transparent text-sm"
-                        component="a"
-                        href="/"
+                        // component="a"
+                        // href="/"
                       >
                         log out
                       </Typography>

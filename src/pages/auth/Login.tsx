@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../controllers/auth/loginUser";
 import { saveToLocalStorage } from "../../API/utils/saveToLocalStorage";
 import { showToast } from "../../utils/toast";
+import { useAuth } from "../../controllers/auth/useAuth";
 
 interface Props {}
 
@@ -21,7 +22,7 @@ export const Login: React.FC<Props> = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [formValid, setFormValid] = useState<boolean>(false);
-
+  const auth = useAuth();
   const onLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -33,6 +34,7 @@ export const Login: React.FC<Props> = () => {
         accessToken: res.accessToken,
         isLoggedIn: true,
       });
+      auth.setIsAuthenticated(true);
       navigate("/");
       navigate(0);
     } else {

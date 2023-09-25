@@ -56,10 +56,19 @@ const truncateText = (text:string, chars:number ) => {
   return text;
 }
 
+
+const splitStringToLines = (text: string): string[] => {
+  // Use a regular expression to split the string by '\n' but not '\\n'
+  const lines = text?.split(/(?<!\\)\\n|(?<!\\\\)\n/);
+  // Replace any '\\n' with '\n' in the lines
+  return lines
+};
+
 export {
   toTitleCase,
   randomBetween,
   getAvarageRGBValue,
   generateRandomColorString,
-  truncateText
+  truncateText,
+  splitStringToLines
 };

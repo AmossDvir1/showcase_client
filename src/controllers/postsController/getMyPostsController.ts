@@ -8,6 +8,7 @@ const getMyPosts = async () => {
 } catch (err: any) {
     console.error(err)
   }
+  return false;
 };
 
 export { getMyPosts };

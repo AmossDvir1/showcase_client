@@ -2,37 +2,35 @@ import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { PostMenu } from "./PostMenu";
 import PostInput from "./PostInput";
-import { Button } from "../sharedComponents/Button";
-import { deletePost } from "../../controllers/postsController/deletePostController";
-import { useNavigate } from "react-router-dom";
-import { updatePost } from "../../controllers/postsController/updatePostController";
+import { Button } from "../Button";
+import { deletePost } from "../../../controllers/postsController/deletePostController";
+import { updatePost } from "../../../controllers/postsController/updatePostController";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { Tooltip } from "../sharedComponents/Tooltip";
-import { Avatar } from "../sharedComponents/Avatar";
+import { Tooltip } from "../Tooltip";
+import { Avatar } from "../Avatar";
+import LineRenderer from "../LineRenderer";
 
-export const Post: React.FC<Post> = ({
-  content = "",
-  postId,
-  fullName,
-  userId,
-}) => {
-  const [value, setValue] = useState(content);
+interface PostProps {
+  postData: Post;
+  setPosts: React.Dispatch<React.SetStateAction<Post[]>>;
+}
+export const Post: React.FC<PostProps> = ({ postData, setPosts }) => {
+  const [value, setValue] = useState(postData.content);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
   const [previousState, setPreviousState] = useState(value);
-  const navigate = useNavigate();
 
   const onDeletePost = async () => {
-    const res = await deletePost(postId);
-    setIsDeleted(true);
-    // navigate(0);
+    const res = await deletePost(postData.postId);
+    if (res){
+      setIsDeleted(true);
+    }
   };
 
   const onUpdatePost = async () => {
     setPreviousState(value);
-    const res = await updatePost(value, postId);
+    const res = await updatePost(value, postData.postId);
     setIsEditMode(false);
-    // navigate(0);
   };
   const onCancel = () => {
     setValue(previousState);
@@ -76,16 +74,14 @@ export const Post: React.FC<Post> = ({
         </div>
       ) : (
         <div className="flex">
-          
           <Avatar
-          username={fullName}
-            alt={fullName?.toUpperCase() || ""}
+            username={postData.fullName}
+            alt={postData.fullName?.toUpperCase() || ""}
             src="/static/images/avatar/1.jpg"
             className="bg-gradient-to-b from-rose-400 via-fuchsia-500 to-indigo-500 mr-4"
             sx={{ width: 40, height: 40 }}
           />
-          <Typography className="text-slate-500">{value}</Typography>
-          
+          <Typography className="text-slate-500"><LineRenderer text={value}></LineRenderer></Typography>
         </div>
       )}
       {!isEditMode && (
