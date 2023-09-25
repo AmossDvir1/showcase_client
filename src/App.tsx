@@ -1,9 +1,4 @@
-
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -19,7 +14,8 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import Layout from "./components/Layout";
 import ActivationLayout from "./pages/auth/ActivationLayout";
 import Profile from "./pages/profile/ProfilePage";
-
+import { useEffect } from "react";
+import io from "socket.io-client";
 const rootElement = document.getElementById("root");
 
 const theme = createTheme({
@@ -51,6 +47,16 @@ const theme = createTheme({
 });
 
 const App = () => {
+  // useEffect(() => {
+  //   const socket = io("ws://localhost:3200/");
+  //   return () => {
+  //     socket.close();
+  //   };
+  // }, []);
+  
+
+
+
   return (
     <StyledEngineProvider injectFirst>
       <AuthProvider>
@@ -71,14 +77,13 @@ const App = () => {
                     path="my-projects"
                     element={<UserProjectsDashboard></UserProjectsDashboard>}
                   ></Route>
-                   <Route path="/:type/:urlName" element={<Profile />} />
-
+                  <Route path="/:type/:urlName" element={<Profile />} />
                 </Route>
               </Route>
               <Route element={<Layout withMenu={false} />}>
                 <Route
                   path="user-activation"
-                  element={<ActivationLayout/>}
+                  element={<ActivationLayout />}
                 ></Route>
               </Route>
               {/* <Route path="*" element={<Navigate to="/" replace />} /> */}

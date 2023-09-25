@@ -1,14 +1,13 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import { Box, Typography, Grid, Divider } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 import { toTitleCase } from "../utils/utils";
 import { Button } from "../components/sharedComponents/Button";
 import { useNavigate } from "react-router-dom";
 import ProtectedComponent from "../components/sharedComponents/ProtectedComponent";
-import { WritePost } from "../components/posts/WritePost";
+import { WritePost } from "../components/sharedComponents/posts/WritePost";
 import { useAuth } from "../controllers/auth/useAuth";
-import { serverReq } from "../API/utils/axiosConfig";
-import { Post } from "../components/posts/Post";
 import { getMyPosts } from "../controllers/postsController/getMyPostsController";
+import Posts from "../components/sharedComponents/posts/Posts";
 
 const GridItem: React.FC<{
   children?: ReactNode;
@@ -31,20 +30,9 @@ const GridItem: React.FC<{
 interface Props {}
 
 export const HomePage: React.FC<Props> = () => {
-  const [postValue, setPostValue] = useState("");
-  const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
   const auth = useAuth();
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const data = await getMyPosts();
-      if (data?.length > 0) {
-        setPosts(data);
-      }
-    };
-    fetchPosts();
-  }, []);
   return (
     <Grid container className="py-10">
       <Grid item xs={12} sm={4} md={4}>
@@ -87,14 +75,7 @@ export const HomePage: React.FC<Props> = () => {
           <GridItem className="mt-7">
             <ProtectedComponent>
               <WritePost></WritePost>
-
-              {posts?.length > 0 &&
-                posts?.map((post: any, index: number) => (
-                  <div key={index}>
-                    <Divider />
-                    <Post content={post?.content} postId={post?.postId} userId={post?.user?.userId} fullName={post?.user?.fullName}></Post>
-                  </div>
-                ))}
+              <Posts></Posts>
             </ProtectedComponent>
           </GridItem>
         </Grid>

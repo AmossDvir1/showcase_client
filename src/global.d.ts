@@ -74,3 +74,16 @@ interface UserInfo {
   email: string;
   // Add other user info properties as needed
 }
+
+type NotificationType = "friend_request" | "comment" | "like" | "";
+type NotificationStatus = "read" | "unread";
+
+interface INotification {
+  _id: string;
+  content: string;
+  sender: string;
+  type: NotificationType;
+  status: NotificationStatus;
+  timestamp: Date | string;
+  extraData: string;
+}

@@ -104,7 +104,7 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
           <DialogTitle id="responsive-dialog-title">
             {"Create New Project"}
           </DialogTitle>
-          s<Divider></Divider>
+          <Divider></Divider>
           <DialogContent>
             <Stepper
               activeStep={activeStep}

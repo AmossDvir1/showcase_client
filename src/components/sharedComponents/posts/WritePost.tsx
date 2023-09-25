@@ -1,8 +1,8 @@
 import { Avatar, Divider } from "@mui/material";
 import React, { TextareaHTMLAttributes, useRef, useState } from "react";
-import useUserInfo from "../../pages/auth/useUserInfo";
-import { Button } from "../sharedComponents/Button";
-import { createPost } from "../../controllers/postsController/createPostController";
+import useUserInfo from "../../../pages/auth/useUserInfo";
+import { Button } from "../Button";
+import { createPost } from "../../../controllers/postsController/createPostController";
 import { useNavigate } from "react-router-dom";
 import PostInput from "./PostInput";
 
@@ -22,10 +22,10 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
         return;
       }
     }
-  
+
     // For other cases (clicking outside the textarea), collapse the component
     setIsExpanded(false);
-  
+
     // Scroll the textarea to the top
     if (textareaRef.current) {
       textareaRef.current.scrollTop = 0;
@@ -36,8 +36,10 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
     e.preventDefault();
     setLoading(true);
     const res = await createPost(postValue);
-    setIsExpanded(false);
-    navigate(0);
+    if (res) {
+      setIsExpanded(false);
+      navigate(0);
+    }
   };
 
   return (
@@ -69,7 +71,15 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
       )}
       <Divider className="py-2" />
       <div className="flex items-end justify-center pt-4">
-        <Button disabled={!postValue}  data-post-button="true" onMouseDown={(e) => {e.stopPropagation()}} round onClick={onCreatePost}>
+        <Button
+          disabled={!postValue}
+          data-post-button="true"
+          onMouseDown={(e) => {
+            e.stopPropagation();
+          }}
+          round
+          onClick={onCreatePost}
+        >
           Post
         </Button>
       </div>
