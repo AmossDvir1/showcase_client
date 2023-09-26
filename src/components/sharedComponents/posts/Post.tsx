@@ -75,8 +75,8 @@ export const Post: React.FC<PostProps> = ({ postData, setPosts }) => {
       ) : (
         <div className="flex">
           <Avatar
-            username={postData.fullName}
-            alt={postData.fullName?.toUpperCase() || ""}
+            username={postData?.user?.fullName}
+            alt={postData?.user?.fullName?.toUpperCase() || ""}
             src="/static/images/avatar/1.jpg"
             className="bg-gradient-to-b from-rose-400 via-fuchsia-500 to-indigo-500 mr-4"
             sx={{ width: 40, height: 40 }}

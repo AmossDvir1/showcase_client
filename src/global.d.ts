@@ -64,7 +64,7 @@ interface Post {
   content: string;
   postId:string;
   fullName: string;
-  userId: string;
+  user: { userId: string, fullName: string}
 }
 
 interface UserInfo {

@@ -17,18 +17,18 @@ const Search: FC<Props<ResultsItem>> = (props): JSX.Element => {
       return setResults([]);
     }
 
-    setResults(suggestions && !loading ?suggestions : []);
+    setResults(suggestions && !loading ? suggestions : []);
   };
 
   useEffect(() => suggestions && setResults(suggestions), [suggestions]);
 
   return (
-      <LiveSearch
-        results={results}
-        value={value}
-        onChange={handleChange}
-        onSelect={(item) => setSelectedItem(item)}
-      />
+    <LiveSearch
+      results={results}
+      value={value}
+      onChange={handleChange}
+      onSelect={(item) => setSelectedItem(item)}
+    />
   );
 };
 

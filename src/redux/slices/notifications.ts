@@ -30,6 +30,18 @@ export const markAsRead = createAsyncThunk(
     }
   }
 );
+export const markAsUnread = createAsyncThunk(
+  'notifications/markNotificationsAsUnread',
+  async (notificationsIds:string[]) => {
+    try{
+      const response = await serverReq.post('/notifications/mark-as-unread', {data: {ids: notificationsIds}});
+      return response.data.ids;
+    }
+    catch(err:any){
+      console.log(err);
+    }
+  }
+);
 
 // Create the notifications slice
 const notificationsSlice = createSlice({
