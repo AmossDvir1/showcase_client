@@ -54,7 +54,16 @@ const notificationsSlice = createSlice({
     });
     builder.addCase(markAsRead.fulfilled, (state, action) => {
       state.forEach((notif) => {
-        notif.status = 'read';
+        if (action.payload.includes(notif._id)){
+          notif.status = 'read';
+        }
+      });
+    });
+    builder.addCase(markAsUnread.fulfilled, (state, action) => {
+      state.forEach((notif) => {
+        if (action.payload.includes(notif._id)){
+          notif.status = 'unread';
+        }
       });
     });
   },

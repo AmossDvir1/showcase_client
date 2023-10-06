@@ -17,6 +17,7 @@ import {
   markAsRead,
   markAsUnread,
 } from "../../redux/slices/notifications";
+import { confirmFriendship } from "../../controllers/friendsController/confirmFriendship";
 
 interface NotificationDetailsProps {
   notification: INotification;
@@ -27,9 +28,9 @@ const NotificationDetails: React.FC<NotificationDetailsProps> = ({
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchNotifications());
-  });
+  }, []);
   const navigate = useNavigate();
-  const onDotClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onDotClick = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.stopPropagation();
     if (notification.status === "read") {
       dispatch(markAsUnread([notification._id]));
@@ -45,24 +46,26 @@ const NotificationDetails: React.FC<NotificationDetailsProps> = ({
       navigate(`/profile/${notification.extraData}`);
     }
   };
+  const onConfirmClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    await confirmFriendship(notification.);
+  }
+  const onDeleteClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    
+  }
   return (
     <div
-      className={`flex bg-transparent p-3 ${
-        notification?.status === "unread" ? "bg-slate-100" : ""
-      }`}
+      className={`flex px-3 py-1
+      ${notification?.status === "unread" && "bg-neutral-100"}`}
     >
       {notification?.type === "friend_request" && (
-        <Accordion className="flex flex-col shadow-none border-none">
+        <Accordion className="flex flex-col shadow-none border-none bg-transparent">
           <AccordionSummary
-          disableRipple
-
             expandIcon={
               <div onClick={onNotificationClick}>
-                <GroupAddIcon className="w-5 pr-2 fill-slate-400"></GroupAddIcon>
+                <GroupAddIcon className="w-5 pr-2 fill-slate-400 cursor-pointer"></GroupAddIcon>
               </div>
             }
-            
-            className="bg-transparent flex flex-row-reverse cursor-default"
+            className=" flex flex-row-reverse cursor-default"
             sx={{
               "& .MuiAccordionSummary-content": {
                 display: "flex",
@@ -72,33 +75,26 @@ const NotificationDetails: React.FC<NotificationDetailsProps> = ({
               "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
                 transform: "rotate(0deg)",
               },
-              "& .MuiIconButton-root": {
-                  
-                backgroundColor: "transparent"
-              }
             }}
           >
             <Typography className="cursor-default p-2">
               {notification?.content}
             </Typography>
-            <IconButton onClick={onDotClick}>
-              <CircleIcon
-                className={`hover:fill-primary ${
-                  notification.status === "unread"
-                    ? "fill-primary"
-                    : "fill-slate-200"
-                } w-3 pl-4`}
-              ></CircleIcon>
-            </IconButton>
+            <CircleIcon
+              onClick={onDotClick}
+              className={`hover:fill-primary cursor-pointer ${
+                notification.status === "unread"
+                  ? "fill-primary"
+                  : "fill-slate-200"
+              } w-3 pl-4`}
+            ></CircleIcon>
           </AccordionSummary>
           <AccordionDetails className="flex items-center justify-center">
             <div className="px-4">
-              <Button round>Confirm</Button>
+              <Button round onClick={onConfirmClick}>Confirm</Button>
             </div>
             <div className="px-4">
-              <MuiButton className="bg-transparent border-solid border">
-                Delete
-              </MuiButton>
+              <MuiButton className=" border-solid border" onClick={onDeleteClick}>Delete</MuiButton>
             </div>
           </AccordionDetails>
         </Accordion>

@@ -12,7 +12,7 @@ const NotificationIcon = () => {
   const notifications = useAppSelector((state) => state.notifications);
   useEffect(() => {
     dispatch(fetchNotifications());
-  }, [dispatch]);
+  }, []);
 
   // NotificationsWindow vars:
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(

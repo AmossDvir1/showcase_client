@@ -58,6 +58,7 @@ interface UserProfile {
   firstName: string;
   lastName: string;
   username: string;
+  id: string;
 }
 
 interface Post {

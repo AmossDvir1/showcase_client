@@ -43,7 +43,7 @@ export const Post: React.FC<PostProps> = ({ postData, setPosts }) => {
       className={`w-full min-h-[100px] my-2
       bg-slate-50 flex rounded-lg ${
         !isEditMode ? "justify-between" : ""
-      } p-[20px]`}
+      } px-[20px] py-[15px]`}
     >
       {isEditMode ? (
         <div className="flex flex-col w-full">
