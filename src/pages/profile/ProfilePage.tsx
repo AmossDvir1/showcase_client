@@ -14,25 +14,13 @@ const Profile: React.FC = () => {
   const [userData, setUserData] = useState<UserProfile | null>(null);
   const [relationship, setRelationship] = useState<RelationshipState>();
 
-  const onAddUserClick = async () => {
-    try {
-      const res = await serverReq.post("/friends", {
-        addUsername: userData?.username,
-      });
-      setRelationship(res.data.relationship);
-      console.log(res.data);
-    } catch (err: any) {
-      console.error("Error sending friend request:", err);
-    }
-  };
-
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const res = await serverReq.get(`/profiles`, {
           params: { urlMapping: urlName, type },
         });
-        setUserData(res.data[0]);
+        setUserData(res.data);
       } catch (error) {
         console.error("Error fetching user profile:", error);
         setUserData(null);

@@ -61,11 +61,19 @@ interface UserProfile {
   id: string;
 }
 
+interface Comment {
+  commentStr: string;
+  id: string;
+}
+
 interface Post {
   content: string;
-  postId:string;
+  postId: string;
   fullName: string;
-  user: { userId: string, fullName: string}
+  user: { userId: string; fullName: string };
+  likes:  string[] ;
+  liked: boolean;
+  comments: Comment[];
 }
 
 interface UserInfo {

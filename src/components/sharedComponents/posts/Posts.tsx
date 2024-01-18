@@ -10,6 +10,7 @@ const Posts = () => {
     const fetchPosts = async () => {
       const data = await getMyPosts();
       if (data?.length > 0) {
+        console.log(data)
         setPosts(data);
       }
     };
