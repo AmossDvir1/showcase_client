@@ -36,11 +36,18 @@ const NotificationsWindow: React.FC<NotificationsWindowProps> = ({
         {notificationsData?.map((notif, index) => (
           <div>
             {index > 0 && (
-              <div className="flex items-center justify-center">
+              <div
+                className={`${
+                  notif.status === "unread" && "bg-neutral-100"
+                } flex items-center justify-center`}
+              >
                 <Divider className="w-[92%] bg-slate-100"></Divider>
               </div>
             )}
-            <NotificationDetails notification={notif} key={index}></NotificationDetails>
+            <NotificationDetails
+              notification={notif}
+              key={index}
+            ></NotificationDetails>
           </div>
         ))}
       </Popover>

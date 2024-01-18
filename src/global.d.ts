@@ -58,13 +58,22 @@ interface UserProfile {
   firstName: string;
   lastName: string;
   username: string;
+  id: string;
+}
+
+interface Comment {
+  commentStr: string;
+  id: string;
 }
 
 interface Post {
   content: string;
-  postId:string;
+  postId: string;
   fullName: string;
-  userId: string;
+  user: { userId: string; fullName: string };
+  likes:  string[] ;
+  liked: boolean;
+  comments: Comment[];
 }
 
 interface UserInfo {

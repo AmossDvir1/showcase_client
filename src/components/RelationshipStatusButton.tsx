@@ -1,6 +1,7 @@
 import { Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { serverReq } from "../API/utils/axiosConfig";
+import { confirmFriendship } from "../controllers/friendsController/confirmFriendship";
 
 const RequestSent = () => {
   return (
@@ -9,13 +10,21 @@ const RequestSent = () => {
     </div>
   );
 };
-const PendingApproval = () => {
+const PendingApproval: React.FC<{ senderId: string | undefined }> = ({
+  senderId,
+}) => {
+  const onConfirmClick = async () => {
+    if (senderId) {
+      await confirmFriendship(senderId);
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center p-4 w-64 bg-transparent border-solid border-primary border-[1px] rounded-lg">
       <Typography>Wants to be your friend</Typography>
-      <div className="flex flex-row">      <Button >confirm</Button>
-      <Button>delete</Button></div>
-
+      <div className="flex flex-row">
+        <Button onClick={onConfirmClick}>confirm</Button>
+        <Button>delete</Button>
+      </div>
     </div>
   );
 };
@@ -52,9 +61,11 @@ const RelationshipStatusButton: React.FC<RelationshipStatusButtonProps> = ({
     case "request_sent":
       return <RequestSent></RequestSent>;
     case "pending_approval":
-      return <PendingApproval></PendingApproval>
+      return (
+        <PendingApproval senderId={userData?.id}></PendingApproval>
+      );
   }
-  return <div></div>
+  return <div></div>;
 };
 
 export default RelationshipStatusButton;
