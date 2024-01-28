@@ -23,7 +23,7 @@ const Posts = () => {
           <Divider />
           <Post
             setPosts={setPosts}
-            postData={post}
+            post={post}
           ></Post>
         </div>
       ))}

@@ -107,6 +107,7 @@ const LiveSearch = <T extends ResultsItem>({
             className="w-full bg-transparent rounded-full focus:outline-none p-[3px] active:outline-none"
             inputProps={{
               "aria-label": "search",
+              className:"input-no-ring",
               style: {
                 borderRadius: "100px",
                 paddingTop: 0,
