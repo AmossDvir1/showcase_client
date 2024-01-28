@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Divider,
@@ -26,18 +26,22 @@ import SendIcon from "@mui/icons-material/Send";
 import Link from "@mui/material/Link";
 import { addComment } from "../../../controllers/postsController/addCommentController";
 import Comment from "./Comment";
+import { formatTime } from "../../../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 interface PostProps {
-  postData: Post;
-  setPosts: React.Dispatch<React.SetStateAction<Post[]>>;
+  post: Post;
+  setPosts?: React.Dispatch<React.SetStateAction<Post[]>>;
 }
-export const Post: React.FC<PostProps> = ({ postData, setPosts }) => {
-  const [liked, setLiked] = useState(postData.liked);
-  const [likesCount, setLikesCount] = useState(postData?.likes?.length ?? 0);
+export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
+  const navigate = useNavigate();
+  const [liked, setLiked] = useState(post.liked);
+  const [likesCount, setLikesCount] = useState(post?.likes?.length ?? 0);
   const [commentsCount, setCommentsCount] = useState(
-    postData?.comments?.length ?? 0
+    post?.comments?.length ?? 0
   );
-  const [value, setValue] = useState(postData.content);
+  const [value, setValue] = useState(post.content);
+  const [postData, setPostData] = useState(post);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
   const [previousState, setPreviousState] = useState(value);
@@ -45,27 +49,42 @@ export const Post: React.FC<PostProps> = ({ postData, setPosts }) => {
   const [showCommentsOpen, setShowCommentsOpen] = useState(false);
 
   const [commentString, setCommentString] = useState("");
+  const { relativeTime, exactTime } = formatTime(postData.createdAt);
+
   const onDeletePost = async () => {
-    const res = await deletePost(postData.postId);
+    const res = await deletePost(postData._id);
     if (res) {
       setIsDeleted(true);
     }
   };
 
   const onUpdatePost = async () => {
-    setPreviousState(value);
-    const res = await updatePost(value, postData.postId);
-    setIsEditMode(false);
+    try {
+      setPreviousState(value);
+      const res = await updatePost(value, postData._id);
+      setPostData(res.data.postData);
+      setIsEditMode(false);
+    } catch (err: any) {
+      console.log(err);
+    }
   };
+  useEffect(() => {
+    setLikesCount(postData?.likes?.length ?? 0);
+  }, [postData]);
 
   const onLikeClick = async () => {
     try {
-      const res = await likePost(postData.postId);
+      const res = await likePost(postData._id);
       setLiked(!liked);
-      setLikesCount(res?.data?.post?.likes?.length ?? 0);
+      setPostData(res.data.postData);
+      // setLikesCount(res?.data?.post?.likes?.length ?? 0);
     } catch (err: any) {
       console.error("Failed to like post:", err);
     }
+  };
+
+  const onUserClick = () => {
+    navigate(`/profile/${postData.user.urlMapping}`);
   };
 
   const onCommentClick = () => {
@@ -73,8 +92,11 @@ export const Post: React.FC<PostProps> = ({ postData, setPosts }) => {
   };
   const onAddComment = async () => {
     try {
-      const res = await addComment(postData.postId, commentString);
-      setCommentsCount(commentsCount+1);
+      const res = await addComment(postData._id, commentString);
+      setPostData(res.data.postData);
+      setCommentsCount(commentsCount + 1);
+      setCommentString("");
+      setShowCommentsOpen(true);
     } catch (err: any) {
       console.error("Failed to like post:", err);
     }
@@ -87,7 +109,7 @@ export const Post: React.FC<PostProps> = ({ postData, setPosts }) => {
     <></>
   ) : (
     <Box
-      className={`w-full min-h-[100px] my-2
+      className={`w-full min-h-[100px] max-w-[800px] min-w-[600px] my-2 relative
       bg-slate-50 flex rounded-lg ${
         !isEditMode ? "justify-between" : ""
       } px-[20px] py-[15px]`}
@@ -128,21 +150,53 @@ export const Post: React.FC<PostProps> = ({ postData, setPosts }) => {
         <div className="flex w-full flex-col">
           <div className="flex">
             <Avatar
-              username={postData?.user?.fullName}
-              alt={postData?.user?.fullName?.toUpperCase() || ""}
+              username={postData?.user?.userStr}
+              alt={postData?.user?.userStr?.toUpperCase() || ""}
               src="/static/images/avatar/1.jpg"
               className="bg-gradient-to-b from-rose-400 via-fuchsia-500 to-indigo-500 mr-4"
               sx={{ width: 40, height: 40 }}
             />
-            <Typography className="text-slate-500">
-              <LineRenderer text={value}></LineRenderer>
-            </Typography>
+            <div className="flex flex-col">
+              <div className="flex flex-row items-center">
+                <Typography>
+                  <Link
+                    className="text-black font-normal"
+                    underline="hover"
+                    component="button"
+                    onClick={onUserClick}
+                  >
+                    {postData.user.userStr}
+                  </Link>
+                </Typography>
+                <Divider className="mx-4" orientation="vertical"></Divider>
+                <Tooltip title={exactTime} placement={"bottom"}>
+                  <Typography className="text-gray-500 text-sm">
+                    {relativeTime}
+                  </Typography>
+                </Tooltip>
+              </div>
+              <Typography className="text-slate-700 font-light">
+                <LineRenderer text={value}></LineRenderer>
+              </Typography>
+            </div>
           </div>
           {(likesCount > 0 || commentsCount > 0) && (
-            <div className="flex flex-row justify-between">
+            <div
+              className={`px-3 flex flex-row ${
+                likesCount > 0 && commentsCount > 0
+                  ? "justify-between"
+                  : likesCount > 0 && commentsCount === 0
+                  ? "justify-start"
+                  : "justify-end"
+              }`}
+            >
               {likesCount > 0 && (
                 <div className="flex flex-row pt-5 items-center">
-                  <img className="w-[15px] h-[15px]" src={likeImg}></img>
+                  <img
+                    alt="like"
+                    className="w-[17px] h-[17px]"
+                    src={likeImg}
+                  ></img>
                   <Typography className="text-primary pl-[3px] cursor-default">
                     {likesCount}
                   </Typography>
@@ -150,9 +204,9 @@ export const Post: React.FC<PostProps> = ({ postData, setPosts }) => {
               )}
               {commentsCount > 0 && (
                 <div className="flex flex-row pt-5 items-center">
-
-                  <Typography className="text-primary pl-[3px] cursor-pointer">
-                    <Link underline="hover"
+                  <Typography className="flex items-end text-primary pl-[3px] cursor-pointer">
+                    <Link
+                      underline="hover"
                       component="button"
                       onClick={() => setShowCommentsOpen(!showCommentsOpen)}
                     >{`${commentsCount} comments`}</Link>
@@ -164,53 +218,79 @@ export const Post: React.FC<PostProps> = ({ postData, setPosts }) => {
 
           {commentsCount > 0 && showCommentsOpen && (
             <div>
+              <Divider className="w-full my-3"></Divider>
               {postData.comments.map((comment, index) => (
-                <Comment key={index} value={comment.commentStr}></Comment>
+                <Comment
+                  key={index}
+                  post={postData}
+                  comment={comment}
+                ></Comment>
               ))}
             </div>
           )}
-
-          <Divider className="w-full pt-3"></Divider>
+          <Divider className="w-full pb-3"></Divider>
           <div className="flex flex-row w-full justify-between pt-3">
             <div className="flex flex-row">
-              {liked ? (
-                <MuiButton variant="text" onClick={onLikeClick}>
+              <MuiButton variant="text" onClick={onLikeClick}>
+                {liked ? (
                   <ThumbUpIcon className="text-primary pr-1 w-5" />
-                  <Typography className="text-primary pl-1">Like</Typography>
-                </MuiButton>
-              ) : (
-                <MuiButton variant="text" onClick={onLikeClick}>
+                ) : (
                   <ThumbUpOutlinedIcon className="text-gray-400 pr-1 w-5" />
-                  <Typography className="text-gray-400 pl-1">Like</Typography>
-                </MuiButton>
-              )}
+                )}
+                <Typography
+                  className={
+                    liked
+                      ? "text-primary pl-1 text-sm"
+                      : "text-gray-400 pl-1 text-sm"
+                  }
+                >
+                  Like
+                </Typography>
+              </MuiButton>
             </div>
             <div className="flex flex-row">
               <MuiButton variant="text" onClick={onCommentClick}>
                 <InsertCommentOutlinedIcon className="text-primary pr-1 w-5" />
-                <Typography className="text-primary pl-1">Comment</Typography>
+                <Typography className="text-primary pl-1 text-sm">
+                  Comment
+                </Typography>
               </MuiButton>
             </div>
           </div>
           {commentOpen && (
-            <div className="flex w-full py-2">
+            <div className="flex w-full py-2 bg-transparent rounded-full">
               <MuiTextField
                 onChange={(e) => setCommentString(e.target.value)}
                 value={commentString}
-                sx={{ backgroundColor: "white" }}
+                sx={{ borderRadius: "100px" }}
                 placeholder="Write a comment..."
                 fullWidth
                 InputProps={{
-                  sx: { borderRadius: "100px" },
+                  sx: { borderRadius: "100px", cursor: "default" },
+                  inputProps: {
+                    className: "input-no-ring",
+                    style: {
+                      borderTopLeftRadius: "100px",
+                      borderBottomLeftRadius: "100px",
+                    },
+                  },
                   endAdornment: (
                     <InputAdornment sx={{ display: "flex" }} position="end">
                       <IconButton
                         disabled={!commentString}
-                        className={`flex ${commentString ? "text-primary" : "text-gray-300"}`}
+                        className={`flex ${
+                          commentString
+                            ? "text-primary cursor-pointer"
+                            : "text-gray-300 cursor-default"
+                        }`}
                         onClick={onAddComment}
                         disableRipple
                       >
-                        <SendIcon className="w-[20px]" />
+                        <SendIcon
+                          className={`w-[20px] ${
+                            commentString ? "cursor-pointer" : "cursor-default"
+                          }`}
+                        />
                       </IconButton>
                     </InputAdornment>
                   ),

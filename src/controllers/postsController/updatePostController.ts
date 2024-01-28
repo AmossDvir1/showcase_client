@@ -5,9 +5,8 @@ const updatePost = async (content: string, postId: string) => {
     const res = await serverReq.put(`/post/${postId}`, { content });
     return res;
   } catch (err: any) {
-    console.error(err);
+    throw err;
   }
-  return false;
 };
 
 export { updatePost };

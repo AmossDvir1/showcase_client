@@ -49,19 +49,63 @@ const generateRandomColorString = (alpha = 1) => {
   return rgb;
 };
 
-const truncateText = (text:string, chars:number ) => {
-  if (chars > 3){
-    return (text.slice(0, chars - 3) + "...")
+const truncateText = (text: string, chars: number) => {
+  if (chars > 3) {
+    return text.slice(0, chars - 3) + "...";
   }
   return text;
-}
-
+};
 
 const splitStringToLines = (text: string): string[] => {
   // Use a regular expression to split the string by '\n' but not '\\n'
   const lines = text?.split(/(?<!\\)\\n|(?<!\\\\)\n/);
   // Replace any '\\n' with '\n' in the lines
-  return lines
+  return lines;
+};
+
+type DateTimeFormatOptions = {
+  weekday?: "long" | "short" | "narrow";
+  year?: "numeric" | "2-digit";
+  month?: "numeric" | "2-digit" | "long" | "short" | "narrow";
+  day?: "numeric" | "2-digit";
+  hour?: "numeric" | "2-digit";
+  minute?: "numeric" | "2-digit";
+  second?: "numeric" | "2-digit";
+  timeZoneName?: "long" | "short";
+};
+
+const formatTime = (timestamp: string): { relativeTime: string; exactTime: string } => {
+  const now = new Date();
+  const diff = now.getTime() - new Date(timestamp).getTime();
+
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  const commentDate = new Date(timestamp);
+
+  const options: DateTimeFormatOptions = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  };
+
+
+  const exactDate = commentDate.toLocaleDateString(undefined, options);
+
+  if (days > 0) {
+    return { relativeTime: `${days}d`, exactTime: exactDate };
+  } else if (hours > 0) {
+    return { relativeTime: `${hours}h`, exactTime: exactDate };
+  } else if (minutes > 0) {
+    return { relativeTime: `${minutes}m`, exactTime: exactDate };
+  } else {
+    return { relativeTime: `${seconds}s`, exactTime: exactDate };
+  }
 };
 
 export {
@@ -70,5 +114,6 @@ export {
   getAvarageRGBValue,
   generateRandomColorString,
   truncateText,
-  splitStringToLines
+  splitStringToLines,
+  formatTime
 };

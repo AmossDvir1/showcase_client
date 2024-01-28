@@ -26,12 +26,18 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: ["pop"].join(","),
+  
   },
   components: {
     MuiPopover: {
       defaultProps: {
         container: rootElement,
       },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {lineHeight: "1.3"}
+      }
     },
     MuiPopper: {
       defaultProps: {

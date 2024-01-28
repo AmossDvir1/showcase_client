@@ -40,3 +40,7 @@ textarea {
   cursor: auto;
 }
 
+.input-no-ring {
+  --tw-ring-shadow: 0 0 #000 !important;
+}
+

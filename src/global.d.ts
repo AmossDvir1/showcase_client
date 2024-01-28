@@ -61,19 +61,31 @@ interface UserProfile {
   id: string;
 }
 
+interface UserDetails {
+  userStr: string;
+  userId: string;
+  urlMapping: string;
+}
+
 interface Comment {
-  commentStr: string;
-  id: string;
+  content: string;
+  user: UserDetails;
+  createdAt: string;
+  updatedAt: string;
+  _id: string;
+  likes: string[];
+  liked: boolean;
 }
 
 interface Post {
   content: string;
-  postId: string;
-  fullName: string;
-  user: { userId: string; fullName: string };
-  likes:  string[] ;
+  _id: string;
+  user: UserDetails;
+  likes: string[];
   liked: boolean;
   comments: Comment[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface UserInfo {
@@ -81,6 +93,7 @@ interface UserInfo {
   firstName: string;
   lastName: string;
   email: string;
+  userId: string;
   // Add other user info properties as needed
 }
 
