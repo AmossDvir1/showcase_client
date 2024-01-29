@@ -8,6 +8,7 @@ import ProfilePhoto from "./ProfilePhoto";
 import ProfileMenu from "./ProfileMenu";
 import ProfilePosts from "./ProfilePosts";
 import FriendsList from "./FriendsList";
+import useUserInfo from "../auth/useUserInfo";
 
 const Profile: React.FC = () => {
   const { urlName, type } = useParams<{
@@ -16,6 +17,7 @@ const Profile: React.FC = () => {
   }>();
   const [userData, setUserData] = useState<UserProfile | null>(null);
   const [relationship, setRelationship] = useState<RelationshipState>();
+  const { userInfo } = useUserInfo();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -79,23 +81,19 @@ const Profile: React.FC = () => {
       <div className="flex flex-col rounded-lg bg-white pb-8">
         {/* Cover Photo */}
         <Paper
-          className="flex bg-gray-100 w-full h-80 z-10"
+          className="flex bg-gray-100 w-full lg:h-80 xs:h-52 z-10"
           style={{ backgroundImage: 'url("your-cover-photo-url.jpg")' }}
         ></Paper>
-        <div className="flex flex-row ml-20 mt-[-3rem] top-6 z-20">
-          <ProfilePhoto userProfile></ProfilePhoto>
-          <Typography className="flex items-center mb-4 mx-5 text-black text-5xl z-30">{`${userData?.firstName} ${userData?.lastName}`}</Typography>
+        <div className="flex flex-row lg:ml-20 xs:ml-4 xs:mt-[-1.5rem] lg:mt-[-3rem] top-6 z-20">
+          <ProfilePhoto userProfile={userInfo?.urlMapping===userData.urlMapping}></ProfilePhoto>
+          <Typography className="flex items-center lg:mx-5 xs:mx-2 text-black xs:text-2xl lg:text-5xl z-30">{`${userData?.firstName} ${userData?.lastName}`}</Typography>
         </div>
-        <div className="flex items-center justify-center pt-10 mx-12">
+        <div className="flex items-center justify-center pt-10 xs:mx-4 lg:mx-12">
           <Divider className="w-full"></Divider>
         </div>
-        <div className="flex flex-col mx-12 mb-2">
-          <ProfileMenu></ProfileMenu>
+        <div className="">
+          <ProfileMenu userData={userData}></ProfileMenu>
         </div>
-      </div>
-      <div className="mt-4 px-12 flex flex-col rounded-lg bg-white">
-        <FriendsList userData={userData}></FriendsList>
-        <ProfilePosts userData={userData}></ProfilePosts>
       </div>
     </div>
   );

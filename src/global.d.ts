@@ -59,6 +59,7 @@ interface UserProfile {
   lastName: string;
   username: string;
   id: string;
+  urlMapping: string;
 }
 
 interface UserDetails {
@@ -94,6 +95,7 @@ interface UserInfo {
   lastName: string;
   email: string;
   userId: string;
+  urlMapping: string;
   // Add other user info properties as needed
 }
 

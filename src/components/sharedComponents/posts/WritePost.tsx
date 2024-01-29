@@ -37,6 +37,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
     setLoading(true);
     const res = await createPost(postValue);
     if (res) {
+      setLoading(false)
       setIsExpanded(false);
       navigate(0);
     }
@@ -44,11 +45,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
 
   return (
     <div
-      className={`w-full ${
-        isExpanded ? "min-h-[150px]" : "min-h-[100px]"
-      } bg-slate-50 flex flex-col rounded-lg p-[20px] ${
-        isExpanded ? "h-[18vh]" : "h-0"
-      } transition-width duration-300 my-2`}
+      className={`w-full bg-slate-50 flex flex-col rounded-lg transition-width duration-300 my-2 lg:p-3 xs:px-2 xs:py-3`}
     >
       {userInfo?.username && (
         <div className="flex w-full">
@@ -72,6 +69,8 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
       <Divider className="py-2" />
       <div className="flex items-end justify-center pt-4">
         <Button
+        loading={loading}
+          btnsize="sm"
           disabled={!postValue}
           data-post-button="true"
           onMouseDown={(e) => {

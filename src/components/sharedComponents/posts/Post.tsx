@@ -88,7 +88,7 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
   };
 
   const onCommentClick = () => {
-    setCommentOpen(true);
+    setCommentOpen(!commentOpen);
   };
   const onAddComment = async () => {
     try {
@@ -109,10 +109,10 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
     <></>
   ) : (
     <Box
-      className={`w-full min-h-[100px] max-w-[800px] min-w-[600px] my-2 relative
+      className={`w-full my-2 relative
       bg-slate-50 flex rounded-lg ${
         !isEditMode ? "justify-between" : ""
-      } px-[20px] py-[15px]`}
+      } lg:p-3 xs:px-2 xs:py-3`}
     >
       {isEditMode ? (
         <div className="flex flex-col w-full">
@@ -175,8 +175,9 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
                   </Typography>
                 </Tooltip>
               </div>
-              <Typography className="text-slate-700 font-light">
-                <LineRenderer text={value}></LineRenderer>
+              <Typography className="text-slate-900 font-light text-sm break-words" sx={{unicodeBidi: "plaintext"}}>
+                {/* <LineRenderer text={value}></LineRenderer> */}
+                {value}
               </Typography>
             </div>
           </div>
