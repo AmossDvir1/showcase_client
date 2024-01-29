@@ -14,11 +14,11 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({ userProfile = false }) => {
         <AddIcon
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="w-40 h-40 bg-gray-300 fill-slate-50 hover:bg-gray-400 object-cover rounded-full relative z-20"
+          className="w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] bg-gray-300 fill-slate-50 hover:bg-gray-400 object-cover rounded-full relative z-20"
         ></AddIcon>
       ) : (
         <PersonIcon
-          className="w-40 h-40 bg-gray-300 fill-slate-50 hover:bg-gray-400 object-cover rounded-full relative z-20"
+          className="w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem]  bg-gray-300 fill-slate-50 hover:bg-gray-400 object-cover rounded-full relative z-20"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         ></PersonIcon>

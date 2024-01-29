@@ -21,9 +21,9 @@ const ProfilePosts: React.FC<ProfilePostsProps> = ({ userData }) => {
   }, [userData]);
 
   return (
-    <div className="flex flex-col items-center my-8">
+    <div className="flex flex-col items-center w-full my-8">
       {profilePosts?.length > 0 ? (
-        profilePosts.map((post, index) => <div key={index}><Post post={post}></Post><Divider  className="my-5"></Divider></div>)
+        profilePosts.map((post, index) => <div className="w-full items-center justify-center flex" key={index}><Post post={post}></Post><Divider  className="my-5"></Divider></div>)
       ) : (
         <div className="flex items-center justify-center">
           <Typography className="text-xl text-black">No posts to show</Typography>
