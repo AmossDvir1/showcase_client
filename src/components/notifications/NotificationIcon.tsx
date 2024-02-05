@@ -27,7 +27,7 @@ const NotificationIcon = () => {
   const open = Boolean(anchorEl);
 
   return (
-    <Box className="flex text-center ">
+    <Box className="flex text-center">
       <div>
         <Badge
           className="text-red-500"
@@ -36,7 +36,7 @@ const NotificationIcon = () => {
               ?.length || 0
           }
         >
-          <IconButton onClick={handleClick}>
+          <IconButton className="p-0" onClick={handleClick}>
             <NotificationsIcon fontSize="medium" color="primary" />
           </IconButton>
           <NotificationsWindow

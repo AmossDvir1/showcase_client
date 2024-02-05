@@ -5,6 +5,7 @@ import { Divider } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import NotificationDetails from "./NotificationDetails";
+import { Collapse } from "@mui/material";
 interface NotificationsWindowProps extends PopoverProps {
   notificationsData: INotification[];
   setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>;
@@ -34,7 +35,7 @@ const NotificationsWindow: React.FC<NotificationsWindowProps> = ({
         }}
       >
         {notificationsData?.map((notif, index) => (
-          <div>
+          <div key={index}>
             {index > 0 && (
               <div
                 className={`${

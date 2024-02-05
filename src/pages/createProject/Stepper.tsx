@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 interface Props {
   steps: Array<{ label: string; content: JSX.Element }>;
   activeStep: number;
-  setData: Dispatch<SetStateAction<{ projectName: string; projectDesc: string; isExposed: string; }>>;
+  // setData: Dispatch<SetStateAction<{ projectName: string; projectDesc: string; isExposed: string; technologies: []}>>;
 }
 
 export const Stepper: React.FC<Props> = ({ steps, activeStep }) => {

@@ -22,7 +22,7 @@ export const PostMenu: React.FC<PostMenuProps> = ({
     setAnchorEl(null);
   };
   return (
-    <div className="absolute z-10 right-3">
+    <div className="absolute z-10 right-3 top-2">
       <IconButton
         aria-label="more"
         id="long-button"

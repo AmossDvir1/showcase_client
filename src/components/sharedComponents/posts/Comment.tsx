@@ -1,35 +1,29 @@
 import React, { useState } from "react";
 import { Typography } from "@mui/material";
-import { Avatar } from "../Avatar";
-import { formatTime } from "../../../utils/utils";
-import { Tooltip } from "../Tooltip";
 import LikeComment from "./LikeComment";
 import likeImg from "../../../assets/like.png";
 import { useNavigate } from "react-router-dom";
 import Link from "@mui/material/Link";
+import ElapsedTimeLabel from "../ElapsedTimeLabel";
+import MiniProfilePicture from "../profilePicture/MiniProfilePicture";
 
 interface CommentProps {
   comment: Comment;
   post: Post;
+  media?: Media[];
 }
-const Comment: React.FC<CommentProps> = ({ post, comment }) => {
+const Comment: React.FC<CommentProps> = ({ post, comment, media=[] }) => {
   const navigate = useNavigate();
 
   const [commentData, setCommentData] = useState(comment);
-  const { relativeTime, exactTime } = formatTime(comment.createdAt);
   const onUserClick = () => {
     navigate(`/profile/${commentData.user.urlMapping}`);
   };
   return (
     <div className="flex flex-row ml-[20px] py-2 w-[calc(100%-20px-1.5rem-15px)]">
       <div className="flex">
-        <Avatar
-          username={commentData.user.userStr}
-          alt={commentData.user.userStr.toUpperCase() || ""}
-          src="/static/images/avatar/1.jpg"
-          className="bg-gradient-to-b from-rose-400 via-fuchsia-500 to-indigo-500 mr-2"
-          sx={{ width: 40, height: 40 }}
-        />
+        <div className="mr-1"><MiniProfilePicture media={media} userDetails={commentData.user}></MiniProfilePicture></div>
+
       </div>
       <div className="flex flex-col">
         <div className="bg-slate-200 rounded-3xl px-3 pt-3 pb-3 min-w-[12rem] w-[calc(100%)]">
@@ -47,7 +41,7 @@ const Comment: React.FC<CommentProps> = ({ post, comment }) => {
               component="button"
               onClick={onUserClick}
             >
-              {commentData.user.userStr}
+              {`${commentData.user.firstName} ${commentData.user.lastName}`}
             </Link>
           </Typography>
           <Typography className="text-black font-thin">
@@ -55,11 +49,7 @@ const Comment: React.FC<CommentProps> = ({ post, comment }) => {
           </Typography>
         </div>
         <div className="flex items-center cursor-default">
-          <Tooltip title={exactTime} placement={"bottom"}>
-            <Typography className="pl-2 text-gray-500 text-sm">
-              {relativeTime}
-            </Typography>
-          </Tooltip>
+          <ElapsedTimeLabel date={comment.createdAt}></ElapsedTimeLabel>
           <LikeComment
             post={post}
             commentData={commentData}

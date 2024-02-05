@@ -5,8 +5,8 @@ import { confirmFriendship } from "../controllers/friendsController/confirmFrien
 
 const RequestSent = () => {
   return (
-    <div className="flex items-center justify-center p-4 w-64 bg-transparent border-solid border-primary border-[1px] rounded-lg">
-      <Typography>Request Sent</Typography>
+    <div className="flex items-center justify-center p-4 w-32 bg-transparent border-solid border-primary border-[1px] rounded-lg">
+      <Typography className="text-black">Request Sent</Typography>
     </div>
   );
 };
@@ -57,7 +57,7 @@ const RelationshipStatusButton: React.FC<RelationshipStatusButtonProps> = ({
     case "no_relationship":
       return <Button onClick={onAddUserClick}>+Add friend</Button>;
     case "friends":
-      return <Typography>You are friends</Typography>;
+      return <Typography className="text-black">You are friends</Typography>;
     case "request_sent":
       return <RequestSent></RequestSent>;
     case "pending_approval":

@@ -213,9 +213,9 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
 
                 {/* <ResponsiveComponent breakpoint="md"> */}
                 <Grid item>
-                  <MenuItem className="cursor-default" disableRipple>
+                  <MenuItem className="cursor-default px-2" disableRipple>
                     <Button
-                      className="outline outline-1 w-0"
+                      className="outline outline-1 w-0 min-w-0"
                       btnsize="xs"
                       transparent
                       round={isMobile}
@@ -233,21 +233,16 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 </Grid>
                 {/* </ResponsiveComponent> */}
                 <Grid item>
-                  <MenuItem className="cursor-default" disableRipple>
+                  <MenuItem className="cursor-default lg:px-4 xs:px-2" disableRipple>
                     <NotificationIcon></NotificationIcon>
                   </MenuItem>
                 </Grid>
                 <Grid item>
-                  <MenuItem className="cursor-default" disableRipple>
+                  <MenuItem className="cursor-default lg:px-4 xs:px-2" disableRipple>
                     <MuiButton
+                    className="pl-0"
                       onClick={onLogOut}
                       disableRipple
-                      sx={{
-                        my: 2,
-                        color: "white",
-                        display: "block",
-                        fontWeight: "400",
-                      }}
                     >
                       <Typography
                         noWrap
