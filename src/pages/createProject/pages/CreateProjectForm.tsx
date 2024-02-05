@@ -13,9 +13,18 @@ import PublicIcon from "@mui/icons-material/Public";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import { CreateProjectContext } from "../../../context/CreateProjectContext";
 
-interface Props {setData: Dispatch<SetStateAction<{ projectName: string; projectDesc: string; isExposed: string; }>>}
+interface Props {
+  setData: Dispatch<
+    SetStateAction<{
+      projectName: string;
+      projectDesc: string;
+      isExposed: string;
+      technologies: string[];
+    }>
+  >;
+}
 
-export const CreateProjectForm: React.FC<Props> = ({setData}) => {
+export const CreateProjectForm: React.FC<Props> = ({ setData }) => {
   const [isExposed, setIsExposed] = useState<boolean>(false);
   const { formData, updateFormData } = useContext(CreateProjectContext);
 
@@ -25,6 +34,7 @@ export const CreateProjectForm: React.FC<Props> = ({setData}) => {
     setData({
       ...formData,
       [e.target.name]: e.target.value,
+      technologies: [],
     });
     updateFormData({
       ...formData,

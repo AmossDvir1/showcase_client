@@ -8,6 +8,7 @@ import { WritePost } from "../components/sharedComponents/posts/WritePost";
 import { useAuth } from "../controllers/auth/useAuth";
 import { getMyPosts } from "../controllers/postsController/getMyPostsController";
 import Posts from "../components/sharedComponents/posts/Posts";
+import useMediaQuery from "../components/responsiveness/useMediaQuery";
 
 const GridItem: React.FC<{
   children?: ReactNode;
@@ -32,9 +33,10 @@ interface Props {}
 export const HomePage: React.FC<Props> = () => {
   const navigate = useNavigate();
   const auth = useAuth();
+  const isMobile = useMediaQuery(500);
 
   return (
-    <Grid container className="py-10">
+    <Grid container className="xs:py-0 lg:py-10">
       <Grid item xs={12} sm={4} md={4}>
         <Grid container direction="column">
           <GridItem>
@@ -48,22 +50,22 @@ export const HomePage: React.FC<Props> = () => {
           </GridItem>
           <GridItem>
             <Box>
-              <Typography className="cursor-default whitespace-pre-line text-start  sm:text-lg md:text-xl lg:text-2xl">
+              <Typography className="cursor-default whitespace-pre-line text-start sm:text-lg md:text-xl lg:text-2xl">
                 {toTitleCase(
                   " get inspired by others,\nand connect with fellow developers\nfrom all around the world."
                 )}
               </Typography>
             </Box>
           </GridItem>
-          <GridItem className="mt-7">
+          <GridItem className="xs:mt-4 lg:mt-7">
             <ProtectedComponent
               fallback={
-                <Button round btnsize="lg" onClick={() => navigate("/sign_up")}>
+                <Button round btnsize={isMobile ? "sm": "lg"} onClick={() => navigate("/sign_up")}>
                   get started
                 </Button>
               }
             >
-              <Button round btnsize="lg" onClick={() => navigate("/explore")}>
+              <Button round btnsize={isMobile ? "sm": "lg"} onClick={() => navigate("/explore")}>
                 explore
               </Button>
             </ProtectedComponent>

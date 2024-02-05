@@ -22,11 +22,18 @@ interface ProjectSlotDetails {
 }
 
 interface UserDetails {
-  usernme: string;
+  profilePicture: {imageStringBase64: string, filename: string, userId:string};
+  username: string;
   firstName: string;
   lastName: string;
   id: string;
+  urlMapping:string;
   accessToken?: string;
+}
+
+interface Media {
+  userId: string;
+  imageStringBase64: string;
 }
 
 interface GlobalState {
@@ -60,12 +67,7 @@ interface UserProfile {
   username: string;
   id: string;
   urlMapping: string;
-}
-
-interface UserDetails {
-  userStr: string;
-  userId: string;
-  urlMapping: string;
+  profilePicture?: string | null;
 }
 
 interface Comment {

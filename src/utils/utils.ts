@@ -104,7 +104,7 @@ const formatTime = (timestamp: string): { relativeTime: string; exactTime: strin
   } else if (minutes > 0) {
     return { relativeTime: `${minutes}m`, exactTime: exactDate };
   } else {
-    return { relativeTime: `${seconds}s`, exactTime: exactDate };
+    return { relativeTime: `${seconds >= 0 ? seconds : 0}s`, exactTime: exactDate };
   }
 };
 

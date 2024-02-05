@@ -15,9 +15,7 @@ import { createProject } from "../../controllers/createProjectController";
 import { Stepper } from "./Stepper";
 import { TechnologiesTagsPage } from "./pages/technologiesPage/TechnologiesTagsPage";
 import { Popup } from "../../components/sharedComponents/Popup";
-import {
-  CreateProjectProvider,
-} from "../../context/CreateProjectContext";
+import { CreateProjectProvider } from "../../context/CreateProjectContext";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
@@ -30,21 +28,23 @@ interface Props {
 
 export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
   const isDirty = false;
-  const [data, setData] = useState({
+  const [data, setData] = useState<{
+    projectName: string;
+    projectDesc: string;
+    isExposed: string;
+    technologies: string[];
+  }>({
     projectName: "",
     projectDesc: "",
     isExposed: "",
+    technologies: [],
   });
 
   const steps = useMemo(
     () => [
       {
         label: "Project Details",
-        content: (
-          <CreateProjectForm
-            setData={setData ?? (() => {})}
-          ></CreateProjectForm>
-        ),
+        content: <CreateProjectForm setData={setData}></CreateProjectForm>,
       },
       {
         label: "Technologies",
@@ -76,7 +76,7 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
     setCreateLoading(true);
     const res = await createProject({ data });
     setCreateLoading(false);
-    if (res){
+    if (res) {
       navigate("/my-projects");
       navigate(0);
     }
@@ -109,7 +109,7 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
             <Stepper
               activeStep={activeStep}
               steps={steps}
-              setData={setData}
+              // setData={setData}
             ></Stepper>
           </DialogContent>
           <DialogActions>

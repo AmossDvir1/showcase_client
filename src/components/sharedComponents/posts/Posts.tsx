@@ -5,13 +5,15 @@ import { getMyPosts } from "../../../controllers/postsController/getMyPostsContr
 
 const Posts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [media, setMedia] = useState<Media[]>([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
       const data = await getMyPosts();
-      if (data?.length > 0) {
+      if (data?.postsData?.length > 0) {
         console.log(data)
-        setPosts(data);
+        setPosts(data?.postsData);
+        setMedia(data?.media);
       }
     };
     fetchPosts();
@@ -22,6 +24,7 @@ const Posts = () => {
         <div key={index}>
           <Divider />
           <Post
+          media={media}
             setPosts={setPosts}
             post={post}
           ></Post>

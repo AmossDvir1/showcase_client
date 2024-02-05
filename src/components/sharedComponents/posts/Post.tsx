@@ -14,8 +14,6 @@ import { deletePost } from "../../../controllers/postsController/deletePostContr
 import { updatePost } from "../../../controllers/postsController/updatePostController";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Tooltip } from "../Tooltip";
-import { Avatar } from "../Avatar";
-import LineRenderer from "../LineRenderer";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import InsertCommentOutlinedIcon from "@mui/icons-material/InsertCommentOutlined";
@@ -26,14 +24,18 @@ import SendIcon from "@mui/icons-material/Send";
 import Link from "@mui/material/Link";
 import { addComment } from "../../../controllers/postsController/addCommentController";
 import Comment from "./Comment";
-import { formatTime } from "../../../utils/utils";
 import { useNavigate } from "react-router-dom";
+import ElapsedTimeLabel from "../ElapsedTimeLabel";
+import MiniProfilePicture from "../profilePicture/MiniProfilePicture";
+import { Collapse } from "@mui/material";
+import Loader from "../Loader";
 
 interface PostProps {
   post: Post;
+  media?: Media[];
   setPosts?: React.Dispatch<React.SetStateAction<Post[]>>;
 }
-export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
+export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(post.liked);
   const [likesCount, setLikesCount] = useState(post?.likes?.length ?? 0);
@@ -47,9 +49,9 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
   const [previousState, setPreviousState] = useState(value);
   const [commentOpen, setCommentOpen] = useState(false);
   const [showCommentsOpen, setShowCommentsOpen] = useState(false);
-
+  const [userStr, setUserStr] = useState("");
+    const [commentSubmitLoading, setCommentSubmitLoading] = useState(false);
   const [commentString, setCommentString] = useState("");
-  const { relativeTime, exactTime } = formatTime(postData.createdAt);
 
   const onDeletePost = async () => {
     const res = await deletePost(postData._id);
@@ -70,6 +72,9 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
   };
   useEffect(() => {
     setLikesCount(postData?.likes?.length ?? 0);
+    if (postData?.user) {
+      setUserStr(`${postData?.user?.firstName} ${postData.user.lastName}`);
+    }
   }, [postData]);
 
   const onLikeClick = async () => {
@@ -92,7 +97,9 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
   };
   const onAddComment = async () => {
     try {
+      setCommentSubmitLoading(true);
       const res = await addComment(postData._id, commentString);
+      setCommentSubmitLoading(false);
       setPostData(res.data.postData);
       setCommentsCount(commentsCount + 1);
       setCommentString("");
@@ -149,13 +156,12 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
       ) : (
         <div className="flex w-full flex-col">
           <div className="flex">
-            <Avatar
-              username={postData?.user?.userStr}
-              alt={postData?.user?.userStr?.toUpperCase() || ""}
-              src="/static/images/avatar/1.jpg"
-              className="bg-gradient-to-b from-rose-400 via-fuchsia-500 to-indigo-500 mr-4"
-              sx={{ width: 40, height: 40 }}
-            />
+            <div className="mr-2">
+              <MiniProfilePicture
+                media={media}
+                userDetails={postData.user}
+              ></MiniProfilePicture>
+            </div>
             <div className="flex flex-col">
               <div className="flex flex-row items-center">
                 <Typography>
@@ -165,23 +171,22 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
                     component="button"
                     onClick={onUserClick}
                   >
-                    {postData.user.userStr}
+                    {userStr}
                   </Link>
                 </Typography>
                 <Divider className="mx-4" orientation="vertical"></Divider>
-                <Tooltip title={exactTime} placement={"bottom"}>
-                  <Typography className="text-gray-500 text-sm">
-                    {relativeTime}
-                  </Typography>
-                </Tooltip>
+                <ElapsedTimeLabel date={postData.createdAt} />
               </div>
-              <Typography className="text-slate-900 font-light text-sm break-words" sx={{unicodeBidi: "plaintext"}}>
-                {/* <LineRenderer text={value}></LineRenderer> */}
+              <Typography
+                className="pt-3 text-slate-900 font-light text-sm break-words"
+                sx={{ unicodeBidi: "plaintext" }}
+              >
                 {value}
               </Typography>
             </div>
           </div>
-          {(likesCount > 0 || commentsCount > 0) && (
+
+          <Collapse in={likesCount > 0 || commentsCount > 0}>
             <div
               className={`px-3 flex flex-row ${
                 likesCount > 0 && commentsCount > 0
@@ -215,20 +220,15 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
                 </div>
               )}
             </div>
-          )}
+          </Collapse>
 
-          {commentsCount > 0 && showCommentsOpen && (
-            <div>
-              <Divider className="w-full my-3"></Divider>
-              {postData.comments.map((comment, index) => (
-                <Comment
-                  key={index}
-                  post={postData}
-                  comment={comment}
-                ></Comment>
-              ))}
-            </div>
-          )}
+          <Collapse in={commentsCount > 0 && showCommentsOpen}>
+            <Divider className="w-full my-3"></Divider>
+            {postData.comments.map((comment, index) => (
+              <Comment media={media} key={index} post={postData} comment={comment}></Comment>
+            ))}
+          </Collapse>
+
           <Divider className="w-full pb-3"></Divider>
           <div className="flex flex-row w-full justify-between pt-3">
             <div className="flex flex-row">
@@ -258,7 +258,7 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
               </MuiButton>
             </div>
           </div>
-          {commentOpen && (
+          <Collapse in={commentOpen}>
             <div className="flex w-full py-2 bg-transparent rounded-full">
               <MuiTextField
                 onChange={(e) => setCommentString(e.target.value)}
@@ -276,10 +276,10 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
                     },
                   },
                   endAdornment: (
-                    <InputAdornment sx={{ display: "flex" }} position="end">
+                    <InputAdornment sx={{ display: "flex", alignItems: "center", justifyContent: "center" }} position="end">
                       <IconButton
                         disabled={!commentString}
-                        className={`flex ${
+                        className={`flex items-center p-0 px-1 justify-center ${
                           commentString
                             ? "text-primary cursor-pointer"
                             : "text-gray-300 cursor-default"
@@ -287,18 +287,18 @@ export const Post: React.FC<PostProps> = ({ post, setPosts }) => {
                         onClick={onAddComment}
                         disableRipple
                       >
-                        <SendIcon
-                          className={`w-[20px] ${
+                        {commentSubmitLoading ? <Loader/>:<SendIcon
+                          className={`flex items-center justify-center w-[20px] ${
                             commentString ? "cursor-pointer" : "cursor-default"
                           }`}
-                        />
+                        />}
                       </IconButton>
                     </InputAdornment>
                   ),
                 }}
               />
             </div>
-          )}
+          </Collapse>
         </div>
       )}
       {!isEditMode && (

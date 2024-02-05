@@ -14,6 +14,7 @@ const TabPanel: React.FC<TabPanelProps> = (props: TabPanelProps) => {
     <div>
       {elements.map((element, index) => (
         <div
+        key={index}
           role="tabpanel"
           hidden={value !== index}
           id={`simple-tabpanel-${index}`}
