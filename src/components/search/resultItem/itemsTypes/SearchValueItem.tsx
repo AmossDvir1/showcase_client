@@ -7,7 +7,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   containerRef: RefObject<HTMLDivElement> | null | undefined;
   isFocused?: boolean;
   index: number;
-  handleSelection: (selectedIndex: number) => void;
+  onItemClick: () => void;
 }
 
 const SearchValueItem: FC<Props> = ({
@@ -15,14 +15,12 @@ const SearchValueItem: FC<Props> = ({
   index,
   containerRef,
   isFocused,
-  handleSelection,
+  onItemClick,
 }): JSX.Element => {
   return (
     <div
       className="cursor-pointer hover:bg-gray-200 p-2 flex items-center"
-      onClick={() => {
-        console.log("Hi");
-      }}
+      onMouseDown={() => onItemClick && onItemClick()}
       ref={containerRef}
       style={{
         backgroundColor: isFocused ? "rgba(40,0,0,0.1)" : "",

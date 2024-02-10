@@ -68,6 +68,7 @@ interface UserProfile {
   id: string;
   urlMapping: string;
   profilePicture?: string | null;
+  coverPhoto?: string | null;
 }
 
 interface Comment {
@@ -76,16 +77,14 @@ interface Comment {
   createdAt: string;
   updatedAt: string;
   _id: string;
-  likes: string[];
-  liked: boolean;
+  likes: UserInfo[];
 }
 
 interface Post {
   content: string;
   _id: string;
   user: UserDetails;
-  likes: string[];
-  liked: boolean;
+  likes: UserInfo[];
   comments: Comment[];
   createdAt: string;
   updatedAt: string;
@@ -97,6 +96,7 @@ interface UserInfo {
   lastName: string;
   email: string;
   userId: string;
+  _id: string;
   urlMapping: string;
   // Add other user info properties as needed
 }

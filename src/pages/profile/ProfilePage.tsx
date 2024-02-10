@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { serverReq } from "../../API/utils/axiosConfig";
 import { Divider, Paper, Typography } from "@mui/material";
-import { Button } from "../../components/sharedComponents/Button";
 import RelationshipStatusButton from "../../components/RelationshipStatusButton";
 import ProfilePhoto from "./ProfilePhoto";
 import ProfileMenu from "./ProfileMenu";
-import useUserInfo from "../auth/useUserInfo";
 import { getProfile } from "../../controllers/profilesController/getProfileController";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserInfo } from "../../redux/slices/user";
+import { RootState } from "../../redux/rootReducer";
+import { AppDispatch } from "../../redux/store";
+import CoverPhoto from "./CoverPhoto";
 
 const Profile: React.FC = () => {
   const { urlName, type } = useParams<{
@@ -16,7 +19,16 @@ const Profile: React.FC = () => {
   }>();
   const [userData, setUserData] = useState<UserProfile | null>(null);
   const [relationship, setRelationship] = useState<RelationshipState>();
-  const { userInfo } = useUserInfo();
+  const dispatch = useDispatch<AppDispatch>();
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const userInfoStatus = useSelector((state: RootState) => state.user.status);
+
+  useEffect(() => {
+    // Dispatch the async action to fetch user info only if it's not already present
+    if (!userInfo && userInfoStatus !== "loading") {
+      dispatch(fetchUserInfo());
+    }
+  }, [dispatch, userInfo, userInfoStatus]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -55,21 +67,17 @@ const Profile: React.FC = () => {
   return (
     <div className="min-w-4xl max-w-6xl m-auto">
       <div className="flex flex-col rounded-lg bg-white pb-8">
-        {/* Cover Photo */}
-        <Paper
-          className="flex bg-gray-100 w-full lg:h-80 xs:h-52 z-10"
-          style={{ backgroundImage: 'url("your-cover-photo-url.jpg")' }}
-        ></Paper>
+        {userInfo?.urlMapping === userData.urlMapping && <CoverPhoto coverPhoto={userData?.coverPhoto} userProfile={userInfo?.urlMapping === userData.urlMapping}></CoverPhoto>}
         <div className="flex flex-row justify-between">
-          <div className="flex lg:ml-20 xs:ml-4 xs:mt-[-1.5rem] lg:mt-[-3rem] z-20">
+          <div className="flex lg:ml-20 xs:ml-4 xs:mt-[-1.5rem] lg:mt-[-3rem] ">
             <ProfilePhoto
               profilePicture={userData?.profilePicture}
               userProfile={userInfo?.urlMapping === userData.urlMapping}
             ></ProfilePhoto>
-            <Typography className="flex items-center lg:mx-5 xs:mx-2 text-black xs:text-2xl lg:text-5xl z-30">{`${userData?.firstName} ${userData?.lastName}`}</Typography>
+            <Typography className="flex items-center lg:mx-5 xs:mx-2 text-black xs:text-2xl lg:text-5xl">{`${userData?.firstName} ${userData?.lastName}`}</Typography>
           </div>
           {userInfo?.urlMapping !== userData.urlMapping && (
-            <div className="flex items-center justify-end lg:mr-20 xs:mr-4 xs:mt-[-1.5rem] lg:mt-[-3rem] z-20">
+            <div className="flex items-center justify-end lg:mr-20 xs:mr-4 xs:mt-[-1.5rem] lg:mt-[-3rem]">
               <RelationshipStatusButton
                 relationship={relationship}
                 setRelationship={setRelationship}

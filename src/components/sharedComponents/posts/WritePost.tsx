@@ -1,19 +1,33 @@
 import { Avatar, Divider } from "@mui/material";
-import React, { TextareaHTMLAttributes, useRef, useState } from "react";
-import useUserInfo from "../../../pages/auth/useUserInfo";
+import React, { TextareaHTMLAttributes, useEffect, useRef, useState } from "react";
 import { Button } from "../Button";
 import { createPost } from "../../../controllers/postsController/createPostController";
 import { useNavigate } from "react-router-dom";
 import PostInput from "./PostInput";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { RootState } from "../../../redux/rootReducer";
+import { fetchUserInfo } from "../../../redux/slices/user";
 
 interface WritePostProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
 export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const userInfoStatus = useSelector((state: RootState) => state.user.status);
+
   const [isExpanded, setIsExpanded] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null); // Ref for the textarea element
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { userInfo } = useUserInfo();
   const [postValue, setPostValue] = useState("");
+
+  useEffect(() => {
+    // Dispatch the async action to fetch user info only if it's not already present
+    if (!userInfo && userInfoStatus !== 'loading') {
+      dispatch(fetchUserInfo());
+    }
+  }, [dispatch, userInfo, userInfoStatus]);
+
   const handleBlur = (e: React.FocusEvent) => {
     // Check if the related target (the element clicked) is the "Post" button
     if (e.relatedTarget && e.relatedTarget instanceof HTMLElement) {

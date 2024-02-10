@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { InputBase, Typography } from "@mui/material";
-import { Search as SearchIcon } from "@mui/icons-material";
+import { InputBase } from "@mui/material";
 import ResultItem from "./resultItem/ResultItem";
 import SearchValueItem from "./resultItem/itemsTypes/SearchValueItem";
-import ResponsiveComponent from "../responsiveness/ResponsiveComponent";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Props<T> {
   results?: T[];
@@ -27,16 +25,21 @@ const LiveSearch = <T extends ResultsItem>({
 
   const onItemClick = (index: number) => {
     const selectedItem = results[index];
-    // if (!selectedItem) return resetSearchComplete();
     onSelect?.(selectedItem);
-    // resetSearchComplete();
     navigate(`/${selectedItem.type}/${selectedItem.urlMapping}`);
-    // onChange("") // reset the search bar
+    setIsExpanded(false);
+    setShowResults(false);
+  };
+  const onResultItemClick = () => {
+    navigate(`/search/${value}`);
+    setIsExpanded(false);
+    setShowResults(false);
   };
 
   const resetSearchComplete = useCallback(() => {
     setFocusedIndex(-1);
     setShowResults(false);
+    
   }, []);
 
   const handleBlur = () => {
@@ -54,8 +57,10 @@ const LiveSearch = <T extends ResultsItem>({
       nextIndexCount = (focusedIndex + 1) % (results.length + 1);
 
     // move up
-    if (key === "ArrowUp")
+    if (key === "ArrowUp"){
       nextIndexCount = (focusedIndex + results.length) % (results.length + 1);
+console.log(nextIndexCount)
+    }
 
     // hide search results
     if (key === "Escape") {
@@ -65,7 +70,12 @@ const LiveSearch = <T extends ResultsItem>({
     // select the current item
     if (key === "Enter") {
       e.preventDefault();
-      onItemClick(focusedIndex);
+      if (focusedIndex >= 0 && focusedIndex < results.length){
+        onItemClick(focusedIndex);
+      }
+      else if(focusedIndex === results.length){
+        onResultItemClick();
+      }
     }
 
     setFocusedIndex(nextIndexCount);
@@ -119,7 +129,7 @@ const LiveSearch = <T extends ResultsItem>({
         </div>
 
         {showResults && value && value.length > 0 && (
-          <div className="absolute mt-1 w-full py-2 bg-white shadow-lg rounded-2xl max-h-96 overflow-y-auto">
+          <div className="absolute mt-1 w-full py-2 bg-white shadow-lg rounded-2xl max-h-96 overflow-y-auto z-10">
             {showResults &&
               results?.length > 0 &&
               results?.map((res, index) => (
@@ -136,9 +146,10 @@ const LiveSearch = <T extends ResultsItem>({
               <SearchValueItem
                 isFocused={results.length === focusedIndex}
                 value={value}
-                handleSelection={onItemClick}
+                onItemClick={onResultItemClick}
                 index={results.length}
                 containerRef={
+                  // resultContainer
                   results.length === focusedIndex ? resultContainer : null
                 }
               ></SearchValueItem>

@@ -44,3 +44,6 @@ textarea {
   --tw-ring-shadow: 0 0 #000 !important;
 }
 
+.cover-photo{
+  background-position: right 1000px top;
+}
