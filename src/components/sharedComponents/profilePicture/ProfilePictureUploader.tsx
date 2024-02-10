@@ -14,8 +14,12 @@ import { Button } from "../Button";
 import { Popup } from "../Popup";
 import CloseIcon from "@mui/icons-material/Close";
 import { uploadProfilePicture } from "../../../controllers/contentUploadController/uploadProfilePictureController";
-import useUserInfo from "../../../pages/auth/useUserInfo";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { RootState } from "../../../redux/rootReducer";
+import { fetchUserInfo } from "../../../redux/slices/user";
+import { showToast } from "../../../utils/toast";
 
 interface ProfilePictureUploaderProps {
   open?: boolean;
@@ -37,16 +41,27 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
     width: null | number;
   }>({ height: null, width: null });
 
-  const user = useUserInfo();
+  const dispatch = useDispatch<AppDispatch>();
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const userInfoStatus = useSelector((state: RootState) => state.user.status);
 
+  useEffect(() => {
+    // Dispatch the async action to fetch user info only if it's not already present
+    if (!userInfo && userInfoStatus !== "loading") {
+      dispatch(fetchUserInfo());
+    }
+  }, [dispatch, userInfo, userInfoStatus]);
 
-  const [imageDetails, setImageDetails] = useState<
-    string | ArrayBuffer | null
-  >(null);
+  const [imageDetails, setImageDetails] = useState<string | ArrayBuffer | null>(
+    null
+  );
   const [error, setError] = useState<string>("");
 
-  useEffect(() => console.log(imageDimensions), [imageDimensions]);
-  useEffect(() => console.log(error), [error]);
+  useEffect(() => {
+    if (error) {
+      showToast(error, error, "error");
+    }
+  }, [error]);
 
   const onChooseFileClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -58,11 +73,12 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
 
   const validateImage = (file: File | null) => {
     if (file) {
+      console.log(file.size)
       if (!file.type.startsWith("image/")) {
-        setError("Please select an image file");
+        setError("Please Select an Image File");
         return false;
-      } else if (file.size > 1000000) {
-        setError("File size is too large");
+      } else if (file.size > 10000000) {
+        setError("File Size is Too Large");
         return false;
       } else {
         setError("");
@@ -99,7 +115,7 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
         reader.readAsDataURL(e?.target?.files[0]);
         reader.onload = async () => {
           const { height, width } = await getImageDimensions(file);
-          
+
           setImageDimensions({ height, width });
           setFilename(file.name);
           setImageDetails(reader.result);
@@ -110,15 +126,19 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
   };
 
   const onUploadPicture = async () => {
-    if (imageDetails && user.userInfo?.userId){
+    if (imageDetails && userInfo?.userId) {
       setUploadLoading(true);
-      const res = await uploadProfilePicture(imageDetails.toString(),user.userInfo.userId, filename );
+      const res = await uploadProfilePicture(
+        imageDetails.toString(),
+        userInfo.userId,
+        filename
+      );
       setOpen(false);
       navigate(0);
     }
     console.log(imageDetails);
     setUploadLoading(false);
-  }
+  };
 
   return (
     <div>
@@ -155,7 +175,16 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
               onChange={onFileChange}
             />
             {preview && imageDimensions.height && imageDimensions.width && (
-              <img style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} className="p-6" alt="profile" src={preview}></img>
+              <img
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "contain",
+                }}
+                className="p-6"
+                alt="profile"
+                src={preview}
+              ></img>
             )}
           </div>
         </DialogContent>
@@ -174,7 +203,7 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
                 onClick={onUploadPicture}
                 loading={uploadLoading}
                 disabled={!imageDetails}
-                loadingText="Creating"
+                loadingText="Uloading..."
                 type="submit"
               >
                 + Upload Photo

@@ -29,6 +29,11 @@ import ElapsedTimeLabel from "../ElapsedTimeLabel";
 import MiniProfilePicture from "../profilePicture/MiniProfilePicture";
 import { Collapse } from "@mui/material";
 import Loader from "../Loader";
+import LikeIcon from "./LikeIcon";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { RootState } from "../../../redux/rootReducer";
+import { fetchUserInfo } from "../../../redux/slices/user";
 
 interface PostProps {
   post: Post;
@@ -37,7 +42,18 @@ interface PostProps {
 }
 export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
   const navigate = useNavigate();
-  const [liked, setLiked] = useState(post.liked);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const userInfoStatus = useSelector((state: RootState) => state.user.status);
+  useEffect(() => {
+    // Dispatch the async action to fetch user info only if it's not already present
+    if (!userInfo && userInfoStatus !== 'loading') {
+      dispatch(fetchUserInfo());
+    }
+  }, [dispatch, userInfo, userInfoStatus]);
+
+  
   const [likesCount, setLikesCount] = useState(post?.likes?.length ?? 0);
   const [commentsCount, setCommentsCount] = useState(
     post?.comments?.length ?? 0
@@ -80,7 +96,6 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
   const onLikeClick = async () => {
     try {
       const res = await likePost(postData._id);
-      setLiked(!liked);
       setPostData(res.data.postData);
       // setLikesCount(res?.data?.post?.likes?.length ?? 0);
     } catch (err: any) {
@@ -198,11 +213,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
             >
               {likesCount > 0 && (
                 <div className="flex flex-row pt-5 items-center">
-                  <img
-                    alt="like"
-                    className="w-[17px] h-[17px]"
-                    src={likeImg}
-                  ></img>
+                  <LikeIcon users={postData.likes}></LikeIcon>
                   <Typography className="text-primary pl-[3px] cursor-default">
                     {likesCount}
                   </Typography>
@@ -233,14 +244,14 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
           <div className="flex flex-row w-full justify-between pt-3">
             <div className="flex flex-row">
               <MuiButton variant="text" onClick={onLikeClick}>
-                {liked ? (
+                {postData.likes.some(like => like._id === userInfo?.userId) ? (
                   <ThumbUpIcon className="text-primary pr-1 w-5" />
                 ) : (
                   <ThumbUpOutlinedIcon className="text-gray-400 pr-1 w-5" />
                 )}
                 <Typography
                   className={
-                    liked
+                    postData.likes.some(like => like._id === userInfo?.userId)
                       ? "text-primary pl-1 text-sm"
                       : "text-gray-400 pl-1 text-sm"
                   }
