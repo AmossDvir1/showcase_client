@@ -1,10 +1,38 @@
 import React from "react";
 
-const Loader = () => {
+
+interface LoaderProps {
+size?: Sizes;
+}
+const Loader: React.FC<LoaderProps> = ({ size="xs" }) => {
+  let loaderSize: string = "";
+
+  switch (size) {
+    case "xs":
+      loaderSize = "w-5 h-5";
+      break;
+    case "sm":
+      loaderSize = "w-7 h-7";
+      break;
+    case "md":
+      loaderSize = "w-10 h-10";
+      break;
+    case "lg":
+      loaderSize = "w-14 h-14";
+      break;
+    case "xl":
+      loaderSize = "w-[4.5rem] h-[4.5rem]";
+      break;
+    case "2xl":
+      loaderSize = "w-24 h-24";
+      break;
+    default:
+      loaderSize = "w-10 h-10"; // Default size
+  }
   return (
     <svg
       aria-hidden="true"
-      className="inline w-5 h-5 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-indigo-700 dark:fill-gray-300"
+      className={`inline ${loaderSize} mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-indigo-700 dark:fill-gray-300`}
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

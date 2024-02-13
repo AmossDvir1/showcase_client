@@ -24,10 +24,12 @@ import { showToast } from "../../../utils/toast";
 interface ProfilePictureUploaderProps {
   open?: boolean;
   setOpen: (open: boolean) => void;
+  purpose: ImagePurpose;
 }
 const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
   open = false,
   setOpen,
+  purpose
 }) => {
   const navigate = useNavigate();
   const theme = useTheme();
@@ -131,7 +133,8 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
       const res = await uploadProfilePicture(
         imageDetails.toString(),
         userInfo.userId,
-        filename
+        filename,
+        purpose
       );
       setOpen(false);
       navigate(0);
@@ -203,7 +206,7 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
                 onClick={onUploadPicture}
                 loading={uploadLoading}
                 disabled={!imageDetails}
-                loadingText="Uloading..."
+                loadingText="Uploading..."
                 type="submit"
               >
                 + Upload Photo
