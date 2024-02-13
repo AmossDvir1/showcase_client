@@ -24,6 +24,7 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({
       <ProfilePictureUploader
         setOpen={setUploaderOpen}
         open={uploaderOpen}
+        purpose="cover"
       ></ProfilePictureUploader>
       {!coverPhoto ? (
         <Paper

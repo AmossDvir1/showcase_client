@@ -23,6 +23,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
       <ProfilePictureUploader
         setOpen={setUploaderOpen}
         open={uploaderOpen}
+        purpose="profile"
       ></ProfilePictureUploader>
       {isHovered && userProfile && !profilePicture ? (
         <AddIcon

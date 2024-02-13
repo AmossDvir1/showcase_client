@@ -4,6 +4,7 @@ import { Slot } from "../components/Slot";
 import { EmptySlot } from "../components/EmptySlot";
 import { CreateProjectDialog } from "./createProject/CreateProjectDialog";
 import useFetchProjectSlots from "../API/useFetchProjectSlots";
+import Loader from "../components/sharedComponents/Loader";
 
 interface Props {}
 
@@ -11,7 +12,7 @@ const VISIBLE_PROJECTS_NUM = 6;
 
 export const UserProjectsDashboard: React.FC<Props> = () => {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const projectSlots = useFetchProjectSlots();
+  const { projectSlots, loading } = useFetchProjectSlots();
 
   const onClose = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -43,11 +44,11 @@ export const UserProjectsDashboard: React.FC<Props> = () => {
                     details={{
                       title: projectSlots[index]?.title || "",
                       description: projectSlots[index]?.description || "",
-                      isExposed: projectSlots[index]?.isExposed
+                      isExposed: projectSlots[index]?.isExposed,
                     }}
                   ></Slot>
                 ) : (
-                  <EmptySlot onClick={() => onClickOpen()}></EmptySlot>
+                  <EmptySlot loading={loading} onClick={() => onClickOpen()}></EmptySlot>
                 ))}
             </Grid>
           ))}

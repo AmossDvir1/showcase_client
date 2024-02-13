@@ -71,6 +71,8 @@ interface UserProfile {
   coverPhoto?: string | null;
 }
 
+type ImagePurpose = "cover" | "profile";
+
 interface Comment {
   content: string;
   user: UserDetails;

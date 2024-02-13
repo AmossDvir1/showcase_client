@@ -8,10 +8,11 @@ import ProfilePosts from "./ProfilePosts";
 interface ProfileMenuProps {
   userData: UserProfile;
   userProfile?: boolean;
+  setUserData: React.Dispatch<React.SetStateAction<UserProfile | null>>;
 }
 
-const ProfileMenu: React.FC<ProfileMenuProps> = ({ userData }) => {
-  const [value, setValue] = React.useState(0);
+const ProfileMenu: React.FC<ProfileMenuProps> = ({ userData, setUserData }) => {
+  const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -54,7 +55,10 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userData }) => {
             value={value}
             elements={[
               <ProfilePosts userData={userData}></ProfilePosts>,
-              <FriendsList userData={userData}></FriendsList>,
+              <FriendsList
+                userData={userData}
+                setUserData={setUserData}
+              ></FriendsList>,
             ]}
           ></TabPanel>
         </div>

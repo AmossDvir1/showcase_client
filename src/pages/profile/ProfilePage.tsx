@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { serverReq } from "../../API/utils/axiosConfig";
-import { Divider, Paper, Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import RelationshipStatusButton from "../../components/RelationshipStatusButton";
 import ProfilePhoto from "./ProfilePhoto";
 import ProfileMenu from "./ProfileMenu";
@@ -11,6 +11,7 @@ import { fetchUserInfo } from "../../redux/slices/user";
 import { RootState } from "../../redux/rootReducer";
 import { AppDispatch } from "../../redux/store";
 import CoverPhoto from "./CoverPhoto";
+import Loader from "../../components/sharedComponents/Loader";
 
 const Profile: React.FC = () => {
   const { urlName, type } = useParams<{
@@ -61,15 +62,15 @@ const Profile: React.FC = () => {
   }, [userData]);
 
   if (!userData || !relationship) {
-    return <div>Loading...</div>;
+    return <div className="pt-24 flex items-center justify-center"><Loader size="lg"></Loader></div>;
   }
 
   return (
     <div className="min-w-4xl max-w-6xl m-auto">
       <div className="flex flex-col rounded-lg bg-white pb-8">
-        {userInfo?.urlMapping === userData.urlMapping && <CoverPhoto coverPhoto={userData?.coverPhoto} userProfile={userInfo?.urlMapping === userData.urlMapping}></CoverPhoto>}
+        <CoverPhoto coverPhoto={userData?.coverPhoto} userProfile={userInfo?.urlMapping === userData.urlMapping}></CoverPhoto>
         <div className="flex flex-row justify-between">
-          <div className="flex lg:ml-20 xs:ml-4 xs:mt-[-1.5rem] lg:mt-[-3rem] ">
+          <div className="flex lg:ml-20 xs:ml-4 xs:mt-[-1.5rem] lg:mt-[-3rem]">
             <ProfilePhoto
               profilePicture={userData?.profilePicture}
               userProfile={userInfo?.urlMapping === userData.urlMapping}
@@ -90,7 +91,7 @@ const Profile: React.FC = () => {
           <Divider className="w-full"></Divider>
         </div>
         <div className="">
-          <ProfileMenu userData={userData}></ProfileMenu>
+          <ProfileMenu userData={userData} setUserData={setUserData}></ProfileMenu>
         </div>
       </div>
     </div>

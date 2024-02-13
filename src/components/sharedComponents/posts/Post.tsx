@@ -127,7 +127,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
     setValue(previousState);
     setIsEditMode(false);
   };
-  return isDeleted ? (
+  return isDeleted || !postData? (
     <></>
   ) : (
     <Box
@@ -174,7 +174,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
             <div className="mr-2">
               <MiniProfilePicture
                 media={media}
-                userDetails={postData.user}
+                userDetails={postData?.user}
               ></MiniProfilePicture>
             </div>
             <div className="flex flex-col">
@@ -190,7 +190,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                   </Link>
                 </Typography>
                 <Divider className="mx-4" orientation="vertical"></Divider>
-                <ElapsedTimeLabel date={postData.createdAt} />
+                <ElapsedTimeLabel date={postData?.createdAt} />
               </div>
               <Typography
                 className="pt-3 text-slate-900 font-light text-sm break-words"
@@ -213,7 +213,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
             >
               {likesCount > 0 && (
                 <div className="flex flex-row pt-5 items-center">
-                  <LikeIcon users={postData.likes}></LikeIcon>
+                  <LikeIcon users={postData?.likes}></LikeIcon>
                   <Typography className="text-primary pl-[3px] cursor-default">
                     {likesCount}
                   </Typography>
@@ -221,12 +221,12 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
               )}
               {commentsCount > 0 && (
                 <div className="flex flex-row pt-5 items-center">
-                  <Typography className="flex items-end text-primary pl-[3px] cursor-pointer">
+                  <Typography className="flex items-end text-primary pl-[3px] xs:text-sm lg:text-base cursor-pointer">
                     <Link
                       underline="hover"
                       component="button"
                       onClick={() => setShowCommentsOpen(!showCommentsOpen)}
-                    >{`${commentsCount} comments`}</Link>
+                    >{`${commentsCount} comment${commentsCount===1 ?"" :"s"}`}</Link>
                   </Typography>
                 </div>
               )}
@@ -235,7 +235,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
 
           <Collapse in={commentsCount > 0 && showCommentsOpen}>
             <Divider className="w-full my-3"></Divider>
-            {postData.comments.map((comment, index) => (
+            {postData?.comments?.map((comment, index) => (
               <Comment media={media} key={index} post={postData} comment={comment}></Comment>
             ))}
           </Collapse>
@@ -244,14 +244,14 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
           <div className="flex flex-row w-full justify-between pt-3">
             <div className="flex flex-row">
               <MuiButton variant="text" onClick={onLikeClick}>
-                {postData.likes.some(like => like._id === userInfo?.userId) ? (
+                {postData?.likes?.some(like => like._id === userInfo?.userId) ? (
                   <ThumbUpIcon className="text-primary pr-1 w-5" />
                 ) : (
                   <ThumbUpOutlinedIcon className="text-gray-400 pr-1 w-5" />
                 )}
                 <Typography
                   className={
-                    postData.likes.some(like => like._id === userInfo?.userId)
+                    postData?.likes?.some(like => like._id === userInfo?.userId)
                       ? "text-primary pl-1 text-sm"
                       : "text-gray-400 pl-1 text-sm"
                   }
