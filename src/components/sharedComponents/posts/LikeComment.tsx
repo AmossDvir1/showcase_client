@@ -42,7 +42,7 @@ const LikeComment: React.FC<LikeCommentProps> = ({
       <Typography className="flex items-end cursor-pointer pl-4 text-gray-500 text-sm">
         <Link
           className={
-            userInfo && commentData.likes.some(like => like._id === userInfo?.userId)
+            userInfo && commentData.likes.some(like => like.id === userInfo?.id)
               ? "text-primary font-medium"
               : "text-gray-500"
           }

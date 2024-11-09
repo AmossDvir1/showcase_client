@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material";
@@ -14,8 +13,8 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import Layout from "./components/Layout";
 import ActivationLayout from "./pages/auth/ActivationLayout";
 import Profile from "./pages/profile/ProfilePage";
-import { useEffect } from "react";
-import io from "socket.io-client";
+import { WebSocketProvider } from "./context/WebSocketContext";
+
 const rootElement = document.getElementById("root");
 
 const theme = createTheme({
@@ -26,7 +25,6 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: ["pop"].join(","),
-  
   },
   components: {
     MuiPopover: {
@@ -36,8 +34,8 @@ const theme = createTheme({
     },
     MuiTypography: {
       styleOverrides: {
-        root: {lineHeight: "1.3"}
-      }
+        root: { lineHeight: "1.3" },
+      },
     },
     MuiPopper: {
       defaultProps: {
@@ -53,49 +51,41 @@ const theme = createTheme({
 });
 
 const App = () => {
-  // useEffect(() => {
-  //   const socket = io("ws://localhost:3200/");
-  //   return () => {
-  //     socket.close();
-  //   };
-  // }, []);
-  
-
-
-
   return (
     <StyledEngineProvider injectFirst>
       <AuthProvider>
         <ThemeProvider theme={theme}>
-          <Router>
-            <Routes>
-              <Route element={<Layout />}>
-                {/* <Route
+          <WebSocketProvider>
+            <Router>
+              <Routes>
+                <Route element={<Layout />}>
+                  {/* <Route
                   element={
                     <ProtectedRoute checkActivation={false}></ProtectedRoute>
                   }
                 ></Route> */}
-                <Route index element={<HomePage></HomePage>} />
-                <Route path="sign_up" element={<SignUp></SignUp>} />
-                <Route path="login" element={<Login></Login>} />
-                <Route element={<ProtectedRoute></ProtectedRoute>}>
-                  <Route
-                    path="my-projects"
-                    element={<UserProjectsDashboard></UserProjectsDashboard>}
-                  ></Route>
-                  <Route path="/:type/:urlName" element={<Profile />} />
+                  <Route index element={<HomePage></HomePage>} />
+                  <Route path="sign_up" element={<SignUp></SignUp>} />
+                  <Route path="login" element={<Login></Login>} />
+                  <Route element={<ProtectedRoute></ProtectedRoute>}>
+                    <Route
+                      path="my-projects"
+                      element={<UserProjectsDashboard></UserProjectsDashboard>}
+                    ></Route>
+                    <Route path="/:type/:urlName" element={<Profile />} />
+                  </Route>
                 </Route>
-              </Route>
-              <Route element={<Layout withMenu={false} />}>
-                <Route
-                  path="user-activation"
-                  element={<ActivationLayout />}
-                ></Route>
-              </Route>
-              {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
-            </Routes>
-          </Router>
-          <ToastContainer />
+                <Route element={<Layout withMenu={false} />}>
+                  <Route
+                    path="user-activation"
+                    element={<ActivationLayout />}
+                  ></Route>
+                </Route>
+                {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+              </Routes>
+            </Router>
+            <ToastContainer />
+          </WebSocketProvider>
         </ThemeProvider>
       </AuthProvider>
     </StyledEngineProvider>

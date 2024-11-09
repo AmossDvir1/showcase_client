@@ -103,7 +103,7 @@ console.log(nextIndexCount)
         onKeyDown={handleKeyDown}
         onFocus={() => setShowResults(true)}
         className={`relative ${
-          isExpanded || (value && value.length > 10) ? "xs:w-[40vw] lg:w-[20vw]" : "xs:w-[20vw] lg:w-[15vw]"
+          isExpanded || (value && value.length > 10) ? "xs:w-[12rem] lg:w-[20vw]" : "xs:w-[8rem] lg:w-[15vw]"
         } bg-opacity-15 transition-width duration-300 rounded-full min-w-[115px] max-w-[40vw] z-10`}
       >
         <div className="flex rounded-full mr-4 bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500">

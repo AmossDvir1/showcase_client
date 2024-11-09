@@ -62,13 +62,20 @@ const Profile: React.FC = () => {
   }, [userData]);
 
   if (!userData || !relationship) {
-    return <div className="pt-24 flex items-center justify-center"><Loader size="lg"></Loader></div>;
+    return (
+      <div className="pt-24 flex items-center justify-center">
+        <Loader size="lg"></Loader>
+      </div>
+    );
   }
 
   return (
     <div className="min-w-4xl max-w-6xl m-auto">
       <div className="flex flex-col rounded-lg bg-white pb-8">
-        <CoverPhoto coverPhoto={userData?.coverPhoto} userProfile={userInfo?.urlMapping === userData.urlMapping}></CoverPhoto>
+        <CoverPhoto
+          coverPhoto={userData?.coverPhoto}
+          userProfile={userInfo?.urlMapping === userData.urlMapping}
+        ></CoverPhoto>
         <div className="flex flex-row justify-between">
           <div className="flex lg:ml-20 xs:ml-4 xs:mt-[-1.5rem] lg:mt-[-3rem]">
             <ProfilePhoto
@@ -78,7 +85,7 @@ const Profile: React.FC = () => {
             <Typography className="flex items-center lg:mx-5 xs:mx-2 text-black xs:text-2xl lg:text-5xl">{`${userData?.firstName} ${userData?.lastName}`}</Typography>
           </div>
           {userInfo?.urlMapping !== userData.urlMapping && (
-            <div className="flex items-center justify-end lg:mr-20 xs:mr-4 xs:mt-[-1.5rem] lg:mt-[-3rem]">
+            <div className="flex items-end justify-end lg:mr-20 xs:mr-4 xs:mt-[-1.5rem] lg:mt-[-3rem]">
               <RelationshipStatusButton
                 relationship={relationship}
                 setRelationship={setRelationship}
@@ -91,7 +98,10 @@ const Profile: React.FC = () => {
           <Divider className="w-full"></Divider>
         </div>
         <div className="">
-          <ProfileMenu userData={userData} setUserData={setUserData}></ProfileMenu>
+          <ProfileMenu
+            userData={userData}
+            setUserData={setUserData}
+          ></ProfileMenu>
         </div>
       </div>
     </div>

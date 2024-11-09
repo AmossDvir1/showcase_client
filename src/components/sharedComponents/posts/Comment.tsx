@@ -10,7 +10,7 @@ import LikeIcon from "./LikeIcon";
 interface CommentProps {
   comment: Comment;
   post: Post;
-  media?: Media[];
+  media?: PictureData[];
 }
 const Comment: React.FC<CommentProps> = ({ post, comment, media = [] }) => {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const Comment: React.FC<CommentProps> = ({ post, comment, media = [] }) => {
               {`${commentData.user.firstName} ${commentData.user.lastName}`}
             </Link>
           </Typography>
-          <Typography className="text-black font-thin">
+          <Typography className="text-black font-thin lg:text-base xs:text-sm">
             {commentData.content}
           </Typography>
         </div>

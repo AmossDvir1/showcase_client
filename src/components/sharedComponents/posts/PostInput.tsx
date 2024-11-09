@@ -6,7 +6,7 @@ interface PostInputProps {
   textareaRef?: React.MutableRefObject<HTMLTextAreaElement | null>;
   handleBlur?: (e: React.FocusEvent) => void;
   setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
-  userInfo?: UserInfo | null;
+  userInfo?: UserDetails | null;
   isExpanded?: boolean;
 }
 const PostInput: React.FC<PostInputProps> = ({

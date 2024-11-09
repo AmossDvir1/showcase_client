@@ -128,11 +128,11 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
   };
 
   const onUploadPicture = async () => {
-    if (imageDetails && userInfo?.userId) {
+    if (imageDetails && userInfo?.id) {
       setUploadLoading(true);
       const res = await uploadProfilePicture(
         imageDetails.toString(),
-        userInfo.userId,
+        userInfo.id,
         filename,
         purpose
       );

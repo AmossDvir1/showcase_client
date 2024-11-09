@@ -21,19 +21,27 @@ interface ProjectSlotDetails {
   isExposed: boolean;
 }
 
-interface UserDetails {
-  profilePicture: {imageStringBase64: string, filename: string, userId:string};
-  username: string;
-  firstName: string;
-  lastName: string;
+type ImagePurpose = "cover" | "profile";
+
+interface PictureData {
+  filename: string;
+  imageStringBase64: string;
+  purpose: ImagePurpose;
+  userId: string;
   id: string;
-  urlMapping:string;
-  accessToken?: string;
 }
 
-interface Media {
-  userId: string;
-  imageStringBase64: string;
+interface UserDetails {
+  activated: boolean;
+  createdAt: string;
+  email: string;
+  firstName: string;
+  id: string;
+  lastName: string;
+  profilePicture: PictureData;
+  updatedAt: string;
+  urlMapping: string;
+  username: string;
 }
 
 interface GlobalState {
@@ -71,36 +79,23 @@ interface UserProfile {
   coverPhoto?: string | null;
 }
 
-type ImagePurpose = "cover" | "profile";
-
 interface Comment {
   content: string;
   user: UserDetails;
   createdAt: string;
   updatedAt: string;
   _id: string;
-  likes: UserInfo[];
+  likes: UserDetails[];
 }
 
 interface Post {
   content: string;
   _id: string;
   user: UserDetails;
-  likes: UserInfo[];
+  likes: UserDetails[];
   comments: Comment[];
   createdAt: string;
   updatedAt: string;
-}
-
-interface UserInfo {
-  username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  userId: string;
-  _id: string;
-  urlMapping: string;
-  // Add other user info properties as needed
 }
 
 type NotificationType = "friend_request" | "comment" | "like" | "";
