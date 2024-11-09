@@ -6,7 +6,7 @@ import Loader from "../Loader";
 
 const Posts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [media, setMedia] = useState<Media[]>([]);
+  const [media, setMedia] = useState<PictureData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -14,7 +14,6 @@ const Posts = () => {
       setLoading(true);
       const data = await getMyPosts();
       if (data?.postsData?.length > 0) {
-        console.log(data);
         setPosts(data?.postsData);
         setMedia(data?.media);
         setLoading(false);

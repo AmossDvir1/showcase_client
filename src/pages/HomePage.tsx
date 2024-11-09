@@ -36,7 +36,7 @@ export const HomePage: React.FC<Props> = () => {
   const isMobile = useMediaQuery(500);
 
   return (
-    <Grid container className="xs:py-0 lg:py-10">
+    <Grid container className="xs:pr-6 xs:py-0 lg:py-10">
       <Grid item xs={12} sm={4} md={4}>
         <Grid container direction="column">
           <GridItem>

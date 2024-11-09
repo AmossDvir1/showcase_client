@@ -1,25 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Typography } from "@mui/material";
-import CircleIcon from "@mui/icons-material/Circle";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchNotifications,
-  markAsRead,
-  markAsUnread,
-} from "../../redux/slices/notifications";
-import { useAppDispatch } from "../../redux/hooks";
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import NotificationStatusDot from "./NotificationStatusDot";
 interface LikeProps {
   notification: INotification;
 }
 
 const Like: React.FC<LikeProps> = ({ notification }) => {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchNotifications());
-  }, []);
   const navigate = useNavigate();
 
   const onNotificationClick = (
@@ -31,62 +20,20 @@ const Like: React.FC<LikeProps> = ({ notification }) => {
     }
   };
 
-  const onDotClick = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
-    e.stopPropagation();
-    if (notification.status === "read") {
-      dispatch(markAsUnread([notification._id]));
-    } else {
-      dispatch(markAsRead([notification._id]));
-    }
-  };
-
   return (
-    <Accordion className="flex flex-col shadow-none border-none bg-transparent">
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon className="pt-1"></ExpandMoreIcon>}
-        className="flex flex-col cursor-default items-center justify-end"
-        sx={{
-          
-          "& .MuiAccordionSummary-content": {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            margin:"0",
-            marginTop:2
-          },
-          "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
-            transform: "rotate(180deg)",
-          },
-          "& .MuiAccordionSummary-expandIconWrapper": {
-            display: "none",
-            alignItems: "center",
-            justifyContent: "center"
-          },
-          "&:hover .MuiAccordionSummary-expandIconWrapper": {
-            display: "flex", // Show the expand icon on hover
-          },
-        }}
-      >
-        <div className="flex flex-row">
-          <div onClick={onNotificationClick}>
-            <ThumbUpIcon className="w-5 pr-2 fill-slate-400 cursor-pointer"></ThumbUpIcon>
-          </div>
-          <Typography className="cursor-default px-2 pt-2">
-            {notification?.content}
-          </Typography>
-          <CircleIcon
-            onClick={onDotClick}
-            className={`hover:fill-primary cursor-pointer ${
-              notification.status === "unread"
-                ? "fill-primary"
-                : "fill-slate-200"
-            } w-3 pl-4`}
-          ></CircleIcon>
+    <div className="w-full my-1 cursor-default items-start flex flex-col shadow-none border-none bg-transparent">
+      <div className="flex flex-row items-center justify-center">
+        <div onClick={onNotificationClick}>
+          <ThumbUpIcon className="flex w-5 pr-4 fill-slate-400 cursor-pointer"></ThumbUpIcon>
         </div>
-      </AccordionSummary>
-      <AccordionDetails className="flex items-center justify-center"></AccordionDetails>
-    </Accordion>
+        <Typography className="flex cursor-default pr-4">
+          {notification?.content}
+        </Typography>
+        <div className="absolute right-4">
+          <NotificationStatusDot notification={notification} />
+        </div>
+      </div>
+    </div>
   );
 };
 

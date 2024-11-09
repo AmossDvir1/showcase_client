@@ -1,11 +1,8 @@
 import React from "react";
 import Popover, { PopoverProps } from "@mui/material/Popover";
-import Typography from "@mui/material/Typography";
 import { Divider } from "@mui/material";
-import CircleIcon from "@mui/icons-material/Circle";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
+
 import NotificationDetails from "./NotificationDetails";
-import { Collapse } from "@mui/material";
 interface NotificationsWindowProps extends PopoverProps {
   notificationsData: INotification[];
   setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>;
@@ -27,11 +24,17 @@ const NotificationsWindow: React.FC<NotificationsWindowProps> = ({
       <Popover
         id={id}
         open={open}
+        className="h-1/2"
         anchorEl={anchorEl}
         onClose={handleClose}
+        disableScrollLock
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: -150,
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
         }}
       >
         {notificationsData?.map((notif, index) => (

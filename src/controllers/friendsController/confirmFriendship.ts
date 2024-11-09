@@ -7,7 +7,7 @@ const confirmFriendship = async (senderId: string) => {
     });
     return res.data;
   } catch (err: any) {
-    return false;
+    throw err;
   }
 };
 

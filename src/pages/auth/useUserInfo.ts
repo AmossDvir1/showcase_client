@@ -4,13 +4,13 @@ import { serverReq } from '../../API/utils/axiosConfig';
 
 
 interface UseUserInfo {
-  userInfo: UserInfo | null;
+  userInfo: UserDetails | null;
   loading: boolean;
   error: Error | null;
 }
 
 const useUserInfo = (): UseUserInfo => {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [userInfo, setUserInfo] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 

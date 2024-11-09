@@ -17,7 +17,6 @@ import { Tooltip } from "../Tooltip";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import InsertCommentOutlinedIcon from "@mui/icons-material/InsertCommentOutlined";
-import likeImg from "../../../assets/like.png";
 import { likePost } from "../../../controllers/postsController/likePostController";
 import { TextField as MuiTextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
@@ -37,7 +36,7 @@ import { fetchUserInfo } from "../../../redux/slices/user";
 
 interface PostProps {
   post: Post;
-  media?: Media[];
+  media?: PictureData[];
   setPosts?: React.Dispatch<React.SetStateAction<Post[]>>;
 }
 export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
@@ -134,7 +133,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
       className={`w-full my-2 relative
       bg-slate-50 flex rounded-lg ${
         !isEditMode ? "justify-between" : ""
-      } lg:p-3 xs:px-2 xs:py-3`}
+      } lg:p-3 xs:px-2 xs:py-3 shadow-[-4px_4px_8px_1px_rgba(0,0,0,0.17)] `}
     >
       {isEditMode ? (
         <div className="flex flex-col w-full">
@@ -193,7 +192,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                 <ElapsedTimeLabel date={postData?.createdAt} />
               </div>
               <Typography
-                className="pt-3 text-slate-900 font-light text-sm break-words"
+                className="pt-3 text-slate-900 font-light lg:text-base xs:text-sm break-words"
                 sx={{ unicodeBidi: "plaintext" }}
               >
                 {value}
@@ -244,17 +243,13 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
           <div className="flex flex-row w-full justify-between pt-3">
             <div className="flex flex-row">
               <MuiButton variant="text" onClick={onLikeClick}>
-                {postData?.likes?.some(like => like._id === userInfo?.userId) ? (
+                {postData?.likes?.some(like => like.id === userInfo?.id) ? (
                   <ThumbUpIcon className="text-primary pr-1 w-5" />
                 ) : (
                   <ThumbUpOutlinedIcon className="text-gray-400 pr-1 w-5" />
                 )}
                 <Typography
-                  className={
-                    postData?.likes?.some(like => like._id === userInfo?.userId)
-                      ? "text-primary pl-1 text-sm"
-                      : "text-gray-400 pl-1 text-sm"
-                  }
+                  className={`${postData?.likes?.some(like => like.id === userInfo?.id)? "text-primary": "text-gray-400"} pl-1 lg:text-sm xs:text-xs`}
                 >
                   Like
                 </Typography>
@@ -263,7 +258,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
             <div className="flex flex-row">
               <MuiButton variant="text" onClick={onCommentClick}>
                 <InsertCommentOutlinedIcon className="text-primary pr-1 w-5" />
-                <Typography className="text-primary pl-1 text-sm">
+                <Typography className="text-primary pl-1 lg:text-sm xs:text-xs">
                   Comment
                 </Typography>
               </MuiButton>
@@ -280,8 +275,9 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                 InputProps={{
                   sx: { borderRadius: "100px", cursor: "default" },
                   inputProps: {
-                    className: "input-no-ring",
+                    className: "input-no-ring lg:text-sm xs:text-xs",
                     style: {
+                     
                       borderTopLeftRadius: "100px",
                       borderBottomLeftRadius: "100px",
                     },

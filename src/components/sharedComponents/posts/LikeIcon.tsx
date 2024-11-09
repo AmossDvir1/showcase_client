@@ -3,7 +3,7 @@ import { Tooltip, Typography } from "@mui/material";
 import likeImg from "../../../assets/like.png";
 
 interface TooltipUsersContentProps {
-  users: UserInfo[];
+  users: UserDetails[];
 }
 const TooltipUsersContent: React.FC<TooltipUsersContentProps> = ({ users }) => {
   return (
@@ -29,7 +29,7 @@ interface LikeIconProps
     React.ImgHTMLAttributes<HTMLImageElement>,
     HTMLImageElement
   > {
-  users: UserInfo[];
+  users: UserDetails[];
 }
 const LikeIcon: React.FC<LikeIconProps> = ({ users, ...rest }) => {
   return (
@@ -49,7 +49,7 @@ const LikeIcon: React.FC<LikeIconProps> = ({ users, ...rest }) => {
     >
       <img
         alt="like"
-        className={`${rest.className} w-[17px] h-[17px] rounded-lg shadow-[-3px_3px_6px_2px_rgba(0,0,0,0.2)] hover:shadow-[-3px_3px_5px_2px_rgba(0,0,0,0.25)]`}
+        className={`z-0 ${rest.className} w-[17px] h-[17px] rounded-lg shadow-[-3px_3px_6px_2px_rgba(0,0,0,0.2)] hover:shadow-[-3px_3px_5px_2px_rgba(0,0,0,0.25)]`}
         src={likeImg}
       ></img>
     </Tooltip>

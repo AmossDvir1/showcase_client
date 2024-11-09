@@ -10,7 +10,7 @@ interface ProfilePostsProps {
 
 const ProfilePosts: React.FC<ProfilePostsProps> = ({ userData }) => {
   const [profilePosts, setProfilePosts] = useState<Post[]>([]);
-  const [media, setMedia] = useState<Media[]>([]);
+  const [media, setMedia] = useState<PictureData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {

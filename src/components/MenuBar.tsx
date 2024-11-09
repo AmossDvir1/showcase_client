@@ -22,6 +22,9 @@ import NotificationIcon from "./notifications/NotificationIcon";
 import useMediaQuery from "./responsiveness/useMediaQuery";
 import { showToast } from "../utils/toast";
 import { logout } from "../controllers/auth/logoutUser";
+import MiniProfilePicture from "./sharedComponents/profilePicture/MiniProfilePicture";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
 interface Props {
   menuItems: string[];
   userSettings: string[];
@@ -31,7 +34,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   const auth = useAuth();
   const isMobile = useMediaQuery(500);
   const isTablet = useMediaQuery(600);
-
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -70,6 +73,10 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
     setAnchorElNav(event.currentTarget);
   };
 
+  const onOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
@@ -79,12 +86,13 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   };
 
   return (
-    <AppBar className="static bg-transparent border-solid border-b-[1px] border-t-0 border-r-0 border-l-0 border-[#6e6e6e]">
-      <Container className="xl:max-w-full 2xl:max-w-[80%] px-0">
+    <AppBar className="bg-main-bg border-solid border-b-[1px] border-t-0 border-r-0 border-l-0 border-[#6e6e6e] fixed top-0 left-0 right-0 z-index: 100">
+      <Container className="xl:max-w-full 2xl:max-w-[80%] px-0 xs:max-w-[] xs:px-4">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
+              className="p-0 pr-1"
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
@@ -141,7 +149,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                   onClick={handleCloseNavMenu}
                   disableRipple
                   sx={{
-                    my: 2,
+                    my: 1,
                     color: "white",
                     display: "block",
                     fontWeight: "400",
@@ -233,31 +241,55 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 </Grid>
                 {/* </ResponsiveComponent> */}
                 <Grid item>
-                  <MenuItem className="cursor-default lg:px-4 xs:px-2" disableRipple>
+                  <MenuItem
+                    className="cursor-default lg:px-4 xs:px-2"
+                    disableRipple
+                  >
                     <NotificationIcon></NotificationIcon>
                   </MenuItem>
                 </Grid>
-                <Grid item>
-                  <MenuItem className="cursor-default lg:px-4 xs:px-2" disableRipple>
-                    <MuiButton
-                    className="pl-0"
-                      onClick={onLogOut}
+                {userInfo && (
+                  <Grid item>
+                    <MenuItem
+                      className="cursor-default lg:px-4 xs:ml-1"
+                      onClick={onOpenNavMenu}
                       disableRipple
                     >
-                      <Typography
-                        noWrap
-                        className="flex text-white decoration-transparent text-sm"
-                        // component="a"
-                        // href="/"
+                      <MiniProfilePicture
+                        size="medium"
+                        media={[userInfo.profilePicture]}
+                        userDetails={userInfo}
+                      ></MiniProfilePicture>
+                    </MenuItem>
+                  </Grid>
+                )}
+                {!isMobile && (
+                  <Grid item>
+                    <MenuItem
+                      className="cursor-default lg:px-4 xs:px-0"
+                      disableRipple
+                    >
+                      <MuiButton
+                        className="pl-0"
+                        onClick={onLogOut}
+                        disableRipple
                       >
-                        log out
-                      </Typography>
-                    </MuiButton>
-                  </MenuItem>
-                </Grid>
+                        <Typography
+                          noWrap
+                          className="flex text-white decoration-transparent text-sm xs:text-xs"
+                          // component="a"
+                          // href="/"
+                        >
+                          log out
+                        </Typography>
+                      </MuiButton>
+                    </MenuItem>
+                  </Grid>
+                )}
               </Grid>
             </ProtectedComponent>
             <Menu
+              disableScrollLock
               sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
@@ -273,11 +305,22 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {userSettings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">{"Profile"}</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">{"Settings"}</Typography>
+              </MenuItem>
+              {isMobile && (
+                <MenuItem
+                  onClick={() => {
+                    onLogOut();
+                    handleCloseUserMenu();
+                  }}
+                >
+                  <Typography textAlign="center">{"Log Out"}</Typography>
                 </MenuItem>
-              ))}
+              )}
             </Menu>
           </Box>
         </Toolbar>

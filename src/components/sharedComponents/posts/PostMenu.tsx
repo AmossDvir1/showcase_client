@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -13,7 +13,7 @@ export const PostMenu: React.FC<PostMenuProps> = ({
   onEditClick,
   onDeleteClick,
 }) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -21,8 +21,22 @@ export const PostMenu: React.FC<PostMenuProps> = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (open) {
+        handleClose();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [open]);
+
   return (
-    <div className="absolute z-10 right-3 top-2">
+    <div className="absolute right-3 top-2">
       <IconButton
         aria-label="more"
         id="long-button"
@@ -35,6 +49,7 @@ export const PostMenu: React.FC<PostMenuProps> = ({
       </IconButton>
       <Menu
         anchorEl={anchorEl}
+        disableScrollLock={true}
         id="account-menu"
         open={open}
         onClose={handleClose}

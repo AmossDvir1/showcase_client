@@ -50,8 +50,8 @@ export const Login: React.FC<Props> = () => {
     [username, password, isLoading]
   );
   return (
-    <Box className="flex-col w-96 h-96 bg-white rounded-[50px] text-center p-10 mt-28 flex">
-      <Typography className="text-black text-3xl mt-7 mb-7">
+    <Box className="flex items-center flex-col xs:m-auto lg:m-0 lg:mt-24 lg:w-96 lg:h-fit xs:w-56 xs:h-fit bg-white xs:rounded-[30px] lg:rounded-[50px] text-center p-10">
+      <Typography className="text-black xs:text-lg lg:text-3xl lg:pt-7 xs:pt-0 lg:pb-7 xs:pb-3">
         Log in to Showcase
       </Typography>
       <form onSubmit={onLogin}>
@@ -90,7 +90,7 @@ export const Login: React.FC<Props> = () => {
             Don't Have an Account? Sign Up
           </Typography>
         </Box>
-        <Box className="pt-12">
+        <Box className="xs:pt-4 lg:pt-12">
           <Button
             disabled={!formValid ?? true}
             loading={isLoading}

@@ -80,7 +80,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { serverReq } from '../../API/utils/axiosConfig';
 
 interface UserState {
-  userInfo: UserInfo | null;
+  userInfo: UserDetails | null;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
