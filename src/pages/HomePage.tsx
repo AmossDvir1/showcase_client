@@ -5,10 +5,10 @@ import { Button } from "../components/sharedComponents/Button";
 import { useNavigate } from "react-router-dom";
 import ProtectedComponent from "../components/sharedComponents/ProtectedComponent";
 import { WritePost } from "../components/sharedComponents/posts/WritePost";
-import { useAuth } from "../controllers/auth/useAuth";
 import { getMyPosts } from "../controllers/postsController/getMyPostsController";
 import Posts from "../components/sharedComponents/posts/Posts";
 import useMediaQuery from "../components/responsiveness/useMediaQuery";
+import { useAuth } from "../context/AuthContext";
 
 const GridItem: React.FC<{
   children?: ReactNode;

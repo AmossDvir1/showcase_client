@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, FormEvent } from "react";
+import { useAuth } from "../../context/AuthContext";
 import { Box, Grid, Typography } from "@mui/material";
 import { TextField } from "../../components/sharedComponents/TextField";
 import EmailIcon from "@mui/icons-material/Email";
@@ -18,12 +19,11 @@ import {
 } from "../../context/SignUpFormContext";
 import { signUp } from "../../controllers/auth/signUp";
 import { saveToLocalStorage } from "../../API/utils/saveToLocalStorage";
-import { useAuth } from "../../controllers/auth/useAuth";
 
 interface Props {}
 
 export const SignUp: React.FC<Props> = () => {
-  const { setIsAuthenticated } = useAuth();
+  const {  } = useAuth();
 
   const navigate = useNavigate();
   const { formData, setFormData } = useContext(SignUpFormContext);
@@ -48,27 +48,17 @@ export const SignUp: React.FC<Props> = () => {
       lastName,
     });
     if (res && res?.success) {
-      console.log("success");
       saveToLocalStorage("auth", {
         accessToken: res.accessToken,
-        isLoggedIn: true,
       });
-      setIsAuthenticated(true);
+      // setIsAuthenticated(true);
       navigate("/user-activation");
       navigate(0);
     } else {
-      setIsAuthenticated(false);
+      // setIsAuthenticated(false);
       console.error("error", res);
     }
     setIsLoading(false);
-  };
-
-  const handleChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    console.log(e.currentTarget.name);
-    setFormData({
-      ...formData,
-      [e.currentTarget.name]: e.currentTarget.value,
-    });
   };
 
   useEffect(

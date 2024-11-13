@@ -59,7 +59,6 @@ const LiveSearch = <T extends ResultsItem>({
     // move up
     if (key === "ArrowUp"){
       nextIndexCount = (focusedIndex + results.length) % (results.length + 1);
-console.log(nextIndexCount)
     }
 
     // hide search results

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -15,13 +16,10 @@ import { Button } from "./sharedComponents/Button";
 import { CreateProjectDialog } from "../pages/createProject/CreateProjectDialog";
 import { useNavigate } from "react-router-dom";
 import ProtectedComponent from "./sharedComponents/ProtectedComponent";
-import { useAuth } from "../controllers/auth/useAuth";
 import Search from "./search/Search";
 import ResponsiveComponent from "./responsiveness/ResponsiveComponent";
 import NotificationIcon from "./notifications/NotificationIcon";
 import useMediaQuery from "./responsiveness/useMediaQuery";
-import { showToast } from "../utils/toast";
-import { logout } from "../controllers/auth/logoutUser";
 import MiniProfilePicture from "./sharedComponents/profilePicture/MiniProfilePicture";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
@@ -51,22 +49,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   };
 
   const onLogOut = async () => {
-    const res = await logout();
-    if (res) {
-      localStorage.removeItem("auth");
-      auth.setIsAuthenticated(false);
-      showToast(
-        "Successfully logged out",
-        "Successfully logged out",
-        "success"
-      );
-    } else {
-      showToast(
-        "Error during logging out",
-        "Error during logging out",
-        "error"
-      );
-    }
+    auth.logout();
   };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {

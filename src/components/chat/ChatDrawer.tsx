@@ -19,14 +19,13 @@ interface ChatDrawerProps {}
 const ChatDrawer: React.FC<ChatDrawerProps> = () => {
   const chatBottomRef = useRef(null);
   const isMobile = useMediaQuery(500);
-
   const [chatMenuOpen, setChatMenuOpen] = useState(false);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(
     null
   );
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onOpenChatDrawer = (e: React.MouseEvent<HTMLButtonElement>) => {
     // setAnchorEl(event.currentTarget);
     setAnchorEl(chatBottomRef.current);
     setChatMenuOpen((previousOpen) => !previousOpen);
@@ -35,13 +34,13 @@ const ChatDrawer: React.FC<ChatDrawerProps> = () => {
   const open = Boolean(anchorEl) && chatMenuOpen;
 
   return (
-    <div className="fixed bottom-5 md:right-16 xs:right-4 z-20">
-      <div ref={chatBottomRef} className="md:w-44 xs:w-30">
+    <div className="relative flex z-30">
+      <div ref={chatBottomRef} className="md:w-44 xs:w-30 flex justify-center items">
         <Button
           btnsize={isMobile ? "xs" : "sm"}
           round
           className="relative rounded-full bg-primary h-full w-full text-white px-4 py-2 hover:bg-primary-light focus:outline-none"
-          onClick={handleClick}
+          onClick={onOpenChatDrawer}
         >
           <div className="flex items-center">
             Chat
@@ -62,11 +61,12 @@ const ChatDrawer: React.FC<ChatDrawerProps> = () => {
           open={open}
           anchorEl={anchorEl}
           placement="top"
+          className="z-30"
         >
           {({ TransitionProps }) => (
             <div>
               <Collapse
-                className="mb-1 rounded-lg"
+                className="mb-4 rounded-lg"
                 {...TransitionProps}
                 timeout={350}
               >
@@ -75,7 +75,7 @@ const ChatDrawer: React.FC<ChatDrawerProps> = () => {
                     className="absolute top-1 right-1 p-0 m-2"
                     disableFocusRipple
                     disableRipple
-                    onClick={handleClick}
+                    onClick={onOpenChatDrawer}
                   >
                     <CloseIcon className="w-5"></CloseIcon>
                   </IconButton>
@@ -99,7 +99,7 @@ const ChatDrawer: React.FC<ChatDrawerProps> = () => {
                     </div>
 
                     <div>
-                      {userInfo && <ChatContacts contactsList={[]/*[userInfo, userInfo]*/}></ChatContacts>}
+                      {userInfo && <ChatContacts></ChatContacts>}
                     </div>
                   </div>
                 </div>

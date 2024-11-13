@@ -108,6 +108,32 @@ const formatTime = (timestamp: string): { relativeTime: string; exactTime: strin
   }
 };
 
+const formatTimeShort = (isoDate: string): string => {
+  const date = new Date(isoDate);
+
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear() % 100; // Get the last two digits of the year
+
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+
+  return `${month}/${day}/${year}, ${formattedHours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+}
+
+const removeDuplicatesById = <T extends { id: string | number }>(array: T[]): T[] => {
+  const seenIds = new Set();
+  return array.filter(item => {
+    if (seenIds.has(item.id)) {
+      return false;
+    }
+    seenIds.add(item.id);
+    return true;
+  });
+};
+
 export {
   toTitleCase,
   randomBetween,
@@ -115,5 +141,7 @@ export {
   generateRandomColorString,
   truncateText,
   splitStringToLines,
-  formatTime
+  formatTime,
+  formatTimeShort,
+  removeDuplicatesById
 };

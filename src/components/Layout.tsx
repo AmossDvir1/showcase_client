@@ -4,7 +4,7 @@ import { MenuBar } from "./MenuBar";
 import { RouteProps, Outlet } from "react-router-dom";
 import ActivationBar from "./ActivationBar";
 import ProtectedComponent from "./sharedComponents/ProtectedComponent";
-import ChatDrawer from "./chat/ChatDrawer";
+import BottomBar from "./sharedComponents/BottomBar";
 
 interface LayoutProps {
   withMenu?: boolean;
@@ -26,7 +26,7 @@ const Layout: React.FC<RouteProps & LayoutProps> = ({ withMenu = true }) => {
         <Outlet />
       </Box>
       <ProtectedComponent>
-        <ChatDrawer></ChatDrawer>
+        <BottomBar />
       </ProtectedComponent>
     </>
   );

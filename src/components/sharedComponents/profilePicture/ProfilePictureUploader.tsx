@@ -75,11 +75,11 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
 
   const validateImage = (file: File | null) => {
     if (file) {
-      console.log(file.size)
+      console.log(`file size: ${file.size}`)
       if (!file.type.startsWith("image/")) {
         setError("Please Select an Image File");
         return false;
-      } else if (file.size > 10000000) {
+      } else if (file.size > 25000000) {
         setError("File Size is Too Large");
         return false;
       } else {
@@ -111,7 +111,6 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
     let file: File;
     if (e?.target?.files && e?.target?.files?.length > 0) {
       file = e.target.files[0];
-      //   console.log(file);
       if (validateImage(file)) {
         setPreview(URL.createObjectURL(file));
         reader.readAsDataURL(e?.target?.files[0]);

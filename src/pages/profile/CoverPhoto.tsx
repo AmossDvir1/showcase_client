@@ -19,6 +19,13 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({
     setUploaderOpen(true);
   };
 
+  const coverPhotoSrc = coverPhoto
+  ? coverPhoto?.startsWith("data:image")
+    ? coverPhoto // Already in data URI format
+    : `data:image/jpeg;base64,${coverPhoto}` // Add data URI prefix if missing
+  : "";
+
+
   return (
     <div>
       <ProfilePictureUploader
@@ -44,7 +51,7 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({
           onClick={() => userProfile && onAddPictureClick()}
           className="hover:brightness-90 w-full h-full bg-[50%_calc(50%-100px)] bg-no-repeat object-cover max-h-[30rem] lg:h-[30rem] xs:h-[20rem]"
           style={{
-            backgroundImage: `url(${coverPhoto})`,
+            backgroundImage: `url(${coverPhotoSrc})`,
             backgroundSize: "cover",
           }}
         ></div>

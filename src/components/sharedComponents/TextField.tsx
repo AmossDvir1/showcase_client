@@ -1,7 +1,6 @@
 import React, {
   useState,
   InputHTMLAttributes,
-  useEffect,
   SetStateAction,
 } from "react";
 import { SvgIconComponent } from "@mui/icons-material";

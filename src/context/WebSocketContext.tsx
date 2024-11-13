@@ -1,4 +1,3 @@
-// WebSocketContext.tsx
 import React, {
   createContext,
   useCallback,
@@ -10,6 +9,10 @@ import { io, Socket } from "socket.io-client";
 import { AppDispatch } from "../redux/store";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../redux/slices/notifications";
+import { removeDuplicatesById } from "../utils/utils";
+import { AUTHENTICATION_ERROR } from "../utils/constants";
+import { useAuth } from "./AuthContext";
+import { refreshToken } from "../controllers/auth/getValidRefereshToken";
 
 // Define the context
 interface WebSocketContextType {
@@ -27,75 +30,77 @@ export const useWebSocket = () => useContext(WebSocketContext);
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [token, setToken] = useState();
   const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineFriends, setOnlineFriends] = useState<UserDetails[]>([]);
-
+  const { isAuthenticated, isActivated, setAccessToken } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    let auth = localStorage.getItem("auth") || "";
-    if (auth && auth !== "") {
-      setToken(JSON.parse(auth));
+  // Function to establish socket connection with latest token
+  const establishSocketConnection = useCallback(async () => {
+    let token = JSON.parse(localStorage.getItem("auth") || "{}")?.accessToken;
+    if (!isActivated) {
+      token = await refreshToken();
+      setAccessToken(token?.accessToken ?? null);
+      if (!token) return;
     }
-  }, []);
 
-  useEffect(() => {
-    // Initialize the WebSocket connection
-    if (token && token !== "") {
+    if (isActivated && isAuthenticated) {
       const newSocket = io(process.env.REACT_APP_API_BASE_URL ?? "", {
-        auth: { token: token["accessToken"] },
+        auth: { token },
         transports: ["websocket"],
       });
 
-      // Listen for confirmation that the connection was established
-      newSocket.on("connectionConfirmed", (data) => {
-        console.log(data.message);
+      newSocket.on("connectionConfirmed", () => {
+        console.log("Socket connection confirmed");
       });
 
       newSocket.on("newNotification", (data) => {
         dispatch(addNotification(data));
       });
 
-      // Receive initial list of online friends
       newSocket.on("onlineFriends", (friends) => {
-        setOnlineFriends(friends);
+        setOnlineFriends(removeDuplicatesById(friends));
       });
 
-      // Handle friend coming online
       newSocket.on("friendOnline", (newFriend) => {
         const { friendOnline } = newFriend;
-        console.log(
-          friendOnline.firstName + " " + friendOnline.lastName + " is Online"
+        setOnlineFriends((prev) =>
+          removeDuplicatesById([...prev, friendOnline])
         );
-        setOnlineFriends([...onlineFriends, friendOnline]);
       });
 
-      // Handle friend going offline
       newSocket.on("friendOffline", (newFriend) => {
         const { friendOffline } = newFriend;
-        console.log(
-            friendOffline.firstName + " " + friendOffline.lastName + " is Offline"
-        );
-        setOnlineFriends(
-          onlineFriends.filter((friend) => friend.id !== friendOffline.id)
+        setOnlineFriends((prev) =>
+          prev.filter((friend) => friend.id !== friendOffline.id)
         );
       });
 
-      // Handle any connection errors
-      newSocket.on("connect_error", (error) => {
+      newSocket.on("connect_error", async (error) => {
         console.error("WebSocket connection error:", error);
+
+        if (error.message === AUTHENTICATION_ERROR) {
+          newSocket.disconnect();
+        }
       });
 
-      // Set the socket in state
       setSocket(newSocket);
 
-      // Clean up on unmount
+      // Clean up socket connection when component unmounts or token changes
       return () => {
-        newSocket.close();
+        newSocket.off();
+        newSocket.disconnect();
+        setSocket(null);
       };
     }
-  }, [token]);
+  }, [dispatch, isActivated]);
+
+  // Effect to handle socket (re)connection on token change
+  useEffect(() => {
+    if (isAuthenticated) {
+      const cleanUpConnection = establishSocketConnection();
+    }
+  }, [isAuthenticated, establishSocketConnection]);
 
   return (
     <WebSocketContext.Provider value={{ socket, onlineFriends }}>

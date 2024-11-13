@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/user";
+import chatsReducer from "./slices/chats"
 import globalStateReducer from "./slices/globalState";
 import notificationsReducer from "./slices/notifications";
 
@@ -8,6 +9,7 @@ const store = configureStore({
     user: userReducer,
     globalState: globalStateReducer,
     notifications: notificationsReducer,
+    chats: chatsReducer
   },
 });
 

@@ -75,7 +75,6 @@ const RelationshipStatusButton: React.FC<RelationshipStatusButtonProps> = ({
         addUsername: userData?.username,
       });
       setRelationship(res.data.relationship);
-      console.log(res.data);
     } catch (err: any) {
       console.error("Error sending friend request:", err);
     }

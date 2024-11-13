@@ -1,4 +1,5 @@
 import React, { useState, useEffect, FormEvent } from "react";
+import { useAuth } from "../../context/AuthContext";
 import { Box, Typography } from "@mui/material";
 import { TextField } from "../../components/sharedComponents/TextField";
 import PersonIcon from "@mui/icons-material/Person";
@@ -9,10 +10,6 @@ import {
   validateUsername,
 } from "../../utils/stringValidation";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../controllers/auth/loginUser";
-import { saveToLocalStorage } from "../../API/utils/saveToLocalStorage";
-import { showToast } from "../../utils/toast";
-import { useAuth } from "../../controllers/auth/useAuth";
 
 interface Props {}
 
@@ -23,25 +20,16 @@ export const Login: React.FC<Props> = () => {
   const [password, setPassword] = useState<string>("");
   const [formValid, setFormValid] = useState<boolean>(false);
   const auth = useAuth();
+
   const onLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    const res = await login({ username, password });
-    if (res && res?.success) {
-      showToast("Successfully Logged In", "Login Success", "success");
-      console.log("successful login");
-      saveToLocalStorage("auth", {
-        accessToken: res.accessToken,
-        isLoggedIn: true,
-      });
-      auth.setIsAuthenticated(true);
-      navigate("/");
-      navigate(0);
-    } else {
-      console.error("error", res);
-    }
+    await auth.login(username, password);
+    navigate("/");
+    navigate(0);
     setIsLoading(false);
   };
+
   useEffect(
     () =>
       setFormValid(
@@ -92,7 +80,7 @@ export const Login: React.FC<Props> = () => {
         </Box>
         <Box className="xs:pt-4 lg:pt-12">
           <Button
-            disabled={!formValid ?? true}
+            disabled={!formValid}
             loading={isLoading}
             round
             type="submit"

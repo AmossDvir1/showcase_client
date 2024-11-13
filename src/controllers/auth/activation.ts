@@ -14,7 +14,6 @@ const sendValidationEmail = async () => {
 const activateUserWithOtp = async (otp: string) => {
   try {
     const res = await serverReq.put("/user/activate-user", { otp });
-    console.log(res);
     return res.data;
   } catch (err: any) {
     console.error(err);
