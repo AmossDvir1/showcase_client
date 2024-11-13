@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../controllers/auth/useAuth";
+import { useAuth } from "../context/AuthContext";
 import { showToast } from "../utils/toast";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
