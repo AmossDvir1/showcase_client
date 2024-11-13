@@ -2,6 +2,8 @@ const homePageTitle: string =
   "the Platform to\nshowcase, connect,\nand collaborate";
 
 const ACCESS_TOKEN_EXPIRED = "InvalidTokenSent";
+const AUTHENTICATION_ERROR = "Authentication error";
+
 
 const ERRORS_TO_DISPLAY = [
   "invalidPasswordOrUsername",
@@ -9,4 +11,4 @@ const ERRORS_TO_DISPLAY = [
   "emailAlreadyExists",
   // "InvalidOtp",
 ];
-export { homePageTitle, ACCESS_TOKEN_EXPIRED, ERRORS_TO_DISPLAY };
+export { homePageTitle, ACCESS_TOKEN_EXPIRED, ERRORS_TO_DISPLAY, AUTHENTICATION_ERROR };

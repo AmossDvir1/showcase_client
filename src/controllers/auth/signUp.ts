@@ -10,7 +10,6 @@ export const signUp = async (data: UserSignUpData) => {
       firstName: data.firstName,
       lastName: data.lastName,
     });
-    console.log(res);
     return res.data;
   } catch (err: any) {
     console.error(err);

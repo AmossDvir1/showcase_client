@@ -1,25 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MiniProfilePicture from "../sharedComponents/profilePicture/MiniProfilePicture";
 import { Typography } from "@mui/material";
 import { useWebSocket } from "../../context/WebSocketContext";
+import { useDispatch } from "react-redux";
+import { addOpenChat } from "../../redux/slices/chats";
 
-interface ChatContactsProps {
-  contactsList: UserDetails[];
-}
-
-const ChatContacts: React.FC<ChatContactsProps> = ({ contactsList }) => {
+const ChatContacts: React.FC = () => {
   const { onlineFriends } = useWebSocket();
+  
+  const dispatch = useDispatch();
+
+  const onAddChat = (friend: UserDetails) => {
+      dispatch(addOpenChat(friend));
+  };
 
   return (
     <div>
-      {onlineFriends.map((contact) => (
-        <div className="flex flex-row items-center justify-start m-1 py-1">
-          <div className="pr-1"><MiniProfilePicture size="small" userDetails={contact} active></MiniProfilePicture></div>
-          <div className="pl-1"><Typography className="text-sm">{`${contact.firstName} ${contact.lastName}`}</Typography></div>
+      {onlineFriends?.length > 0 && onlineFriends?.map((friend) => (
+        <div
+          key={friend.id}
+          className="px-1 hover:bg-indigo-200 rounded-md flex flex-row items-center justify-start m-1 py-1"
+          onClick={(e) => onAddChat(friend)}
+        >
+          <div className="pr-1">
+            <MiniProfilePicture
+              size="small"
+              userDetails={friend}
+              active
+            ></MiniProfilePicture>
+          </div>
+          <div className="pl-1">
+            <Typography className="cursor-default text-sm">{`${friend.firstName} ${friend.lastName}`}</Typography>
+          </div>
         </div>
       ))}
-
-{/* {onlineFriends?.map(fr => <div>{fr.id}</div>)} */}
     </div>
   );
 };

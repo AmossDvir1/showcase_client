@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../controllers/auth/useAuth";
+import { useAuth } from "../context/AuthContext";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { Typography } from "@mui/material";
 import { Button } from "./sharedComponents/Button";
@@ -16,7 +16,7 @@ const ActivationBar: React.FC<Props> = ({ visible }) => {
   };
   return (
     <>
-      {auth?.checkFinished && !(auth?.isActivated) && auth?.isAuthenticated && auth.checkFinished && (
+      {auth?.checkFinished && !(auth?.isActivated) && auth?.isAuthenticated && (
         <Button bgcolorhover="hover:bg-[#FFB32F]" bgcolor="bg-[#FFC232]" textclassname="flex tracking-[0.25em] text-[rgb(0,0,0)]"
           className=" cursor-pointer text-red-400 flex h-14 w-full bg-[#f7a311]"
           onClick={onBarClick}

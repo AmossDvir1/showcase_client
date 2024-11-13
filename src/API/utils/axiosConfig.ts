@@ -2,7 +2,8 @@ import axios, { AxiosInstance } from "axios";
 import { showToast } from "../../utils/toast";
 import { ACCESS_TOKEN_EXPIRED, ERRORS_TO_DISPLAY } from "../../utils/constants";
 import { saveToLocalStorage } from "./saveToLocalStorage";
-
+import { refreshToken } from "../../controllers/auth/getValidRefereshToken";
+import { useAuth } from "../../context/AuthContext";
 const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
 // Create a new Axios instance with baseURL set
@@ -25,16 +26,12 @@ serverReq.interceptors.response.use(
       // Handle post-login request with an expired token
       // Send a request for a refresh token
       try {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-          },
-          withCredentials: true, // Include cookies in the request
-        };
-        const response = await axios.post(`${apiBaseUrl}/user/refresh-token`, {}, config);
-        // Update the access token in the client
-        const newAccessToken = response.data.accessToken;
-        saveToLocalStorage("auth", {accessToken: newAccessToken, isLoggedIn: true});
+
+        const newAccessTokenData = await refreshToken();
+        const newAccessToken = newAccessTokenData?.accessToken;
+        // const {setAccessToken} = useAuth();
+        // setAccessToken(newAccessToken);
+        saveToLocalStorage("auth", {accessToken: newAccessToken});
         // Update the stored access token with the new one
 
         // Retry the original request with the updated access token

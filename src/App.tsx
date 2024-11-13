@@ -8,7 +8,7 @@ import { HomePage } from "./pages/HomePage";
 import { SignUp } from "./pages/auth/SignUp";
 import { Login } from "./pages/auth/Login";
 import { UserProjectsDashboard } from "./pages/UserProjectsDashboard";
-import { AuthProvider } from "./controllers/auth/useAuth";
+import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import Layout from "./components/Layout";
 import ActivationLayout from "./pages/auth/ActivationLayout";

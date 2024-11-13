@@ -18,6 +18,12 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
     setUploaderOpen(true);
   };
 
+  const profilePictureSrc = profilePicture
+    ? profilePicture?.startsWith("data:image")
+      ? profilePicture // Already in data URI format
+      : `data:image/jpeg;base64,${profilePicture}` // Add data URI prefix if missing
+    : "";
+
   return (
     <div className="rounded-full border-solid border-white border-4 z-20">
       <ProfilePictureUploader
@@ -41,8 +47,9 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
       ) : (
         <img
           onClick={() => userProfile && setUploaderOpen(true)}
-          className="rounded-full w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] hover:brightness-90"
-          src={profilePicture}
+          className="rounded-full w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] hover:brightness-90 object-cover"
+          src={profilePictureSrc}
+          
           alt="profilePicture"
         ></img>
       )}

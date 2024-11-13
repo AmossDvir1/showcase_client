@@ -1,8 +1,8 @@
 import React from "react";
+import { useAuth } from "../../context/AuthContext";
 import UserActivation from "./UserActivation";
 import UserAlreadyActivated from "./UserAlreadyActivated";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../../controllers/auth/useAuth";
 
 const ActivationLayout: React.FC = () => {
   const auth = useAuth();

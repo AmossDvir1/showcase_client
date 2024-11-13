@@ -72,7 +72,6 @@ export const CreateProjectDialog: React.FC<Props> = ({ open, onClose }) => {
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const onSubmit = async () => {
-    console.log(data);
     setCreateLoading(true);
     const res = await createProject({ data });
     setCreateLoading(false);

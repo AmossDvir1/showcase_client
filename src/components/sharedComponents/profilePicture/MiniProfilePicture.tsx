@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { Avatar } from "../Avatar";
 import ActiveBadge from "../ActiveBadge";
 
@@ -45,13 +45,19 @@ const MiniProfilePicture: React.FC<MiniProfilePictureProps> = ({
   size,
   media = [],
   active = false,
-}) => {
+}) => {  
   const circleSize = setSize(size);
-  const [profilePic, setProfilePic] = useState<string>(
-    media?.find((image) => {
-      return image?.userId === userDetails?.id;
-    })?.imageStringBase64 || ""
-  );
+
+  let profilePicBase64 = media?.find((image) => image?.userId === userDetails?.id)?.imageStringBase64 || "";
+  if (!profilePicBase64){
+    profilePicBase64 = userDetails?.profilePicture?.imageStringBase64 || "";
+  }
+  const profilePic = profilePicBase64
+    ? profilePicBase64.startsWith("data:image")
+      ? profilePicBase64 // Already a data URI
+      : `data:image/jpeg;base64,${profilePicBase64}` // Add data URI prefix if missing
+    : "";
+    
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
