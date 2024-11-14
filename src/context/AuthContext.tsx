@@ -10,7 +10,7 @@ interface AuthContextType {
   checkFinished: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  setAccessToken: React.Dispatch<React.SetStateAction<string | null>>
+  setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -20,19 +20,16 @@ const AuthContext = createContext<AuthContextType>({
   checkFinished: false,
   logout: async () => {},
   login: async (username: string, password: string) => {},
-  setAccessToken: () => {}
+  setAccessToken: () => {},
 });
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isActivated, setIsActivated] = useState(false);
   const [checkFinished, setCheckFinished] = useState(false);
 
-
   const checkActivationStatus = async (token: string) => {
-
     try {
       const response = await serverReq.get("/user/check-activation", {
         headers: { Authorization: `Bearer ${token}` },
@@ -50,13 +47,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const authData = localStorage.getItem("auth");
     let parsedTokenData = null;
-    if (authData){
+    if (authData) {
       parsedTokenData = JSON.parse(authData);
     }
     const token = parsedTokenData?.accessToken || null;
     setAccessToken(token);
   }, [accessToken, isAuthenticated, isActivated]);
-
 
   useEffect(() => {
     const initializeAuthState = async () => {
@@ -64,17 +60,17 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (storedAuthData) {
         const parsedData = JSON.parse(storedAuthData);
         const token = parsedData?.accessToken || null;
-  
+
         if (token) {
           setAccessToken(token);
           await checkActivationStatus(token);
           setIsAuthenticated(true);
         }
       }
-  
-      setCheckFinished(true);  // Set checkFinished to true only after initializing state
+
+      setCheckFinished(true); // Set checkFinished to true only after initializing state
     };
-  
+
     initializeAuthState();
   }, []);
 
@@ -129,16 +125,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-
-
-  useEffect(() => console.log({accessToken,
-    isAuthenticated,
-    isActivated,
-    checkFinished}), [accessToken,
-      isAuthenticated,
-      isActivated,
-      checkFinished]);
-
   return (
     <AuthContext.Provider
       value={{
@@ -148,7 +134,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         logout,
         login,
         isActivated,
-        setAccessToken
+        setAccessToken,
       }}
     >
       {children}
