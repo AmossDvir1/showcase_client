@@ -134,6 +134,22 @@ const removeDuplicatesById = <T extends { id: string | number }>(array: T[]): T[
   });
 };
 
+const removeDuplicatesByProperty = <T, K extends keyof T>(
+  array: T[],
+  property: K
+): T[] => {
+  const seenValues = new Set<T[K]>();
+  return array.filter(item => {
+    const value = item[property];
+    if (seenValues.has(value)) {
+      return false;
+    }
+    seenValues.add(value);
+    return true;
+  });
+};
+
+
 export {
   toTitleCase,
   randomBetween,
@@ -143,5 +159,6 @@ export {
   splitStringToLines,
   formatTime,
   formatTimeShort,
-  removeDuplicatesById
+  removeDuplicatesById,
+  removeDuplicatesByProperty
 };

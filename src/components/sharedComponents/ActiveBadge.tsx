@@ -54,7 +54,7 @@ const ActiveBadge: React.FC<ActiveBadgeProps> = ({children, ripple = false}) => 
   return (
     <Stack direction="row" spacing={2}>
       <StyledBadge
-        // ripple={ripple}
+        ripple={ripple}
         overlap="circular"
         sx={{width:1, height:1}}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

@@ -110,3 +110,13 @@ interface INotification {
   timestamp: Date | string;
   extraData: string;
 }
+
+interface Message {
+  chatId?: string;
+  content: string;
+  createdAt: string;
+  readBy?:string[];
+  senderId: {id: string, username: string};
+  updatedAt?:string;
+  _id?: string
+}
