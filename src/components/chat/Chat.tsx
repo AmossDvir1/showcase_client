@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Box,
   IconButton,
@@ -25,6 +25,8 @@ import { useNavigate } from "react-router-dom";
 import BubbleMessage from "../sharedComponents/BubbleMessage";
 import moment from "moment";
 
+import InfiniteScroll from "react-infinite-scroll-component";
+
 interface ChatProps {
   friend: UserDetails;
   closeChat: () => void;
@@ -33,20 +35,26 @@ interface ChatProps {
 const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
   const navigate = useNavigate();
   const friendName = `${friend.firstName} ${friend.lastName}`;
-  const chatBottomRef = useRef(null);
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const chatBottomRef = useRef<null | HTMLDivElement>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const isMobile = useMediaQuery(500);
   const { onlineFriends } = useWebSocket();
   const [inputString, setInputString] = useState("");
   const dispatch = useAppDispatch();
   const { socket } = useWebSocket();
   const open = Boolean(anchorEl);
-  const [chatHistory, setChatHistory] = useState<any[]>([]);
+  const [chatHistory, setChatHistory] = useState<Message[]>([]);
   const userInfo = useAppSelector((state: RootState) => state.user.userInfo);
-  const lastMessageRef = useRef<null | HTMLDivElement>(null);
+  const [chatLength, setChatLength] = useState(0);
+  const [loadMore, setLoadMore] = useState(false);
+  const [hasFetched, setHasFetched] = useState<boolean>(false);
+
+  const [loadingMoreMessages, setLoadingMoreMessages] = useState(false);
+  const [skip, setSkip] = useState(0);
+  const limit = 20;
 
   const handleToggle = () => {
-    if (!open) {
+    if (!open && chatBottomRef?.current) {
       setAnchorEl(chatBottomRef.current);
     } else {
       setAnchorEl(null);
@@ -54,49 +62,66 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
     dispatch(toggleChatWindow(friend.id));
   };
 
+  const setMessages = (messages: Message[]) => {
+    // const uniqueMessages: Message[] = removeDuplicatesByProperty(
+    //   messages,
+    //   "_id"
+    // );
+    const sortedMessages = messages.sort((msg1, msg2) =>
+      msg1.createdAt < msg2.createdAt ? 1 : -1
+    );
+    return sortedMessages;
+  };
+
   useEffect(() => {
-    if (lastMessageRef?.current?.scrollIntoView) {
-      lastMessageRef.current.scrollIntoView({
-        block: "nearest",
-        inline: "nearest",
-        behavior: "smooth",
-      });
-    }
+    chatHistory.length === chatLength ? setLoadMore(false) : setLoadMore(true);
+    setChatLength(chatHistory.length);
   }, [chatHistory]);
 
+  // Initial fetch for the latest messages
   useEffect(() => {
     if (socket) {
-      socket.emit("getConversation", {
-        friendId: friend.id,
-        limit: 20,
-        skip: 0,
+      fetchMessages(); // Load the first 20 messages
+
+      // Listen for new messages
+      socket.on("newMessage", (data: { newMessage: Message }) => {
+        setChatHistory((prev) => setMessages([...prev, data.newMessage]));
       });
     }
-    // Listen to the response from the server with the messages
-    socket?.on("conversation", (data: { messages: any[] }) => {
-      setChatHistory(data.messages);
-    });
 
-    // Listen to the response from the server with the messages
-    socket?.on("newMessage", (data: { newMessage: {} }) => {
-      setChatHistory((prev) => [...prev, data.newMessage]);
-    });
     return () => {
-      socket?.off("conversation"); // Clean up listener on component unmount
-      socket?.off("newMessage"); // Clean up listener on component unmount
+      socket?.off("newMessage");
+      socket?.off("conversation");
     };
   }, [socket, friend.id]);
+
+  // Function to fetch messages for pagination
+  const fetchMessages = useCallback(async () => {
+    if (loadingMoreMessages || !socket) return; // Prevent duplicate fetches
+    setLoadingMoreMessages(true);
+    socket.emit("getConversation", { friendId: friend.id, limit, skip });
+    socket.once("conversation", (data: { messages: Message[] }) => {
+      setChatHistory((prev) => setMessages([...data?.messages, ...prev]));
+      // Prepend new messages
+      setSkip((prevSkip) => prevSkip + limit); // Increment skip count for next fetch
+      setLoadingMoreMessages(false);
+      setHasFetched(true);
+    });
+  }, [friend.id, limit, loadingMoreMessages, skip, socket]);
 
   const onSendMessage = () => {
     if (socket && inputString.trim()) {
       socket.emit("sendMessage", { friendId: friend.id, content: inputString });
-      setChatHistory((prevMessages) => [
-        ...prevMessages,
+      setChatHistory((prev) => [
         {
-          senderId: userInfo ?? {},
+          senderId: {
+            id: userInfo?.id ?? "",
+            username: userInfo?.username ?? "",
+          },
           content: inputString,
-          createdAt: moment(new Date()).toISOString()
+          createdAt: moment(new Date()).toISOString(),
         },
+        ...prev,
       ]);
       setInputString(""); // Clear the input after sending
     }
@@ -170,28 +195,64 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
                   <Divider />
 
                   {/* Chat Messages Area */}
-                  <Box className="flex flex-col overflow-y-auto p-2 h-full">
+                  <Box
+                    id="scrollableDiv"
+                    className={`flex ${
+                      chatHistory?.length > 0 ? "flex-col-reverse" : "flex-col"
+                    }  overflow-y-auto p-2 h-full`}
+                  >
                     {chatHistory?.length > 0 ? (
-                      chatHistory.map((message, index) => (
-                        <BubbleMessage
-                          key={index}
-                          message={message}
-                          friend={friend}
-                          isOwnMessage={message?.senderId?.id === userInfo?.id}
-                        ></BubbleMessage>
-                      ))
+                      <InfiniteScroll
+                        endMessage={
+                          <>
+                            {hasFetched && (
+                              <div className="mb-2">
+                                <Typography className="text-xs text-gray-300 items-center justify-center flex">
+                                  End of Conversation
+                                </Typography>
+                                {/* <Divider className="" /> */}
+                              </div>
+                            )}
+                          </>
+                        }
+                        inverse={true}
+                        next={fetchMessages}
+                        hasMore={loadMore} // Prevent loading more if we're still fetching
+                        style={{
+                          display: "flex",
+                          overflow: "hidden",
+                          flexDirection: "column-reverse",
+                        }}
+                        loader={
+                          <div className="flex flex-row items-center justify-center">
+                            <Loader key={0} />
+                          </div>
+                        }
+                        scrollableTarget="scrollableDiv"
+                        dataLength={chatHistory.length}
+                      >
+                        {chatHistory.map((message, index) => (
+                          <BubbleMessage
+                            key={index}
+                            message={message}
+                            friend={friend}
+                            isOwnMessage={
+                              message?.senderId?.id === userInfo?.id
+                            }
+                          ></BubbleMessage>
+                        ))}
+                      </InfiniteScroll>
                     ) : (
                       <Typography variant="body2" color="textSecondary">
                         Start your conversation with {friendName}...
                       </Typography>
                     )}
-
-                    <div ref={lastMessageRef}></div>
+                    {loadMore && <div className="py-3"></div>}
                   </Box>
                   <Divider />
 
                   {/* Message Input */}
-                  <Box className="p-2">
+                  <Box className="p-2 max-h-20">
                     <TextField
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
@@ -205,6 +266,7 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
                       sx={{ borderRadius: "8px" }}
                       placeholder="Write a message..."
                       fullWidth
+                      // rows={4}
                       multiline
                       InputProps={{
                         sx: {
@@ -212,9 +274,11 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
                           cursor: "default",
                           padding: "10px",
                         },
+
                         inputProps: {
-                          className: "input-no-ring lg:text-sm xs:text-xs",
+                          className: " max-h-16 input-no-ring lg:text-sm xs:text-xs",
                           style: {
+                            // overflow: 'auto',
                             borderTopLeftRadius: "8px",
                             borderBottomLeftRadius: "8px",
                           },

@@ -37,7 +37,7 @@ const NotificationsWindow: React.FC<NotificationsWindowProps> = ({
           horizontal: "right",
         }}
       >
-        {notificationsData?.map((notif, index) => (
+        {[...notificationsData]?.reverse()?.map((notif, index) => (
           <div key={index}>
             {index > 0 && (
               <div

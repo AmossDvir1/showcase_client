@@ -4,11 +4,7 @@ import MiniProfilePicture from "../sharedComponents/profilePicture/MiniProfilePi
 import { formatTimeShort } from "../../utils/utils";
 
 interface BubbleMessageProps {
-  message: {
-    senderId: string;
-    content: string;
-    createdAt?: string;
-  };
+  message: Message;
   isOwnMessage: boolean;
   friend: UserDetails;
 }
@@ -33,11 +29,11 @@ const BubbleMessage: React.FC<BubbleMessageProps> = ({
       {isOwnMessage ? (
         <div className="flex flex-col items-end">
           <div
-            className="py-2 px-3 flex bg-[#cac9e8] rounded-[18px]"
+            className="py-2 px-3 flex bg-[#c0bee9] rounded-[18px] max-w-[70%] w-fit"
             onMouseOver={onMouseOver}
             onMouseOut={onMouseOut}
           >
-            <Typography className="break-all text-wrap text-sm">
+            <Typography sx={{overflowWrap:'anywhere'}} className="text-wrap text-sm">
               {message.content}
             </Typography>
           </div>
@@ -57,11 +53,11 @@ const BubbleMessage: React.FC<BubbleMessageProps> = ({
           </div>
           <div className="flex flex-col items-start">
             <div
-              className="py-2 px-3 flex justify-start bg-gray-200 rounded-[18px]"
+              className="py-2 px-3 flex justify-start bg-gray-200 rounded-[18px] max-w-[70%] w-fit"
               onMouseOver={onMouseOver}
               onMouseOut={onMouseOut}
             >
-              <Typography className="break-all text-wrap text-sm">
+              <Typography sx={{overflowWrap:'anywhere'}} className="text-wrap text-sm">
                 {message.content}
               </Typography>
             </div>
