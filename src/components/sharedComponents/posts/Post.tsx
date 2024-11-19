@@ -115,11 +115,12 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
       const res = await addComment(postData._id, commentString);
       setCommentSubmitLoading(false);
       setPostData(res.data.postData);
-      setCommentsCount(commentsCount + 1);
+      setCommentsCount(prev => prev + 1);
       setCommentString("");
       setShowCommentsOpen(true);
     } catch (err: any) {
-      console.error("Failed to like post:", err);
+      setCommentSubmitLoading(false);
+      console.error("Failed to add comment:", err);
     }
   };
   const onCancel = () => {

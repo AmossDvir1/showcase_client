@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
-import { TechnologiesSelector } from "./TechnologiesSelector";
+import ChipsSelector from "../../../../components/sharedComponents/ChipsSelector";
 interface Props {}
 
 export const TechnologiesTagsPage: React.FC<Props> = () => {
   const [selectedChips, setSelectedChips] = useState<
-    [] | (ColoredChip | undefined)[]
+    [] | (undefined)[]
   >([]);
   const [availableChips, setAvailableChips] = useState<string[]>([]);
 
@@ -25,10 +25,10 @@ export const TechnologiesTagsPage: React.FC<Props> = () => {
   return (
     <Box>
       <Typography>Which Technologies Did You Use?</Typography>
-      <TechnologiesSelector
+      {/* <ChipsSelector
         items={availableChips}
         setSelectedChips={setSelectedChips}
-      ></TechnologiesSelector>
+      ></ChipsSelector> */}
     </Box>
   );
 };

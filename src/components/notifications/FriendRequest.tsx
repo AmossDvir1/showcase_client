@@ -33,7 +33,7 @@ const FriendRequest: React.FC<FriendRequestProps> = ({ notification }) => {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
-    if (notification.type === "friend_request") {
+    if (notification.type === "friendRequest") {
       navigate(`/profile/${notification.extraData}`);
     }
   };

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { serverReq } from "../../API/utils/axiosConfig";
-import { Divider, Typography } from "@mui/material";
+import { 
+  // Chip,
+   Divider, Typography } from "@mui/material";
+   import { Chip } from "../../components/sharedComponents/Chip";
 import RelationshipStatusButton from "../../components/RelationshipStatusButton";
 import ProfilePhoto from "./ProfilePhoto";
 import ProfileMenu from "./ProfileMenu";
@@ -20,6 +23,7 @@ const Profile: React.FC = () => {
   }>();
   const [userData, setUserData] = useState<UserProfile | null>(null);
   const [relationship, setRelationship] = useState<RelationshipState>();
+  const [technologies, setTechnologies] = useState<ChipItem[]>([]);
   const dispatch = useDispatch<AppDispatch>();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const userInfoStatus = useSelector((state: RootState) => state.user.status);
@@ -45,20 +49,35 @@ const Profile: React.FC = () => {
     fetchUserProfile();
   }, [type, urlName]);
 
-  useEffect(() => {
+  const fetchUsersRelationship = async () => {
     if (userData) {
-      const getUsersRelationship = async () => {
-        try {
-          const res = await serverReq.get(`/friends`, {
-            params: { addUsername: userData.username },
-          });
-          setRelationship(res.data.relationship);
-        } catch (err: any) {
-          console.log(err);
-        }
-      };
-      getUsersRelationship();
+      try {
+        const res = await serverReq.get(`/friends`, {
+          params: { addUsername: userData.username },
+        });
+        setRelationship(res.data.relationship);
+      } catch (err: any) {
+        console.log(err);
+      }
     }
+  };
+
+  const fetchTechnologies = async () => {
+    try {
+      if (userData) {
+        const response = await serverReq.get("/techs", {
+          params: { userId: userData.id },
+        });
+        setTechnologies(response.data.technologies);
+      }
+    } catch (err) {
+      console.error("Failed to fetch technologies", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsersRelationship();
+    fetchTechnologies();
   }, [userData]);
 
   if (!userData || !relationship) {
@@ -76,6 +95,7 @@ const Profile: React.FC = () => {
           coverPhoto={userData?.coverPhoto}
           userProfile={userInfo?.urlMapping === userData.urlMapping}
         ></CoverPhoto>
+
         <div className="flex flex-row justify-between">
           <div className="flex lg:ml-20 xs:ml-4 xs:mt-[-1.5rem] lg:mt-[-3rem]">
             <ProfilePhoto
@@ -94,10 +114,19 @@ const Profile: React.FC = () => {
             </div>
           )}
         </div>
+        <div className="flex flex-col lg:ml-20 xs:ml-4 xs:mt-5">
+            <div className="flex flex-wrap gap-2 max-w-[80%]">
+              {technologies?.map((tech, index) => (
+                <div key={index}>
+                  <Chip iconSrc={tech.icon} id={tech._id} outlineColor={tech.color} label={tech.label} variant="outlined" color="primary" />
+                </div>
+              ))}
+            </div>
+          </div>
         <div className="flex items-center justify-center pt-10 xs:mx-4 lg:mx-12">
           <Divider className="w-full"></Divider>
         </div>
-        <div className="">
+        <div>
           <ProfileMenu
             userData={userData}
             setUserData={setUserData}

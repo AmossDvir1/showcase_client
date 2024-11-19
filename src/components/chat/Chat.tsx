@@ -48,6 +48,7 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
   const [chatLength, setChatLength] = useState(0);
   const [loadMore, setLoadMore] = useState(false);
   const [hasFetched, setHasFetched] = useState<boolean>(false);
+  const [chatId, setChatId] = useState<string>("");
 
   const [loadingMoreMessages, setLoadingMoreMessages] = useState(false);
   const [skip, setSkip] = useState(0);
@@ -73,6 +74,7 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
     return sortedMessages;
   };
 
+
   useEffect(() => {
     chatHistory.length === chatLength ? setLoadMore(false) : setLoadMore(true);
     setChatLength(chatHistory.length);
@@ -84,9 +86,14 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
       fetchMessages(); // Load the first 20 messages
 
       // Listen for new messages
-      socket.on("newMessage", (data: { newMessage: Message }) => {
-        setChatHistory((prev) => setMessages([...prev, data.newMessage]));
-      });
+      socket.on(
+        "newMessage",
+        (data: { newMessage: Message }) => {
+          if (data?.newMessage?.chatId === chatId || data?.newMessage.senderId.id === friend.id) {
+            setChatHistory((prev) => setMessages([...prev, data.newMessage]));
+          }
+        }
+      );
     }
 
     return () => {
@@ -100,13 +107,17 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
     if (loadingMoreMessages || !socket) return; // Prevent duplicate fetches
     setLoadingMoreMessages(true);
     socket.emit("getConversation", { friendId: friend.id, limit, skip });
-    socket.once("conversation", (data: { messages: Message[] }) => {
-      setChatHistory((prev) => setMessages([...data?.messages, ...prev]));
-      // Prepend new messages
-      setSkip((prevSkip) => prevSkip + limit); // Increment skip count for next fetch
-      setLoadingMoreMessages(false);
-      setHasFetched(true);
-    });
+    socket.once(
+      "conversation",
+      (data: { messages: Message[]; chatId: string }) => {
+        setChatId(data?.chatId);
+        setChatHistory((prev) => setMessages([...data?.messages, ...prev]));
+        // Prepend new messages
+        setSkip((prevSkip) => prevSkip + limit); // Increment skip count for next fetch
+        setLoadingMoreMessages(false);
+        setHasFetched(true);
+      }
+    );
   }, [friend.id, limit, loadingMoreMessages, skip, socket]);
 
   const onSendMessage = () => {
@@ -276,7 +287,8 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
                         },
 
                         inputProps: {
-                          className: " max-h-16 input-no-ring lg:text-sm xs:text-xs",
+                          className:
+                            " max-h-16 input-no-ring lg:text-sm xs:text-xs",
                           style: {
                             // overflow: 'auto',
                             borderTopLeftRadius: "8px",

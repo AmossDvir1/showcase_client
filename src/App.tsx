@@ -14,6 +14,7 @@ import Layout from "./components/Layout";
 import ActivationLayout from "./pages/auth/ActivationLayout";
 import Profile from "./pages/profile/ProfilePage";
 import { WebSocketProvider } from "./context/WebSocketContext";
+import SettingsPage from "./pages/settings/SettingsPage";
 
 const rootElement = document.getElementById("root");
 
@@ -71,6 +72,10 @@ const App = () => {
                     <Route
                       path="my-projects"
                       element={<UserProjectsDashboard></UserProjectsDashboard>}
+                    ></Route>
+                    <Route
+                      path="settings"
+                      element={<SettingsPage></SettingsPage>}
                     ></Route>
                     <Route path="/:type/:urlName" element={<Profile />} />
                   </Route>

@@ -64,6 +64,17 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
     setAnchorElNav(null);
   };
 
+
+  const onProfileClick = () => {
+    setAnchorElNav(null);
+    navigate(`/profile/${userInfo?.urlMapping}`)
+  }
+
+  const onSettingsClick = () => {
+    setAnchorElNav(null);
+    navigate("/settings")
+  }
+
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
@@ -288,10 +299,10 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={handleCloseUserMenu}>
+              <MenuItem onClick={onProfileClick}>
                 <Typography textAlign="center">{"Profile"}</Typography>
               </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
+              <MenuItem onClick={onSettingsClick}>
                 <Typography textAlign="center">{"Settings"}</Typography>
               </MenuItem>
               {isMobile && (
