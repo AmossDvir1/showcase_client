@@ -1,9 +1,3 @@
-interface ColoredChip {
-  value: string;
-  color: string;
-  bgColor: string;
-}
-
 interface ProjectForm {
   projectName: string;
   projectDesc: string;
@@ -49,6 +43,13 @@ interface GlobalState {
 }
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+
+interface ChipItem  {
+  _id: string;
+  label: string;
+  color?: string;
+  icon?: string;
+}
 
 type ResultsItemTypes = "profile" | "post" | "project";
 
@@ -98,7 +99,7 @@ interface Post {
   updatedAt: string;
 }
 
-type NotificationType = "friend_request" | "comment" | "like" | "";
+type NotificationType = "friendRequest" | "comment" | "likePost" | "likeComment" | "";
 type NotificationStatus = "read" | "unread";
 
 interface INotification {

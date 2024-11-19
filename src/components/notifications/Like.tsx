@@ -15,7 +15,7 @@ const Like: React.FC<LikeProps> = ({ notification }) => {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
-    if (notification.type === "friend_request") {
+    if (notification.type === "friendRequest") {
       navigate(`/profile/${notification.extraData}`);
     }
   };
