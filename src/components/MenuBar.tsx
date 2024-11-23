@@ -21,7 +21,7 @@ import ResponsiveComponent from "./responsiveness/ResponsiveComponent";
 import NotificationIcon from "./notifications/NotificationIcon";
 import useMediaQuery from "./responsiveness/useMediaQuery";
 import MiniProfilePicture from "./sharedComponents/profilePicture/MiniProfilePicture";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/rootReducer";
 interface Props {
   menuItems: string[];
@@ -32,7 +32,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   const auth = useAuth();
   const isMobile = useMediaQuery(500);
   const isTablet = useMediaQuery(600);
-  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const userInfo = useAppSelector((state: RootState) => state.user.userInfo);
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -66,12 +66,12 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
 
 
   const onProfileClick = () => {
-    setAnchorElNav(null);
+    setAnchorElUser(null);
     navigate(`/profile/${userInfo?.urlMapping}`)
   }
 
   const onSettingsClick = () => {
-    setAnchorElNav(null);
+    setAnchorElUser(null);
     navigate("/settings")
   }
 

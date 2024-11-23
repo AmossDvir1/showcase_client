@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext, FormEvent } from "react";
-import { useAuth } from "../../context/AuthContext";
+import React, { useState, useEffect, FormEvent } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { TextField } from "../../components/sharedComponents/TextField";
 import EmailIcon from "@mui/icons-material/Email";
@@ -13,20 +12,15 @@ import {
   validateUsername,
 } from "../../utils/stringValidation";
 import { useNavigate } from "react-router-dom";
-import {
-  SignUpFormContext,
-  SignUpFormProvider,
-} from "../../context/SignUpFormContext";
+
 import { signUp } from "../../controllers/auth/signUp";
 import { saveToLocalStorage } from "../../API/utils/saveToLocalStorage";
 
 interface Props {}
 
 export const SignUp: React.FC<Props> = () => {
-  const {  } = useAuth();
 
   const navigate = useNavigate();
-  const { formData, setFormData } = useContext(SignUpFormContext);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");

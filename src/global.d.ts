@@ -44,7 +44,7 @@ interface GlobalState {
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 
-interface ChipItem  {
+interface ChipItem {
   _id: string;
   label: string;
   color?: string;
@@ -78,6 +78,7 @@ interface UserProfile {
   urlMapping: string;
   profilePicture?: string | null;
   coverPhoto?: string | null;
+  profile: IProfileSettings;
 }
 
 interface Comment {
@@ -99,7 +100,12 @@ interface Post {
   updatedAt: string;
 }
 
-type NotificationType = "friendRequest" | "comment" | "likePost" | "likeComment" | "";
+type NotificationType =
+  | "friendRequest"
+  | "comment"
+  | "likePost"
+  | "likeComment"
+  | "";
 type NotificationStatus = "read" | "unread";
 
 interface INotification {
@@ -116,8 +122,27 @@ interface Message {
   chatId?: string;
   content: string;
   createdAt: string;
-  readBy?:string[];
-  senderId: {id: string, username: string};
-  updatedAt?:string;
-  _id?: string
+  readBy?: string[];
+  senderId: { id: string; username: string };
+  updatedAt?: string;
+  _id?: string;
+}
+
+interface IWork {
+  jobTitle: string;
+  workPlace: string;
+  startedAt: Date;
+  primary: boolean;
+}
+
+interface IProfileSettings {
+  technologies?: ChipItem[];
+  bio?: string;
+  work?: IWork[] | [];
+  relationshipStatus?: string;
+}
+
+interface IUserSettings {
+  profile: IProfileSettings;
+  security?: [];
 }

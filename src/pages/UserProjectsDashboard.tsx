@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { Slot } from "../components/Slot";
 import { EmptySlot } from "../components/EmptySlot";
 import { CreateProjectDialog } from "./createProject/CreateProjectDialog";
 import useFetchProjectSlots from "../API/useFetchProjectSlots";
-import Loader from "../components/sharedComponents/Loader";
 
 interface Props {}
 

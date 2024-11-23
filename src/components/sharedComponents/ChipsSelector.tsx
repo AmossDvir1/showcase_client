@@ -9,7 +9,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
 import { Chip } from "./Chip";
 import { Typography } from "@mui/material";
-
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 interface Props {
   setSelectedChips: React.Dispatch<React.SetStateAction<ChipItem[]>>;
   selectedChips: ChipItem[];
@@ -21,29 +21,39 @@ const ChipsSelector: React.FC<Props> = ({
   setSelectedChips,
   selectedChips,
 }) => {
-  const onChipDelete = (e: any, id:string) => {
+  const [open, setOpen] = React.useState(false);
+  const onChipDelete = (e: any, id: string) => {
     setSelectedChips((prev) => prev.filter((chip) => chip._id !== id));
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const toggleOpenClose = () => {
+    setOpen((prev) => !prev);
   };
 
   const onChipChange = (e: SelectChangeEvent<string[]>) => {
     let selected = e?.target?.value;
-    // console.log(newChip)
 
-    if (selected) {
+    // Handle autofill case: Normalize stringified value into an array
+    const normalized =
+      typeof selected === "string" ? selected.split(",") : selected;
+
+    if (normalized) {
       if (Array.isArray(selected)) {
-
-        const newChips = availableChips.filter(chip => selected.includes(chip.label))
+        const newChips = availableChips.filter((chip) =>
+          normalized.includes(chip.label)
+        );
         newChips?.length > 0
           ? setSelectedChips(newChips ?? [])
           : setSelectedChips([]);
-      } else {
       }
-      // const newChip = availableChips?.find(chip => chip.label === value[0]);
-      // if (newChip) {
-      //   setSelectedChips((prev) => [...prev, newChip]);
-      // }
-      // On autofill we get a stringified value.
-      // const chips = typeof value === "string" ? value.split(",") : value;
     }
   };
 
@@ -60,21 +70,50 @@ const ChipsSelector: React.FC<Props> = ({
           Pick Technologies
         </InputLabel>
         <Select
+          open={open}
+          onClose={handleClose}
+          onOpen={handleOpen}
           className="rounded-[20px]"
           required
           sx={{
             fontWeight: 400,
-            "& .MuiSelect-iconOutlined": {
-              display: selectedChips.length === 0 ? "" : "none",
-            },
+            //         "& .MuiSvgIcon-root": {
+            //           margin: '0 auto',
+            //           display: 'flex',
+
+            //   // right: "unset",
+            //   // left: "7px",
+            // },
+            // "& .MuiSelect-iconOutlined": {
+            //   // transform: 'none'
+            //   // margin: '0 auto',
+            //   // display: 'flex',
+            //   // right: "unset",
+            //   // top: 'calc(100% - 18px)',
+            //   pointerEvents: "none !important",
+            //   right: selectedChips.length === 0 ? "" : "40px",
+            //   // display: selectedChips.length === 0 ? "" : "none",
+            // },
           }}
           labelId="demo-multiple-chip-label"
-          id="demo-multiple-chip"
+          // id="demo-multiple-chip"
           multiple
           value={selectedChips?.map((chip) => chip.label) as never[]}
           onChange={onChipChange}
+          IconComponent={() => (
+            <IconButton
+              className="p-0"
+              sx={{ marginX: selectedChips.length === 0 ? "" : "10px" }}
+              onClick={toggleOpenClose}
+            >
+              <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+            </IconButton>
+          )}
           input={
-            <OutlinedInput id="select-multiple-chip" label="technologygenre" />
+            <OutlinedInput
+              id="select-multiple-chip"
+              label="Pick Technologies"
+            />
           }
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
@@ -85,46 +124,54 @@ const ChipsSelector: React.FC<Props> = ({
                   size="small"
                   key={`${index}_${value}`}
                   label={value.label}
+                  iconSrc={value.icon}
                   onChipDelete={(e) => onChipDelete(e, value._id)}
-                  // outlineColor={
-                  //   availableChips?.find((colorSet) => colorSet.label === value)
-                  //     ?.color ?? ""
-                  // }
                 ></Chip>
               ))}
             </Box>
           )}
           endAdornment={
-            <IconButton
-              sx={{ visibility: selectedChips ? "visible" : "hidden" }}
-              onClick={() => setSelectedChips([])}
-            >
-              <ClearIcon
-                sx={{
-                  display: selectedChips.length === 0 ? "none" : "",
-                  position: "absolute",
-                }}
-              />
-            </IconButton>
+            selectedChips.length > 0 ? (
+              <IconButton
+                sx={{ visibility: selectedChips ? "visible" : "hidden" }}
+                onClick={() => setSelectedChips([])}
+              >
+                <ClearIcon
+                  sx={{
+                    display: selectedChips.length === 0 ? "none" : "",
+                    position: "absolute",
+                  }}
+                />
+              </IconButton>
+            ) : (
+              <></>
+            )
           }
+          MenuProps={{
+            disableScrollLock: true,
+
+            PaperProps: {
+              style: {
+                maxHeight: 250, // Set maximum height in pixels
+                width: "300px", // Optional: Set a fixed width for the dropdown
+              },
+            },
+          }}
         >
-          {/* <div className="overflow-y-scroll max-h-64"> */}
           {availableChips.map((item: ChipItem) => (
             <MenuItem className="py-1" key={item._id} value={item.label}>
               <div className="py-0 my-0 flex items-center">
-                  {item?.icon && (
-                    <img
-                      className="w-6 pr-5"
-                      src={item.icon}
-                      alt={item.label}
-                    ></img>
-                  )}
-                  <Typography>{item.label}</Typography>
-                </div>
-              {/* {item.label} */}
+                {item?.icon && (
+                  <img
+                    className="w-6 pr-5"
+                    src={item.icon}
+                    alt={item.label}
+                  ></img>
+                )}
+                <Typography>{item.label}</Typography>
+              </div>
             </MenuItem>
           ))}
-          {/* </div> */}
         </Select>
       </FormControl>
     </div>

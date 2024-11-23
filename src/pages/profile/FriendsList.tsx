@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getUserFriends } from "../../controllers/friendsController/getUserFriends";
+import { getUserFriendsDetails } from "../../controllers/friendsController/getUserFriends";
 import { Link, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/sharedComponents/Loader";
@@ -18,7 +18,7 @@ const FriendsList: React.FC<FriendsListProps> = ({ userData, setUserData }) => {
     const getProfileFriends = async () => {
       if (userData?.id) {
         setLoading(true);
-        const res = await getUserFriends(userData.id);
+        const res = await getUserFriendsDetails(userData.id);
         if (res?.data) {
           setLoading(false);
 

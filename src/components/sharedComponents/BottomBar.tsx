@@ -13,9 +13,9 @@ const BottomBar: React.FC<BottomBarProps> = () => {
   const openChats: UserDetails[] = useAppSelector(
     (state: RootState) => state.chats.openChats
   );
-  const minimizedChats = useAppSelector(
-    (state: RootState) => state.chats.minimizedChats
-  );
+  // const minimizedChats = useAppSelector(
+  //   (state: RootState) => state.chats.minimizedChats
+  // );
 
   const onCloseChat = (friendId: string) => {
     dispatch(removeOpenChat(friendId));

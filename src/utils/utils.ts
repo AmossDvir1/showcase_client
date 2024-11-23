@@ -149,6 +149,22 @@ const removeDuplicatesByProperty = <T, K extends keyof T>(
   });
 };
 
+const convertPictureToURI = (picStr: string) => {
+  if (picStr === null){
+    return "";
+  }
+  return picStr ? picStr?.startsWith("data:image")
+      ? picStr // Already in data URI format
+      : `data:image/jpeg;base64,${picStr}` // Add data URI prefix if missing
+    : "";
+}
+
+const extractMonthYear = (isoDate: Date): string => {
+  const date = new Date(isoDate);
+  const month = date.toLocaleString('en-US', { month: 'long' });
+  const year = date.getFullYear();
+  return `${month} ${year}`;
+};
 
 export {
   toTitleCase,
@@ -160,5 +176,7 @@ export {
   formatTime,
   formatTimeShort,
   removeDuplicatesById,
-  removeDuplicatesByProperty
+  removeDuplicatesByProperty,
+  convertPictureToURI,
+  extractMonthYear
 };

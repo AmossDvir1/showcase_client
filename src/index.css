@@ -38,6 +38,8 @@ body {
 textarea {
   box-sizing: border-box !important;
   cursor: auto;
+  --tw-ring-shadow: 0 0 #000 !important;
+
 }
 
 .input-no-ring {
@@ -47,3 +49,7 @@ textarea {
 .cover-photo{
   background-position: right 1000px top;
 }
+/* 
+input {
+  --tw-ring-shadow: 0 0 #000 !important;
+} */
