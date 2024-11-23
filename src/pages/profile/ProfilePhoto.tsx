@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
 import ProfilePictureUploader from "../../components/sharedComponents/profilePicture/ProfilePictureUploader";
+import { convertPictureToURI } from "../../utils/utils";
 
 interface ProfilePhotoProps {
   userProfile?: boolean;
@@ -18,11 +19,6 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
     setUploaderOpen(true);
   };
 
-  const profilePictureSrc = profilePicture
-    ? profilePicture?.startsWith("data:image")
-      ? profilePicture // Already in data URI format
-      : `data:image/jpeg;base64,${profilePicture}` // Add data URI prefix if missing
-    : "";
 
   return (
     <div className="rounded-full border-solid border-white border-4 z-20">
@@ -48,7 +44,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
         <img
           onClick={() => userProfile && setUploaderOpen(true)}
           className="rounded-full w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] hover:brightness-90 object-cover"
-          src={profilePictureSrc}
+          src={convertPictureToURI(profilePicture)}
           
           alt="profilePicture"
         ></img>

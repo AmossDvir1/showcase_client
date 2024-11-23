@@ -6,11 +6,13 @@ import ActivationBar from "./ActivationBar";
 import ProtectedComponent from "./sharedComponents/ProtectedComponent";
 import BottomBar from "./sharedComponents/BottomBar";
 
+
 interface LayoutProps {
   withMenu?: boolean;
 }
 
 const Layout: React.FC<RouteProps & LayoutProps> = ({ withMenu = true }) => {
+
   return (
     <>
       {withMenu && (

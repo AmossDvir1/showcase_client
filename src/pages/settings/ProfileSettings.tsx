@@ -1,60 +1,94 @@
 import React, { useState, useEffect } from "react";
 import {
-  TextField,
+  TextField as MuiTextField,
   Select,
   MenuItem,
   InputLabel,
   FormControl,
-  Button,
   Box,
   Typography,
 } from "@mui/material";
 import ChipsSelector from "../../components/sharedComponents/ChipsSelector";
-import { serverReq } from "../../API/utils/axiosConfig";
 import { showToast } from "../../utils/toast";
+import { fetchTechnologiesInventory } from "../../controllers/technologiesController/fetchTechnologiesInventory";
+import { updateUserProfileSettings } from "../../controllers/userSettingsController/profileSettings/updateUserProfileSettings";
+import { Button } from "../../components/sharedComponents/Button";
+import WorkSettings from "./WorkSettings";
 
-// Mock data for programming languages
+interface ProfileSettingsProps {
+  initialSettings?: IProfileSettings;
+}
 
-const ProfileSettings: React.FC = () => {
-  const [bio, setBio] = useState("");
-  const [relationshipStatus, setRelationshipStatus] = useState("");
-  const [availableTechnologies, setAvailableTechnologies] = useState<ChipItem[]>([]);
-  const [selectedTechnologies, setSelectedTechnologies] = useState<ChipItem[]>([]);
+const defaultSettings = {
+  bio: "",
+  relationshipStatus: "",
+  technologies: [],
+  work: [],
+};
+
+const ProfileSettings: React.FC<ProfileSettingsProps> = ({
+  initialSettings = defaultSettings,
+}) => {
+  const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
+  const [bio, setBio] = useState<string>(initialSettings?.bio ?? "");
+  const [workList, setWorkList] = useState<IWork[]>(
+    initialSettings?.work ?? []
+  );
+  const [relationshipStatus, setRelationshipStatus] = useState<string>(
+    initialSettings?.relationshipStatus ?? ""
+  );
+  const [availableTechnologies, setAvailableTechnologies] = useState<
+    ChipItem[]
+  >([]);
+  const [selectedTechnologies, setSelectedTechnologies] = useState<ChipItem[]>(
+    initialSettings?.technologies ?? []
+  );
 
   useEffect(() => {
-    const fetchTechnologiesInventory = async () => {
+    const fetchAvailableTechnologies = async () => {
       try {
-        const response = await serverReq.get("/techs/inventory");
-        const techs = response?.data?.technologies;
-        setAvailableTechnologies(techs);
+        const techs = await fetchTechnologiesInventory();
+        if (techs) {
+          setAvailableTechnologies(techs);
+        }
       } catch (err) {
         console.error("Failed to fetch technologies inventory", err);
       }
     };
 
-    fetchTechnologiesInventory();
+    fetchAvailableTechnologies();
   }, []);
 
-  const updateTechs = async () => {
+  useEffect(() => {
+    if (initialSettings) {
+      setRelationshipStatus(initialSettings.relationshipStatus ?? "");
+      setBio(initialSettings.bio ?? "");
+      setWorkList(initialSettings.work ?? []);
+      setSelectedTechnologies(initialSettings.technologies ?? []);
+    }
+  }, [initialSettings]);
+
+  const updateProfileSettings = async () => {
     try {
-      const res = await serverReq.put(`/techs`, {
-        technologies: selectedTechnologies?.map((tech) => tech._id),
+      setIsSaveLoading(true);
+      const res = await updateUserProfileSettings({
+        technologies: selectedTechnologies,
+        bio,
+        work: workList,
+        relationshipStatus,
       });
       showToast("Settings Saved Successfully", "Save Success", "success");
       return res.data;
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsSaveLoading(false);
     }
   };
 
   // Handle form submissions
   const onSave = () => {
-    console.log({
-      bio,
-      relationshipStatus,
-      selectedTechnologies,
-    });
-    updateTechs();
+    updateProfileSettings();
   };
 
   return (
@@ -64,7 +98,7 @@ const ProfileSettings: React.FC = () => {
       </Typography>
 
       {/* Bio */}
-      <TextField
+      <MuiTextField
         label="Bio"
         multiline
         rows={4}
@@ -80,6 +114,11 @@ const ProfileSettings: React.FC = () => {
       <FormControl fullWidth className="mb-6">
         <InputLabel>Relationship Status</InputLabel>
         <Select
+          MenuProps={{
+            disableScrollLock: true,
+            autoFocus: false,
+            disableAutoFocus: true,
+          }}
           label="Relationship Status"
           value={relationshipStatus}
           onChange={(e) => setRelationshipStatus(e.target.value)}
@@ -91,6 +130,11 @@ const ProfileSettings: React.FC = () => {
         </Select>
       </FormControl>
 
+      <WorkSettings
+        workList={workList}
+        setWorkList={setWorkList}
+      ></WorkSettings>
+
       {/* Programming Languages */}
       <FormControl fullWidth className="mb-6">
         <div className="mb-2">
@@ -100,16 +144,17 @@ const ProfileSettings: React.FC = () => {
         <ChipsSelector
           setSelectedChips={setSelectedTechnologies}
           selectedChips={selectedTechnologies}
-          availableChips={availableTechnologies?? []}
+          availableChips={availableTechnologies ?? []}
         ></ChipsSelector>
       </FormControl>
 
       {/* Save Button */}
       <Button
+        className="w-full mt-2"
         variant="contained"
+        loading={isSaveLoading}
         color="primary"
         onClick={onSave}
-        className="mt-2"
       >
         Save Changes
       </Button>

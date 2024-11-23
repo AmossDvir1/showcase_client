@@ -1,6 +1,6 @@
 import { serverReq } from "../../API/utils/axiosConfig";
 
-const getUserFriends = async (senderId?: string) => {
+const getUserFriendsDetails = async (senderId?: string) => {
   try {
     const res = await serverReq.get(`/friends/friends-list${senderId? `/${senderId}`: ""}`);
     return res;
@@ -9,4 +9,4 @@ const getUserFriends = async (senderId?: string) => {
   }
 };
 
-export { getUserFriends };
+export { getUserFriendsDetails };

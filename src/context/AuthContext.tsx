@@ -2,6 +2,10 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { serverReq } from "../API/utils/axiosConfig";
 import { showToast } from "../utils/toast";
 import { saveToLocalStorage } from "../API/utils/saveToLocalStorage";
+import { AppDispatch } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
+import { fetchUserInfo } from "../redux/slices/user";
 
 interface AuthContextType {
   accessToken: string | null;
@@ -28,6 +32,17 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isActivated, setIsActivated] = useState(false);
   const [checkFinished, setCheckFinished] = useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const userInfoStatus = useSelector((state: RootState) => state.user.status);
+
+  useEffect(() => {
+    // Dispatch the async action to fetch user info only if it's not already present
+    if (!userInfo && userInfoStatus !== 'loading' && isAuthenticated && isActivated) {
+      dispatch(fetchUserInfo());
+    }
+  }, [isActivated, isAuthenticated, userInfo, checkFinished, dispatch, userInfoStatus]);
 
   const checkActivationStatus = async (token: string) => {
     try {

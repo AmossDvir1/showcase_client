@@ -4,8 +4,10 @@ import CancelIcon from "@mui/icons-material/Cancel";
 
 interface Props extends ChipProps {
   label: string;
-  id: string;
+  id?: string;
   outlineColor?: string;
+  textColor?: string;
+  backgroundColor?: string;
   radius?: number;
   iconSrc?: string;
   onChipDelete?: (e: any, label: string) => void;
@@ -14,7 +16,9 @@ interface Props extends ChipProps {
 export const Chip: React.FC<Props> = ({
   label,
   id,
-  outlineColor = "grey",
+  outlineColor,
+  backgroundColor,
+  textColor,
   radius,
   onChipDelete,
   iconSrc,
@@ -25,7 +29,8 @@ export const Chip: React.FC<Props> = ({
       {...(onChipDelete ? { deleteIcon: <CancelIcon /> } : {})}
       onMouseDown={(event) => event.stopPropagation()}
       {...(onChipDelete ? { onDelete: (e) => onChipDelete(e, label) } : {})}
-      key={id}
+      key={id ?? ""}
+      className="cursor-default"
       {...(iconSrc
         ? {
             avatar: (
@@ -43,12 +48,14 @@ export const Chip: React.FC<Props> = ({
           }
         : {})}
       label={label}
+      
       sx={{
-        color: "black",
+        cursor: 'default',
+        color: textColor ?? "black",
         borderWidth: "1px",
-
-        borderColor: outlineColor,
-        backgroundColor: "#F7F7F7",
+        borderStyle: 'solid',
+        borderColor: outlineColor || "#a8a8a8",
+        backgroundColor: backgroundColor ?? "#F7F7F7",
         ...(radius !== null && {
           "&.MuiChip-root": {
             borderRadius: `${radius}px`,

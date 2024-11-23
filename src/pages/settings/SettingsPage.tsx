@@ -1,9 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, Box, Typography } from '@mui/material';
 import ProfileSettings from './ProfileSettings';
+import { getUserSettings } from '../../controllers/userSettingsController/profileSettings/getUserSettings';
 
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [initialProfileSettings, setInitialProfileSettings] = useState<IProfileSettings>();
+
+useEffect(() => {
+    const fetchUserSettings = async () => {
+        try {
+          const res = await getUserSettings();
+          if (res?.profile) {
+            setInitialProfileSettings(res.profile);
+          }
+        } catch (err) {
+          console.error("Failed to fetch user settings", err);
+        }
+      };
+      fetchUserSettings();
+}, []);
 
   // Handles tab changes
   const handleTabChange = (e: React.SyntheticEvent, newValue: number) => {
@@ -14,7 +30,7 @@ const SettingsPage: React.FC = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 0:
-        return <ProfileSettings />;
+        return <ProfileSettings initialSettings={initialProfileSettings}/>;
       case 1:
         return <SecuritySettings />;
       case 2:
