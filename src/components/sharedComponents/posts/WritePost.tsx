@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { RootState } from "../../../redux/rootReducer";
 import { fetchUserInfo } from "../../../redux/slices/user";
+import { showToast } from "../../../utils/toast";
 
 interface WritePostProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
 export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
@@ -55,6 +56,8 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
       setIsExpanded(false);
       navigate(0);
     }
+    setLoading(false);
+    showToast("Error", "Error while posting", "error");
   };
 
   return (
