@@ -59,7 +59,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
 
   return (
     <div
-      className={`w-full bg-slate-50 flex flex-col rounded-lg transition-width duration-300 my-2 lg:p-3 xs:px-2 xs:py-3`}
+      className={`w-full bg-slate-50 flex flex-col rounded-lg transition-width duration-300 my-2 lg:p-3 xs:py-3`}
     >
       {userInfo?.username && (
         <div className="flex w-full">
@@ -72,7 +72,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
           <PostInput
             postValue={postValue}
             setPostValue={setPostValue}
-            textareaRef={textareaRef}
+            // textareaRef={textareaRef}
             handleBlur={handleBlur}
             isExpanded={isExpanded}
             setIsExpanded={setIsExpanded}

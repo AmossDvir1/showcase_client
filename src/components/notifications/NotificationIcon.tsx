@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Badge from "@mui/material/Badge";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import { IoNotifications } from "react-icons/io5";
 import {
   fetchNotifications,
   markAsRead,
@@ -50,8 +50,8 @@ const NotificationIcon = () => {
             ".MuiBadge-badge": { fontSize:'10px', backgroundColor: "#d80000", width: '20px', padding: '0px', minWidth: 0, height: '20px'},
           }}
         >
-          <IconButton className="p-0" onClick={handleClick}>
-            <NotificationsIcon fontSize="medium" color="primary" />
+          <IconButton className="px-1" onClick={handleClick}>
+            <IoNotifications className="w-5 h-5 fill-primary" color="primary" />
           </IconButton>
           <NotificationsWindow
             open={open}

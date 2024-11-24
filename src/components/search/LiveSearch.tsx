@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { InputBase } from "@mui/material";
+import { IconButton, InputBase, Popper } from "@mui/material";
 import ResultItem from "./resultItem/ResultItem";
 import SearchValueItem from "./resultItem/itemsTypes/SearchValueItem";
 import { useNavigate } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
 
 interface Props<T> {
   results?: T[];
@@ -18,10 +19,16 @@ const LiveSearch = <T extends ResultsItem>({
   onSelect,
 }: Props<T>): JSX.Element => {
   const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const resultContainer = useRef<HTMLDivElement>(null);
   const [showResults, setShowResults] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const onSearchIconClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
 
   const onItemClick = (index: number) => {
     const selectedItem = results[index];
@@ -39,7 +46,6 @@ const LiveSearch = <T extends ResultsItem>({
   const resetSearchComplete = useCallback(() => {
     setFocusedIndex(-1);
     setShowResults(false);
-    
   }, []);
 
   const handleBlur = () => {
@@ -57,7 +63,7 @@ const LiveSearch = <T extends ResultsItem>({
       nextIndexCount = (focusedIndex + 1) % (results.length + 1);
 
     // move up
-    if (key === "ArrowUp"){
+    if (key === "ArrowUp") {
       nextIndexCount = (focusedIndex + results.length) % (results.length + 1);
     }
 
@@ -69,10 +75,9 @@ const LiveSearch = <T extends ResultsItem>({
     // select the current item
     if (key === "Enter") {
       e.preventDefault();
-      if (focusedIndex >= 0 && focusedIndex < results.length){
+      if (focusedIndex >= 0 && focusedIndex < results.length) {
         onItemClick(focusedIndex);
-      }
-      else if(focusedIndex === results.length){
+      } else if (focusedIndex === results.length) {
         onResultItemClick();
       }
     }
@@ -93,16 +98,25 @@ const LiveSearch = <T extends ResultsItem>({
   }, [focusedIndex]);
 
   useEffect(() => setShowResults(true), [value]);
+  const isOpen = Boolean(anchorEl);
 
   return (
     <div className="flex items-center justify-center">
+      <IconButton
+        onClick={onSearchIconClick}
+        className="p-2 ml-2 rounded-full bg-gray-200 md:hidden"
+      >
+        <SearchIcon></SearchIcon>
+      </IconButton>
       <div
         tabIndex={1}
         onBlur={resetSearchComplete}
         onKeyDown={handleKeyDown}
         onFocus={() => setShowResults(true)}
-        className={`relative ${
-          isExpanded || (value && value.length > 10) ? "xs:w-[12rem] lg:w-[20vw]" : "xs:w-[8rem] lg:w-[15vw]"
+        className={`relative hidden md:block ${
+          isExpanded || (value && value.length > 10)
+            ? "xs:w-[12rem] lg:w-[20vw]"
+            : "xs:w-[8rem] lg:w-[15vw]"
         } bg-opacity-15 transition-width duration-300 rounded-full min-w-[115px] max-w-[40vw] z-10`}
       >
         <div className="flex rounded-full mr-4 bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500">
@@ -116,7 +130,7 @@ const LiveSearch = <T extends ResultsItem>({
             className="w-full bg-transparent rounded-full focus:outline-none p-[3px] active:outline-none"
             inputProps={{
               "aria-label": "search",
-              className:"input-no-ring text-sm",
+              className: "input-no-ring text-sm",
               style: {
                 borderRadius: "100px",
                 paddingTop: 0,
@@ -156,6 +170,52 @@ const LiveSearch = <T extends ResultsItem>({
           </div>
         )}
       </div>
+      {/* Popper for Mobile */}
+      <Popper
+        open={isOpen}
+        anchorEl={anchorEl}
+        placement="bottom"
+        disablePortal
+        className="z-20 w-full"
+      >
+        <div className="p-1 bg-white rounded-lg shadow-lg w-full">
+          <InputBase
+            value={value}
+            onChange={handleChange}
+            placeholder="Search..."
+            className="w-full bg-transparent rounded-full focus:outline-none p-2"
+            inputProps={{
+              "aria-label": "search",
+            }}
+          />
+          {showResults && value && value.length > 0 && (
+            <div className="mt-2 py-2 bg-white shadow-lg rounded-2xl max-h-96 overflow-y-auto z-10">
+              {results?.length > 0 &&
+                results.map((res, index) => (
+                  <ResultItem
+                    isFocused={index === focusedIndex}
+                    key={index}
+                    itemDetails={res}
+                    onItemClick={onItemClick}
+                    index={index}
+                    containerRef={
+                      index === focusedIndex ? resultContainer : null
+                    }
+                  />
+                ))}
+              {(showResults || results.length === 0) && value?.length > 0 && (
+                <SearchValueItem
+                  isFocused={results.length === focusedIndex}
+                  value={value}
+                  onItemClick={onResultItemClick}
+                  index={results.length}
+                  containerRef={null}
+                />
+              )}
+            </div>
+          )}
+        </div>
+      </Popper>
     </div>
   );
 };

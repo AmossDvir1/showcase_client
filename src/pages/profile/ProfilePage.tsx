@@ -4,7 +4,6 @@ import { serverReq } from "../../API/utils/axiosConfig";
 import { Divider, Typography } from "@mui/material";
 import RelationshipStatusButton from "../../components/RelationshipStatusButton";
 import ProfilePhoto from "./ProfilePhoto";
-import ProfileMenu from "./ProfileMenu";
 import { getProfile } from "../../controllers/profilesController/getProfileController";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserInfo } from "../../redux/slices/user";
@@ -14,6 +13,8 @@ import CoverPhoto from "./CoverPhoto";
 import Loader from "../../components/sharedComponents/Loader";
 import ProfileInfoCard from "./ProfileInfoCard";
 import ProfileFriendsCard from "./ProfileFriendsCard";
+import ProfilePosts from "./ProfilePosts";
+import { WritePost } from "../../components/sharedComponents/posts/WritePost";
 
 const Profile: React.FC = () => {
   const { urlName, type } = useParams<{
@@ -100,9 +101,9 @@ const Profile: React.FC = () => {
         </div>
         {userInfo && (
           <div className="flex justify-center pt-4 pb-2">
-            <div className="max-w-[85%] container flex flex-col lg:flex-row gap-8">
+            <div className="max-w-[85%] container flex flex-col md:flex-row gap-8">
               {/* Profile Info */}
-              <div className="flex-1">
+              <div className="flex-1 xs:max-md:mb-8">
                 <ProfileInfoCard
                   relationshipStatus={userData?.profile?.relationshipStatus}
                   work={userData?.profile?.work}
@@ -126,11 +127,9 @@ const Profile: React.FC = () => {
         <div className="flex items-center justify-center pt-10 xs:mx-4 lg:mx-12">
           <Divider className="w-full"></Divider>
         </div>
-        <div>
-          <ProfileMenu
-            userData={userData}
-            setUserData={setUserData}
-          ></ProfileMenu>
+        <div className="flex flex-col items-center xs:mx-4 lg:mx-12 mb-2">
+          <WritePost></WritePost>
+        <ProfilePosts userData={userData}></ProfilePosts>
         </div>
       </div>
     </div>
