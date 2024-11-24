@@ -59,10 +59,10 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
 
   return (
     <div
-      className={`w-full bg-slate-50 flex flex-col rounded-lg transition-width duration-300 my-2 lg:p-3 xs:py-3`}
+      className={`w-full bg-slate-50 flex flex-col rounded-lg transition-width duration-300 my-2 xs:py-3`}
     >
       {userInfo?.username && (
-        <div className="flex w-full">
+        <div className="flex px-1 pt-1">
           <Avatar
             alt={userInfo?.username?.toUpperCase() || ""}
             src="/static/images/avatar/1.jpg"
@@ -72,7 +72,6 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
           <PostInput
             postValue={postValue}
             setPostValue={setPostValue}
-            // textareaRef={textareaRef}
             handleBlur={handleBlur}
             isExpanded={isExpanded}
             setIsExpanded={setIsExpanded}
@@ -80,8 +79,8 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
           ></PostInput>
         </div>
       )}
-      <Divider className="py-2" />
-      <div className="flex items-end justify-center pt-4">
+      <Divider className="py-2 mx-3" />
+      <div className="flex items-end justify-center pt-2">
         <Button
         loading={loading}
           btnsize="sm"

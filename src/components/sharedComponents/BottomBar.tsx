@@ -5,11 +5,14 @@ import Chat from "../chat/Chat";
 import { RootState } from "../../redux/rootReducer";
 import { removeOpenChat } from "../../redux/slices/chats";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import useMediaQuery from "../responsiveness/useMediaQuery";
 
 interface BottomBarProps {}
 
 const BottomBar: React.FC<BottomBarProps> = () => {
   const dispatch = useAppDispatch();
+  const isMobile = useMediaQuery(600);
+
   const openChats: UserDetails[] = useAppSelector(
     (state: RootState) => state.chats.openChats
   );
@@ -28,10 +31,9 @@ const BottomBar: React.FC<BottomBarProps> = () => {
           <Chat friend={chat} closeChat={() => onCloseChat(chat.id)} />
         </div>
       ))}
-      <Divider flexItem className="" orientation="vertical"></Divider>
-      <div className="flex justify-center items-center md:w-64 xs:w-30 pointer-events-auto">
+      {!isMobile && <div className="flex justify-center items-center md:w-64 xs:w-30 pointer-events-auto">
         <ChatDrawer />
-      </div>
+      </div>}
     </Box>
   );
 };

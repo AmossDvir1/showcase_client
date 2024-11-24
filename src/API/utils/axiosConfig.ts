@@ -25,7 +25,6 @@ serverReq.interceptors.response.use(
       // Handle post-login request with an expired token
       // Send a request for a refresh token
       try {
-
         const newAccessTokenData = await refreshToken();
         const newAccessToken = newAccessTokenData?.accessToken;
         saveToLocalStorage("auth", {accessToken: newAccessToken});
@@ -41,6 +40,7 @@ serverReq.interceptors.response.use(
         // Handle refresh token request failure
         // Display error message, logout user, etc.
       }
+      localStorage.removeItem("auth");
     }
 
     // Check if it's an invalid login request

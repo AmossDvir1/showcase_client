@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { IconButton, InputBase, Popper } from "@mui/material";
+import {
+  IconButton,
+  InputBase,
+  Popper,
+  ClickAwayListener,
+  Slide,
+} from "@mui/material";
 import ResultItem from "./resultItem/ResultItem";
 import SearchValueItem from "./resultItem/itemsTypes/SearchValueItem";
 import { useNavigate } from "react-router-dom";
@@ -25,12 +31,14 @@ const LiveSearch = <T extends ResultsItem>({
   const resultContainer = useRef<HTMLDivElement>(null);
   const [showResults, setShowResults] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-
   const onSearchIconClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
+    event.stopPropagation();
   };
 
   const onItemClick = (index: number) => {
+    onChange("");
+    setAnchorEl(null)
     const selectedItem = results[index];
     onSelect?.(selectedItem);
     navigate(`/${selectedItem.type}/${selectedItem.urlMapping}`);
@@ -170,52 +178,88 @@ const LiveSearch = <T extends ResultsItem>({
           </div>
         )}
       </div>
+
       {/* Popper for Mobile */}
-      <Popper
-        open={isOpen}
-        anchorEl={anchorEl}
-        placement="bottom"
-        disablePortal
-        className="z-20 w-full"
+      <ClickAwayListener
+        onClickAway={(e) =>
+          anchorEl ? setAnchorEl(null) : setAnchorEl(anchorEl)
+        }
       >
-        <div className="p-1 bg-white rounded-lg shadow-lg w-full">
-          <InputBase
-            value={value}
-            onChange={handleChange}
-            placeholder="Search..."
-            className="w-full bg-transparent rounded-full focus:outline-none p-2"
-            inputProps={{
-              "aria-label": "search",
-            }}
-          />
-          {showResults && value && value.length > 0 && (
-            <div className="mt-2 py-2 bg-white shadow-lg rounded-2xl max-h-96 overflow-y-auto z-10">
-              {results?.length > 0 &&
-                results.map((res, index) => (
-                  <ResultItem
-                    isFocused={index === focusedIndex}
-                    key={index}
-                    itemDetails={res}
-                    onItemClick={onItemClick}
-                    index={index}
-                    containerRef={
-                      index === focusedIndex ? resultContainer : null
-                    }
+        <Popper
+          open={isOpen}
+          anchorEl={anchorEl}
+          placement="bottom"
+          className="z-20 w-full hidden xs:max-md:block"
+          modifiers={[
+            {
+              name: "offset",
+              options: {
+                offset: [0, 9], // Add some vertical spacing
+              },
+            },
+          ]}
+          transition
+        >
+          {({ TransitionProps }) => (
+            <Slide
+              {...TransitionProps}
+              easing={{
+                enter: "cubic-bezier(0.5, 1.2, 0.8, 1)",
+                exit: "linear",
+              }}
+              timeout={{
+                enter: 500, // Opening duration
+                exit: 500, // Closing duration
+              }}
+            >
+              <div className="bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 p-[3px] rounded-lg shadow-lg">
+                <div className="bg-white rounded-lg shadow-lg">
+                  <InputBase
+                    value={value}
+                    onChange={handleChange}
+                    placeholder="Search..."
+                    className="w-full bg-transparent rounded-full focus:outline-none"
+                    inputProps={{
+                      "aria-label": "search",
+                      style: {
+                        borderRadius: "8px",
+                        boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
+                      },
+                    }}
                   />
-                ))}
-              {(showResults || results.length === 0) && value?.length > 0 && (
-                <SearchValueItem
-                  isFocused={results.length === focusedIndex}
-                  value={value}
-                  onItemClick={onResultItemClick}
-                  index={results.length}
-                  containerRef={null}
-                />
-              )}
-            </div>
+                  {showResults && value && value.length > 0 && (
+                    <div className="mt-2 py-2 bg-white shadow-lg rounded-2xl max-h-96 overflow-y-auto z-10">
+                      {results?.length > 0 &&
+                        results.map((res, index) => (
+                          <ResultItem
+                            isFocused={index === focusedIndex}
+                            key={index}
+                            itemDetails={res}
+                            onItemClick={onItemClick}
+                            index={index}
+                            containerRef={
+                              index === focusedIndex ? resultContainer : null
+                            }
+                          />
+                        ))}
+                      {(showResults || results.length === 0) &&
+                        value?.length > 0 && (
+                          <SearchValueItem
+                            isFocused={results.length === focusedIndex}
+                            value={value}
+                            onItemClick={onResultItemClick}
+                            index={results.length}
+                            containerRef={null}
+                          />
+                        )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Slide>
           )}
-        </div>
-      </Popper>
+        </Popper>
+      </ClickAwayListener>
     </div>
   );
 };
