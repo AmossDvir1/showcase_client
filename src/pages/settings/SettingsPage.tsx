@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Tab, Box, Typography } from '@mui/material';
+import { Tabs, Tab, Box, Typography, Divider } from '@mui/material';
 import ProfileSettings from './ProfileSettings';
 import { getUserSettings } from '../../controllers/userSettingsController/profileSettings/getUserSettings';
 
@@ -41,26 +41,28 @@ useEffect(() => {
   };
 
   return (
-    <div className="mt-32 flex flex-col items-center p-6 bg-gray-100 h-screen">
+    <div className="mt-8 md:mt-32 flex flex-col items-center p-6 h-screen">
       <Typography variant="h4" className="mb-4">
         Settings
       </Typography>
-      <Box className="w-full max-w-[600px]" >
+      <Box className="w-screen md:w-[600px] rounded-xl bg-gray-50" >
         {/* Tabs for Navigation */}
         <Tabs
+        className="p-0 m-0"
           value={activeTab}
           onChange={handleTabChange}
-          indicatorColor="primary"
-          textColor="primary"
+          // indicatorColor="secondary"
+          // textColor="secondary"
           centered
         >
-          <Tab label="Profile Settings" />
-          <Tab label="Security Settings" />
-          <Tab label="Notification Settings" />
+          <Tab className="px-16 md:px-8 xs:max-md:m-0 xs:max-md:w-[10%]" label="Profile" />
+          <Tab className="px-16 md:px-8 xs:max-md:w-[10%]" label="Security" />
+          <Tab className="px-16 md:px-8 xs:max-md:w-[10%]" label="Notifications" />
         </Tabs>
+          <Divider className="w-full flex"></Divider>
 
         {/* Tab Content */}
-        <Box className="mt-6 p-4 bg-white rounded shadow-md">
+        <Box className="mt-6 p-4 bg-gray-50 rounded-xl shadow-md">
           {renderTabContent()}
         </Box>
       </Box>

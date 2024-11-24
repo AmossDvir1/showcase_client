@@ -40,7 +40,7 @@ export const Chip: React.FC<Props> = ({
                   borderColor: outlineColor,
                   borderStyle: "solid",
                 }}
-                className={`bg-transparent border-[1px] border-${outlineColor} border-solid`}
+                className={`bg-transparent`}
                 alt="Natacha"
                 src={iconSrc}
               />
