@@ -47,11 +47,20 @@ const NotificationIcon = () => {
               ?.length || 0
           }
           sx={{
-            ".MuiBadge-badge": { fontSize:'10px', backgroundColor: "#d80000", width: '20px', padding: '0px', minWidth: 0, height: '20px'},
+            ".MuiBadge-badge": {
+              top: "5px",
+              right: "5px",
+              fontSize: "10px",
+              backgroundColor: "#d80000",
+              width: "20px",
+              padding: "0px",
+              minWidth: 0,
+              height: "20px",
+            },
           }}
         >
           <IconButton className="px-1" onClick={handleClick}>
-            <IoNotifications className="w-5 h-5 fill-primary" color="primary" />
+            <IoNotifications className="w-6 h-6 fill-primary" color="primary" />
           </IconButton>
           <NotificationsWindow
             open={open}

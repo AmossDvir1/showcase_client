@@ -131,10 +131,10 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
     <></>
   ) : (
     <Box
-      className={`w-full my-2 relative
+      className={`w-full my-2 relative 
       bg-slate-50 flex rounded-lg ${
         !isEditMode ? "justify-between" : ""
-      } lg:p-3 xs:py-3 shadow-[-4px_4px_8px_1px_rgba(0,0,0,0.17)] `}
+      } xs:py-3 shadow-[-4px_4px_8px_1px_rgba(0,0,0,0.17)] `}
     >
       {isEditMode ? (
         <div className="flex flex-col w-full">
@@ -169,7 +169,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
           </div>
         </div>
       ) : (
-        <div className="flex w-full flex-col">
+        <div className="flex w-full flex-col px-2 md:px-3">
           <div className="flex">
             <div className="mr-2">
               <MiniProfilePicture
@@ -192,12 +192,15 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                 <Divider className="mx-4" orientation="vertical"></Divider>
                 <ElapsedTimeLabel date={postData?.createdAt} />
               </div>
+              {/* <Box dir={'ltr'}> */}
               <Typography
-                className="pt-3 text-slate-900 font-light lg:text-base xs:text-sm break-words"
-                sx={{ unicodeBidi: "plaintext" }}
+              
+                className="pt-3 text-slate-900 font-light lg:text-base xs:text-sm text-wrap text-left"
+                sx={{ unicodeBidi: "plaintext", overflowWrap:'anywhere' }}
               >
                 {value}
               </Typography>
+              {/* </Box> */}
             </div>
           </div>
 

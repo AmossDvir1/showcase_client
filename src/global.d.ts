@@ -54,11 +54,13 @@ interface ChipItem {
 type ResultsItemTypes = "profile" | "post" | "project";
 
 interface ResultsItem {
+
   id: string;
   title: string;
   content: string;
   type: ResultsItemTypes;
   urlMapping: string;
+  icon?: PictureData;
   // Add other properties as needed
 }
 

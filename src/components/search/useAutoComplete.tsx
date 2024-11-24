@@ -3,7 +3,7 @@ import { getSearchSuggestions } from "../../API/services/searchSuggestions";
 
 export const useAutoComplete = (
   searchQuery: string,
-  debounceTime: number = 300
+  debounceTime: number = 200
 ) => {
   const [suggestions, setSuggestions] = useState<ResultsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);

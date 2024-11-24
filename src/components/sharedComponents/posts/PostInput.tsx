@@ -21,16 +21,17 @@ const PostInput: React.FC<PostInputProps> = ({
   ...rest
 }) => {
   return (
-    <div className={`w-full transition-all duration-300 ${
-      isExpanded ? "h-40" : "h-12"
-    }`}>
+    <div
+      className={`w-full pr-4 transition-all duration-300 ${
+        isExpanded ? "h-40" : "h-12"
+      }`}
+    >
       <textarea
-        className="w-full font-sans h-full p-2 rounded-2xl border border-gray-300 focus:primary-2 focus:border-primary-400 resize-none transition-all duration-300"
-        
+        dir="auto"
+        className="w-full placeholder:text-sm font-sans h-full p-2 rounded-2xl border border-gray-300 focus:primary-2 focus:border-primary-400 resize-none transition-all duration-300"
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
           setPostValue(e.target.value)
         }
-
         value={postValue}
         onBlur={handleBlur}
         onClick={() => setIsExpanded?.(true)}

@@ -23,7 +23,7 @@ import useMediaQuery from "./responsiveness/useMediaQuery";
 import MiniProfilePicture from "./sharedComponents/profilePicture/MiniProfilePicture";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/rootReducer";
-import { IoChatboxEllipses } from "react-icons/io5";
+import ChatDrawer from "./chat/ChatDrawer";
 
 interface Props {
   menuItems: string[];
@@ -32,7 +32,7 @@ interface Props {
 
 export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   const auth = useAuth();
-  const isMobile = useMediaQuery(500);
+  const isMobile = useMediaQuery(600);
   const isTablet = useMediaQuery(600);
   const userInfo = useAppSelector((state: RootState) => state.user.userInfo);
   const navigate = useNavigate();
@@ -235,19 +235,15 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 </Grid>
 
                 {/* Messaging */}
-                <Grid item>
+                {isMobile && <Grid item>
                   <MenuItem
                     className="cursor-default lg:px-4 xs:pl-2 xs:pr-0"
                     disableRipple
                   >
-                    <IconButton className="px-1">
-                      <IoChatboxEllipses
-                        className="fill-primary w-5 h-5"
-                        fontSize="medium"
-                      />
-                    </IconButton>
+
+                    <ChatDrawer onMenuBar></ChatDrawer>
                   </MenuItem>
-                </Grid>
+                </Grid>}
                 {/* </ResponsiveComponent> */}
                 <Grid item>
                   <MenuItem
