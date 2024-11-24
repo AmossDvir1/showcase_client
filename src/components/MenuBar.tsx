@@ -23,6 +23,8 @@ import useMediaQuery from "./responsiveness/useMediaQuery";
 import MiniProfilePicture from "./sharedComponents/profilePicture/MiniProfilePicture";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/rootReducer";
+import { IoChatboxEllipses } from "react-icons/io5";
+
 interface Props {
   menuItems: string[];
   userSettings: string[];
@@ -64,16 +66,15 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
     setAnchorElNav(null);
   };
 
-
   const onProfileClick = () => {
     setAnchorElUser(null);
-    navigate(`/profile/${userInfo?.urlMapping}`)
-  }
+    navigate(`/profile/${userInfo?.urlMapping}`);
+  };
 
   const onSettingsClick = () => {
     setAnchorElUser(null);
-    navigate("/settings")
-  }
+    navigate("/settings");
+  };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -153,7 +154,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 </MuiButton>
               ))}
             </ResponsiveComponent>
-            <div className="pl-3 xs:max-sm:pl-0">
+            <div className="pl-3 xs:max-sm:pl-0 xs:max-sm:w-full">
               <Search></Search>
             </div>
           </Box>
@@ -213,7 +214,6 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                   </Grid>
                 </ResponsiveComponent>
 
-                {/* <ResponsiveComponent breakpoint="md"> */}
                 <Grid item>
                   <MenuItem className="cursor-default px-2" disableRipple>
                     <Button
@@ -233,10 +233,25 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                     ></CreateProjectDialog>
                   </MenuItem>
                 </Grid>
+
+                {/* Messaging */}
+                <Grid item>
+                  <MenuItem
+                    className="cursor-default lg:px-4 xs:pl-2 xs:pr-0"
+                    disableRipple
+                  >
+                    <IconButton className="px-1">
+                      <IoChatboxEllipses
+                        className="fill-primary w-5 h-5"
+                        fontSize="medium"
+                      />
+                    </IconButton>
+                  </MenuItem>
+                </Grid>
                 {/* </ResponsiveComponent> */}
                 <Grid item>
                   <MenuItem
-                    className="cursor-default lg:px-4 xs:px-2"
+                    className="cursor-default lg:px-4 xs:pl-2 xs:pr-0"
                     disableRipple
                   >
                     <NotificationIcon></NotificationIcon>
@@ -245,7 +260,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 {userInfo && (
                   <Grid item>
                     <MenuItem
-                      className="cursor-default lg:px-4 xs:ml-1"
+                      className="cursor-default lg:px-4 xs:ml-0 xs:pr-0"
                       onClick={onOpenNavMenu}
                       disableRipple
                     >
@@ -254,29 +269,6 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                         media={[userInfo.profilePicture]}
                         userDetails={userInfo}
                       ></MiniProfilePicture>
-                    </MenuItem>
-                  </Grid>
-                )}
-                {!isMobile && (
-                  <Grid item>
-                    <MenuItem
-                      className="cursor-default lg:px-4 xs:px-0"
-                      disableRipple
-                    >
-                      <MuiButton
-                        className="pl-0"
-                        onClick={onLogOut}
-                        disableRipple
-                      >
-                        <Typography
-                          noWrap
-                          className="flex text-white decoration-transparent text-sm xs:text-xs"
-                          // component="a"
-                          // href="/"
-                        >
-                          log out
-                        </Typography>
-                      </MuiButton>
                     </MenuItem>
                   </Grid>
                 )}
@@ -305,16 +297,14 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
               <MenuItem onClick={onSettingsClick}>
                 <Typography textAlign="center">{"Settings"}</Typography>
               </MenuItem>
-              {isMobile && (
-                <MenuItem
-                  onClick={() => {
-                    onLogOut();
-                    handleCloseUserMenu();
-                  }}
-                >
-                  <Typography textAlign="center">{"Log Out"}</Typography>
-                </MenuItem>
-              )}
+              <MenuItem
+                onClick={() => {
+                  onLogOut();
+                  handleCloseUserMenu();
+                }}
+              >
+                <Typography textAlign="center">{"Log Out"}</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

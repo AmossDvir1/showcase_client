@@ -134,7 +134,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
       className={`w-full my-2 relative
       bg-slate-50 flex rounded-lg ${
         !isEditMode ? "justify-between" : ""
-      } lg:p-3 xs:px-2 xs:py-3 shadow-[-4px_4px_8px_1px_rgba(0,0,0,0.17)] `}
+      } lg:p-3 xs:py-3 shadow-[-4px_4px_8px_1px_rgba(0,0,0,0.17)] `}
     >
       {isEditMode ? (
         <div className="flex flex-col w-full">
