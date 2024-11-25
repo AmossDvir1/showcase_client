@@ -1,11 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { serverReq } from "../API/utils/axiosConfig";
 import { showToast } from "../utils/toast";
-import { saveToLocalStorage } from "../API/utils/saveToLocalStorage";
+import {
+  getLocalStorageAuth,
+  saveToLocalStorage,
+} from "../API/utils/localStorageUtils";
 import { AppDispatch } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { fetchUserInfo } from "../redux/slices/user";
+import {browserName, osName} from 'react-device-detect';
+
 
 interface AuthContextType {
   accessToken: string | null;
@@ -39,10 +44,22 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // Dispatch the async action to fetch user info only if it's not already present
-    if (!userInfo && userInfoStatus !== 'loading' && isAuthenticated && isActivated) {
+    if (
+      !userInfo &&
+      userInfoStatus !== "loading" &&
+      isAuthenticated &&
+      isActivated
+    ) {
       dispatch(fetchUserInfo());
     }
-  }, [isActivated, isAuthenticated, userInfo, checkFinished, dispatch, userInfoStatus]);
+  }, [
+    isActivated,
+    isAuthenticated,
+    userInfo,
+    checkFinished,
+    dispatch,
+    userInfoStatus,
+  ]);
 
   const checkActivationStatus = async (token: string) => {
     try {
@@ -60,29 +77,27 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Initial load effect to set auth state and check activation
   useEffect(() => {
-    const authData = localStorage.getItem("auth");
-    let parsedTokenData = null;
-    if (authData) {
-      parsedTokenData = JSON.parse(authData);
+    const authData = getLocalStorageAuth();
+    if (!authData) {
+      setAccessToken(null);
+      localStorage.removeItem("auth");
+      return;
     }
-    const token = parsedTokenData?.accessToken || null;
+    const token = authData?.accessToken || null;
     setAccessToken(token);
   }, [accessToken, isAuthenticated, isActivated]);
 
   useEffect(() => {
     const initializeAuthState = async () => {
-      const storedAuthData = localStorage.getItem("auth");
-      if (storedAuthData) {
-        const parsedData = JSON.parse(storedAuthData);
-        const token = parsedData?.accessToken || null;
-
+      const parsedData = getLocalStorageAuth();
+      if (parsedData) {
+        const token = parsedData?.accessToken;
         if (token) {
           setAccessToken(token);
           await checkActivationStatus(token);
           setIsAuthenticated(true);
         }
       }
-
       setCheckFinished(true); // Set checkFinished to true only after initializing state
     };
 
@@ -119,19 +134,29 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
         withCredentials: true, // Include cookies in the request
       };
+      console.log('browserName: ', browserName)
+      console.log('osName: ', osName)
       const res = await serverReq.post(
         "/user/login",
         {
           username,
           password,
+          browserName,
+          osName
         },
         config
       );
 
-      if (res && res?.data?.success) {
+      if (
+        res &&
+        res?.data?.success &&
+        res?.data?.accessToken !== "" &&
+        res?.data?.sessionId !== ""
+      ) {
         showToast("Successfully Logged In", "Login Success", "success");
         saveToLocalStorage("auth", {
           accessToken: res?.data?.accessToken,
+          sessionId: res?.data?.sessionId,
         });
         setIsAuthenticated(true);
       }

@@ -14,7 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import { signUp } from "../../controllers/auth/signUp";
-import { saveToLocalStorage } from "../../API/utils/saveToLocalStorage";
+import { saveToLocalStorage } from "../../API/utils/localStorageUtils";
 
 interface Props {}
 

@@ -13,6 +13,11 @@ import { removeDuplicatesById } from "../utils/utils";
 import { AUTHENTICATION_ERROR } from "../utils/constants";
 import { useAuth } from "./AuthContext";
 import { refreshToken } from "../controllers/auth/getValidRefereshToken";
+import {
+  getLocalStorageAuth,
+  saveToLocalStorage,
+} from "../API/utils/localStorageUtils";
+import { CustomSocket } from "../types/socket";
 
 // Define the context
 interface WebSocketContextType {
@@ -37,18 +42,34 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Function to establish socket connection with latest token
   const establishSocketConnection = useCallback(async () => {
-    let token = JSON.parse(localStorage.getItem("auth") || "{}")?.accessToken;
+    const authData = getLocalStorageAuth();
+    let token = authData?.accessToken;
+    let sessionId = authData?.sessionId;
     if (!isActivated) {
-      token = await refreshToken();
-      setAccessToken(token?.accessToken ?? null);
-      if (!token) return;
+      const newRefreshData = await refreshToken();
+      if (
+        !newRefreshData ||
+        newRefreshData?.error ||
+        !newRefreshData?.activated ||
+        !newRefreshData?.accessToken ||
+        !newRefreshData?.sessionId
+      ) {
+        return;
+      }
+      sessionId = newRefreshData?.sessionId;
+      token = newRefreshData.accessToken;
+      saveToLocalStorage("auth", {
+        accessToken: token,
+        sessionId,
+      });
+      setAccessToken(newRefreshData?.accessToken ?? null);
     }
 
     if (isActivated && isAuthenticated) {
       const newSocket = io(process.env.REACT_APP_API_BASE_URL ?? "", {
-        auth: { token },
+        auth: { token, sessionId },
         transports: ["websocket"],
-      });
+      }) as CustomSocket;
 
       newSocket.on("connectionConfirmed", () => {
         console.log("Socket connection confirmed");
@@ -74,6 +95,27 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
         setOnlineFriends((prev) =>
           prev.filter((friend) => friend.id !== friendOffline.id)
         );
+      });
+
+      newSocket.on('authError', async (data) => {
+        console.error(data.message);
+      
+        // Attempt to refresh the token via HTTP API
+        const refreshTokenData = await refreshToken(); // Implement this based on your API
+        const accessToken = refreshTokenData?.accessToken;
+        const sessionId = refreshTokenData?.sessionId;
+        if (accessToken && sessionId) {
+          // Save the new token and reconnect
+          saveToLocalStorage("auth", {
+            accessToken,
+            sessionId,
+          });
+          newSocket.auth.token = accessToken; // Update token in auth
+          newSocket.auth.sessionId = sessionId; // Update token in auth
+          newSocket.connect(); // Reconnect the WebSocket
+        } else {
+          console.error("Failed to refresh token. User needs to re-authenticate.");
+        }
       });
 
       newSocket.on("connect_error", async (error) => {

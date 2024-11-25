@@ -1,7 +1,11 @@
 import axios, { AxiosInstance } from "axios";
 import { showToast } from "../../utils/toast";
-import { ACCESS_TOKEN_EXPIRED, ERRORS_TO_DISPLAY } from "../../utils/constants";
-import { saveToLocalStorage } from "./saveToLocalStorage";
+import {
+  ACCESS_TOKEN_EXPIRED,
+  REFRESH_TOKEN_EXPIRED,
+  ERRORS_TO_DISPLAY,
+} from "../../utils/constants";
+import { getLocalStorageAuth, saveToLocalStorage } from "./localStorageUtils";
 import { refreshToken } from "../../controllers/auth/getValidRefereshToken";
 const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -25,21 +29,33 @@ serverReq.interceptors.response.use(
       // Handle post-login request with an expired token
       // Send a request for a refresh token
       try {
-        const newAccessTokenData = await refreshToken();
-        const newAccessToken = newAccessTokenData?.accessToken;
-        saveToLocalStorage("auth", {accessToken: newAccessToken});
+        const newRefreshTokenData = await refreshToken();
+        const newAccessToken = newRefreshTokenData?.accessToken;
+        const sessionId = getLocalStorageAuth()?.sessionId;
+
+        if (!newAccessToken || newAccessToken === "" || !sessionId) {
+          localStorage.removeItem("auth");
+          window.location.reload();
+          return Promise.reject(error);
+        }
+        saveToLocalStorage("auth", { accessToken: newAccessToken, sessionId });
         // Update the stored access token with the new one
 
         // Retry the original request with the updated access token
         const originalRequest = error.config;
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        originalRequest.headers["X-Session-ID"] = sessionId;
         return axios(originalRequest);
       } catch (error) {
-        if (ERRORS_TO_DISPLAY.includes(data?.error)){showToast(data?.message || "Error", "Error", "error");}
-        
+        if (ERRORS_TO_DISPLAY.includes(data?.error)) {
+          showToast(data?.message || "Error", "Error", "error");
+        }
+
         // Handle refresh token request failure
         // Display error message, logout user, etc.
       }
+      localStorage.removeItem("auth");
+    } else if (data?.error === REFRESH_TOKEN_EXPIRED) {
       localStorage.removeItem("auth");
     }
 
@@ -53,10 +69,10 @@ serverReq.interceptors.response.use(
 );
 
 serverReq.interceptors.request.use((response) => {
-  let authData = localStorage.getItem("auth") || "";
-  if (authData && authData !== "") {
-    const token = JSON.parse(authData);
-    response.headers.Authorization = token ? `Bearer ${token.accessToken}` : "";
+  const authData = getLocalStorageAuth();
+  if (authData) {
+    response.headers["X-Session-ID"] = authData.sessionId;
+    response.headers.Authorization = `Bearer ${authData.accessToken}`;
     response.withCredentials = true;
   }
   return response;
