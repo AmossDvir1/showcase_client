@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, Box, Typography, Divider } from '@mui/material';
 import ProfileSettings from './ProfileSettings';
 import { getUserSettings } from '../../controllers/userSettingsController/profileSettings/getUserSettings';
+import DeviceManagement from './security/DeviceManagement';
 
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -74,8 +75,7 @@ useEffect(() => {
 
 const SecuritySettings: React.FC = () => (
   <div>
-    <Typography variant="h6">Security Settings</Typography>
-    <p>Update your password and manage account security.</p>
+    <DeviceManagement></DeviceManagement>
   </div>
 );
 

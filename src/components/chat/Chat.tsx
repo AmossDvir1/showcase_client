@@ -74,7 +74,6 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
     return sortedMessages;
   };
 
-
   useEffect(() => {
     chatHistory.length === chatLength ? setLoadMore(false) : setLoadMore(true);
     setChatLength(chatHistory.length);
@@ -86,14 +85,15 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
       fetchMessages(); // Load the first 20 messages
 
       // Listen for new messages
-      socket.on(
-        "newMessage",
-        (data: { newMessage: Message }) => {
-          if (data?.newMessage?.chatId === chatId || data?.newMessage.senderId.id === friend.id) {
-            setChatHistory((prev) => setMessages([...prev, data.newMessage]));
-          }
+      socket.on("newMessage", (data: { newMessage: Message }) => {
+        if (
+          data?.newMessage?.chatId === chatId ||
+          data?.newMessage.senderId.id === friend.id || 
+          data?.newMessage.senderId.id === userInfo?.id
+        ) {
+          setChatHistory((prev) => setMessages([...prev, data.newMessage]));
         }
-      );
+      });
     }
 
     return () => {

@@ -1,43 +1,52 @@
 import axios from "axios";
+import { getLocalStorageAuth } from "../../API/utils/localStorageUtils";
 
 const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const refreshToken = async () => {
-  let storedAuth = JSON.parse(localStorage.getItem("auth") || "{}");
-  let accessToken = storedAuth?.accessToken;
-  if (accessToken) {
-    const status = await checkToken(accessToken);
+  let storedAuth = getLocalStorageAuth();
+  if (storedAuth) {
+    let accessToken = storedAuth?.accessToken;
+    let sessionId = storedAuth?.sessionId;
+    const status = await checkToken(accessToken, sessionId);
     if (status) {
       const isTokenExpired = !status?.activated || status.error;
       if (isTokenExpired) {
-        accessToken = await requestToken(accessToken);
+        const accessData = await requestToken(accessToken, sessionId);
+        if (accessData)
         return {
-          accessToken,
+          accessToken: accessData.accessToken,
+          sessionId: accessData.sessionId,
           activated: status?.activated,
           error: status?.error,
         };
       }
       return {
         accessToken: storedAuth.accessToken,
+        sessionId: storedAuth.sessionId,
         activated: status?.activated,
         error: status?.error,
       };
     }
+
+    return {
+      accessToken: "",
+      sessionId: "",
+      activated: false,
+      error: false,
+    };
   }
-  return {
-    accessToken: "",
-    activated: false,
-    error: false,
-  };
 };
 
-const requestToken = async (accessToken: string) => {
+const requestToken = async (accessToken: string, sessionId: string) => {
   const config = {
     headers: {
       "Content-type": "application/json",
+      "X-Session-ID": sessionId,
+      Authorization: `Bearer ${accessToken}`,
     },
     withCredentials: true, // Include cookies in the request
-    Authorization: `Bearer ${accessToken}`,
+    // Authorization: `Bearer ${accessToken}`,
   };
   try {
     const response = await axios.post(
@@ -46,20 +55,24 @@ const requestToken = async (accessToken: string) => {
       config
     );
     // Update the access token in the client
-    const newAccessToken = response.data.accessToken;
-    return newAccessToken;
+    const newAccessData = {
+      accessToken: response.data.accessToken,
+      sessionId: response.data.sessionId,
+    };
+    return newAccessData;
   } catch (err) {
-    console.error(err);
-    return "";
+    console.error("Error while requesting new refreshToken", err);
+    return null;
   }
 };
 
-const checkToken = async (accessToken: string) => {
+const checkToken = async (accessToken: string, sessionId: string) => {
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${accessToken}`,
+        "X-Session-ID": sessionId,
       },
       withCredentials: true, // Include cookies in the request
     };
