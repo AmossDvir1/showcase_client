@@ -57,6 +57,7 @@ serverReq.interceptors.response.use(
       localStorage.removeItem("auth");
     } else if (data?.error === REFRESH_TOKEN_EXPIRED) {
       localStorage.removeItem("auth");
+      window.location.reload();
     }
 
     // Check if it's an invalid login request
