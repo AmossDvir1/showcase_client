@@ -26,7 +26,8 @@ const ProtectedComponent = ({
   useEffect(() => {
     if (
       checkActivation &&
-      auth?.isAuthenticated &&
+      auth.checkFinished && 
+      !!auth?.isAuthenticated &&
       !auth?.isActivated &&
       !isActivatedChecked &&
       !globalActivationToastShown

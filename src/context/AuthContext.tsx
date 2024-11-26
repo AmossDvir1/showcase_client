@@ -9,7 +9,7 @@ import { AppDispatch } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { fetchUserInfo } from "../redux/slices/user";
-import {browserName, osName} from 'react-device-detect';
+import { getDeviceInfo } from "../utils/utils";
 
 
 interface AuthContextType {
@@ -134,15 +134,15 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
         withCredentials: true, // Include cookies in the request
       };
-      console.log('browserName: ', browserName)
-      console.log('osName: ', osName)
+      const deviceInfo = getDeviceInfo();
+      console.log('Device Info:', deviceInfo);
+
       const res = await serverReq.post(
         "/user/login",
         {
           username,
           password,
-          browserName,
-          osName
+          deviceInfo
         },
         config
       );

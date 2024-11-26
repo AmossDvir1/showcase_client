@@ -1,3 +1,11 @@
+import {
+  isMobile,
+  isTablet,
+  isDesktop,
+  browserName,
+  osName,
+} from "react-device-detect";
+
 const toTitleCase = (str: string) =>
   str.replace(/\b(\w)/g, (k) => k.toUpperCase());
 
@@ -74,7 +82,9 @@ type DateTimeFormatOptions = {
   timeZoneName?: "long" | "short";
 };
 
-const formatTime = (timestamp: string): { relativeTime: string; exactTime: string } => {
+const formatTime = (
+  timestamp: string
+): { relativeTime: string; exactTime: string } => {
   const now = new Date();
   const diff = now.getTime() - new Date(timestamp).getTime();
 
@@ -94,7 +104,6 @@ const formatTime = (timestamp: string): { relativeTime: string; exactTime: strin
     minute: "numeric",
   };
 
-
   const exactDate = commentDate.toLocaleDateString(undefined, options);
 
   if (days > 0) {
@@ -104,28 +113,35 @@ const formatTime = (timestamp: string): { relativeTime: string; exactTime: strin
   } else if (minutes > 0) {
     return { relativeTime: `${minutes}m`, exactTime: exactDate };
   } else {
-    return { relativeTime: `${seconds >= 0 ? seconds : 0}s`, exactTime: exactDate };
+    return {
+      relativeTime: `${seconds >= 0 ? seconds : 0}s`,
+      exactTime: exactDate,
+    };
   }
 };
 
 const formatTimeShort = (isoDate: string): string => {
   const date = new Date(isoDate);
 
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const year = date.getFullYear() % 100; // Get the last two digits of the year
 
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const ampm = hours >= 12 ? "PM" : "AM";
   const formattedHours = hours % 12 || 12; // Convert to 12-hour format
 
-  return `${month}/${day}/${year}, ${formattedHours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
-}
+  return `${month}/${day}/${year}, ${formattedHours}:${minutes
+    .toString()
+    .padStart(2, "0")} ${ampm}`;
+};
 
-const removeDuplicatesById = <T extends { id: string | number }>(array: T[]): T[] => {
+const removeDuplicatesById = <T extends { id: string | number }>(
+  array: T[]
+): T[] => {
   const seenIds = new Set();
-  return array.filter(item => {
+  return array.filter((item) => {
     if (seenIds.has(item.id)) {
       return false;
     }
@@ -139,7 +155,7 @@ const removeDuplicatesByProperty = <T, K extends keyof T>(
   property: K
 ): T[] => {
   const seenValues = new Set<T[K]>();
-  return array.filter(item => {
+  return array.filter((item) => {
     const value = item[property];
     if (seenValues.has(value)) {
       return false;
@@ -150,20 +166,59 @@ const removeDuplicatesByProperty = <T, K extends keyof T>(
 };
 
 const convertPictureToURI = (picStr: string) => {
-  if (picStr === null){
+  if (picStr === null) {
     return "";
   }
-  return picStr ? picStr?.startsWith("data:image")
+  return picStr
+    ? picStr?.startsWith("data:image")
       ? picStr // Already in data URI format
       : `data:image/jpeg;base64,${picStr}` // Add data URI prefix if missing
     : "";
-}
+};
 
 const extractMonthYear = (isoDate: Date): string => {
   const date = new Date(isoDate);
-  const month = date.toLocaleString('en-US', { month: 'long' });
+  const month = date.toLocaleString("en-US", { month: "long" });
   const year = date.getFullYear();
   return `${month} ${year}`;
+};
+
+/**
+ * Determines the device type and relevant details.
+ * @returns {object} An object with deviceType, browserName, and osName.
+ */
+const getDeviceInfo = (): {
+  deviceType: string;
+  browserName: string;
+  osName: string;
+} => {
+  const deviceType = isMobile
+    ? "Mobile"
+    : isTablet
+    ? "Tablet"
+    : isDesktop
+    ? "Desktop"
+    : "Unknown";
+  return {
+    deviceType,
+    browserName,
+    osName,
+  };
+};
+
+const getDeviceImage = (deviceType: string): string => {
+  switch (deviceType.toLowerCase()) {
+    case "desktop":
+      return "/images/devices/desktop.png";
+    case "laptop":
+      return "/images/devices/laptop.png";
+    case "tablet":
+      return "/images/devices/tablet.png";
+    case "mobile":
+      return "/images/devices/mobile.png";
+    default:
+      return "/images/devices/default.png"; // Optional default image
+  }
 };
 
 export {
@@ -178,5 +233,7 @@ export {
   removeDuplicatesById,
   removeDuplicatesByProperty,
   convertPictureToURI,
-  extractMonthYear
+  extractMonthYear,
+  getDeviceInfo,
+  getDeviceImage,
 };
