@@ -73,23 +73,24 @@ const Profile: React.FC = () => {
     );
   }
 
+  const isCurrentUser = userInfo?.urlMapping === userData.urlMapping;
   return (
     <div className="min-w-4xl max-w-6xl m-auto">
       <div className="flex flex-col rounded-lg bg-white pb-8">
         <CoverPhoto
           coverPhoto={userData?.coverPhoto}
-          userProfile={userInfo?.urlMapping === userData.urlMapping}
+          userProfile={isCurrentUser}
         ></CoverPhoto>
 
         <div className="flex flex-row justify-between">
           <div className="flex lg:ml-20 xs:ml-4 xs:mt-[-1.5rem] lg:mt-[-3rem]">
             <ProfilePhoto
               profilePicture={userData?.profilePicture}
-              userProfile={userInfo?.urlMapping === userData.urlMapping}
+              userProfile={isCurrentUser}
             ></ProfilePhoto>
             <Typography className="flex items-center lg:mx-5 xs:mx-2 text-black xs:text-2xl lg:text-5xl">{`${userData?.firstName} ${userData?.lastName}`}</Typography>
           </div>
-          {userInfo?.urlMapping !== userData.urlMapping && (
+          {!isCurrentUser && (
             <div className="flex items-end justify-end lg:mr-20 xs:mr-4 xs:mt-[-1.5rem] lg:mt-[-3rem]">
               <RelationshipStatusButton
                 relationship={relationship}
@@ -110,7 +111,7 @@ const Profile: React.FC = () => {
                   livingPlace={"San Francisco"}
                   bio={userData?.profile?.bio}
                   technologies={userData?.profile?.technologies ?? []}
-                  isCurrentUser={true}
+                  isCurrentUser={isCurrentUser}
                 />
               </div>
 

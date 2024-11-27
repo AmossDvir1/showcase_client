@@ -3,22 +3,68 @@ import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
 import ProfilePictureUploader from "../../components/sharedComponents/profilePicture/ProfilePictureUploader";
 import { convertPictureToURI } from "../../utils/utils";
+import { Button, Menu, MenuItem, styled } from "@mui/material";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import useMediaQuery from "../../components/responsiveness/useMediaQuery";
+import { grey } from "@mui/material/colors";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import PictureViewer from "./PictureViewer";
 
 interface ProfilePhotoProps {
   userProfile?: boolean;
   profilePicture?: string | null;
 }
+const Puller = styled("div")(({ theme }) => ({
+  width: 30,
+  height: 6,
+  backgroundColor: grey[300],
+  borderRadius: 3,
+  position: "absolute",
+  top: 8,
+  left: "calc(50% - 15px)",
+  ...theme.applyStyles("dark", {
+    backgroundColor: grey[900],
+  }),
+}));
+const drawerBleeding = 56;
+
 const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
   userProfile = false,
   profilePicture = null,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [uploaderOpen, setUploaderOpen] = useState(false);
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [viewerOpen, setViewerOpen] = useState(false); // State for Picture Viewer
+
+  const isMobile = useMediaQuery(600);
+
+  const onMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMenuAnchor(event.currentTarget);
+  };
+
+  const onMenuClose = () => {
+    setMenuAnchor(null);
+  };
+
+  const toggleDrawer = () => {
+    setDrawerOpen((prev) => !prev);
+  };
 
   const onAddPictureClick = () => {
     setUploaderOpen(true);
+    setDrawerOpen(false);
+    onMenuClose();
   };
 
+  const onViewPictureClick = () => {
+    setViewerOpen(true);
+
+    // Logic to view current profile picture (e.g., open a modal)
+    onMenuClose();
+    setDrawerOpen(false);
+  };
 
   return (
     <div className="rounded-full border-solid border-white border-4 z-20">
@@ -27,6 +73,13 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
         open={uploaderOpen}
         purpose="profile"
       ></ProfilePictureUploader>
+      {profilePicture && (
+        <PictureViewer
+          open={viewerOpen}
+          onClose={() => setViewerOpen(false)}
+          pictureSrc={convertPictureToURI(profilePicture)} // Pass picture source
+        />
+      )}
       {isHovered && userProfile && !profilePicture ? (
         <AddIcon
           onMouseEnter={() => setIsHovered(true)}
@@ -42,12 +95,83 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
         ></PersonIcon>
       ) : (
         <img
-          onClick={() => userProfile && setUploaderOpen(true)}
+          onClick={(e: React.MouseEvent<HTMLElement>) =>
+            userProfile
+              ? isMobile
+                ? toggleDrawer()
+                : onMenuOpen(e)
+              : setViewerOpen(true)
+          }
           className="rounded-full w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] hover:brightness-90 object-cover"
           src={convertPictureToURI(profilePicture)}
-          
           alt="profilePicture"
         ></img>
+      )}
+      {userProfile && (
+        <Menu
+          anchorEl={menuAnchor}
+          disableScrollLock
+          open={Boolean(menuAnchor)}
+          onClose={onMenuClose}
+          sx={{ zIndex: 1500 }}
+        >
+          <MenuItem onClick={onViewPictureClick}>View Picture</MenuItem>
+          <MenuItem onClick={onAddPictureClick}>Upload a New Picture</MenuItem>
+        </Menu>
+      )}
+
+      {userProfile && isMobile && (
+        <SwipeableDrawer
+          anchor="bottom"
+          open={drawerOpen}
+          onClose={toggleDrawer}
+          onOpen={toggleDrawer}
+          swipeAreaWidth={drawerBleeding}
+          disableSwipeToOpen={false}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            zIndex: 1500,
+            "& .MuiPaper-root": {
+              height: "30%", // Adjust drawer height
+              pt: "50px",
+              borderTopLeftRadius: "16px",
+              borderTopRightRadius: "16px",
+            },
+          }}
+        >
+          <Puller />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              paddingRight: "4px",
+              paddingLeft: "4px",
+            }}
+          >
+            <Button
+              fullWidth
+              variant="outlined"
+              color="primary"
+              onClick={onViewPictureClick}
+              sx={{ mb: 4, width: "80%", height: "3.5rem", fontSize: "1rem" }}
+            >
+              View Picture
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="primary"
+              onClick={onAddPictureClick}
+              sx={{ width: "80%", height: "3.5rem", fontSize: "1rem" }}
+              startIcon={<AddCircleIcon></AddCircleIcon>}
+            >
+              Upload a New Picture
+            </Button>
+          </div>
+        </SwipeableDrawer>
       )}
     </div>
   );
