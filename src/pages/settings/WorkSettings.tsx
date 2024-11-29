@@ -19,6 +19,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { Switch } from "../../components/sharedComponents/Switch";
 import { extractMonthYear } from "../../utils/utils";
 import { Chip } from "../../components/sharedComponents/Chip";
+import useMediaQuery from "../../components/responsiveness/useMediaQuery";
 interface WorkSettingsProps {
   workList: IWork[];
   setWorkList: React.Dispatch<React.SetStateAction<IWork[]>>;
@@ -38,6 +39,7 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
     null
   );
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const isMobile = useMediaQuery(600);
 
   const openWorkDialog = () => setIsWorkDialogOpen(true);
   const closeWorkDialog = () => setIsWorkDialogOpen(false);
@@ -195,15 +197,16 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
       <Dialog
         open={isWorkDialogOpen}
         onClose={closeWorkDialog}
+        fullScreen={isMobile}
         fullWidth
         disableScrollLock
-        maxWidth="sm"
       >
-        <DialogTitle>Add Work</DialogTitle>
+        <DialogTitle className="pt-20">Add Work</DialogTitle>
         <DialogContent>
-          <div className="flex flex-row">
-            <div className="flex flex-col mr-8">
-              <div className="flex flex-row my-4 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {/* First Column */}
+            <div className="flex flex-col">
+              <div className="flex flex-row my-3 md:my-4 items-center">
                 <Typography className="mr-6 min-w-[80px]">
                   Job Title:
                 </Typography>
@@ -212,48 +215,51 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setJobTitleInput(e.target.value)
                   }
-                ></TextField>
+                />
               </div>
-              <div className="flex flex-row my-4 items-center">
+              <div className="flex flex-row my-3 md:my-4 items-center">
                 <Typography className="mr-6 min-w-[80px]">At: </Typography>
                 <TextField
                   value={workPlaceInput}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setWorkPlaceInput(e.target.value)
                   }
-                ></TextField>
+                />
               </div>
-              <div className="flex flex-row my-4 items-center">
+            </div>
+
+            {/* Second Column */}
+            <div className="flex flex-col justify-center items-center">
+              <div className="flex flex-row my-3 md:my-4 items-center">
                 <Typography className="mr-6 min-w-[80px]">
                   Make Primary
                 </Typography>
                 <Switch
                   checked={primary}
                   onChange={(value) => setPrimary(value)}
-                ></Switch>
+                />
               </div>
             </div>
-            <div className="flex items-center justify-center flex-col mr-8">
-              <div className="flex  flex-row my-4">
-                <Typography className="w-full">Since: </Typography>
-              </div>
-              <div className="flex flex-row my-4">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    defaultValue={dayjs().startOf("month")}
-                    value={startedAtInput}
-                    onChange={(value: Dayjs | null) =>
-                      setStartedAtInput(
-                        value
-                          ? value.startOf("month")
-                          : dayjs().startOf("month") // Always reset to the start of the month
-                      )
-                    }
-                    label={"Month and Year"}
-                    views={["month", "year"]}
-                  />
-                </LocalizationProvider>
-              </div>
+          </div>
+
+          {/* Date Picker (spanning both columns) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="flex flex-col col-span-2 my-3 md:my-4">
+              <Typography className="w-full pb-3">Since: </Typography>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  className="flex w-full md:w-1/2"
+                  defaultValue={dayjs().startOf("month")}
+                  value={startedAtInput}
+                  onChange={(value: Dayjs | null) =>
+                    setStartedAtInput(
+                      value ? value.startOf("month") : dayjs().startOf("month")
+                    )
+                  }
+                  label="Month and Year"
+                  views={["month", "year"]}
+                />
+              </LocalizationProvider>
             </div>
           </div>
         </DialogContent>

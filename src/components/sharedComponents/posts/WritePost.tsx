@@ -1,5 +1,10 @@
 import { Avatar, Divider } from "@mui/material";
-import React, { TextareaHTMLAttributes, useEffect, useRef, useState } from "react";
+import React, {
+  TextareaHTMLAttributes,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Button } from "../Button";
 import { createPost } from "../../../controllers/postsController/createPostController";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +29,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
 
   useEffect(() => {
     // Dispatch the async action to fetch user info only if it's not already present
-    if (!userInfo && userInfoStatus !== 'loading') {
+    if (!userInfo && userInfoStatus !== "loading") {
       dispatch(fetchUserInfo());
     }
   }, [dispatch, userInfo, userInfoStatus]);
@@ -52,12 +57,13 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
     setLoading(true);
     const res = await createPost(postValue);
     if (res) {
-      setLoading(false)
+      setLoading(false);
       setIsExpanded(false);
       navigate(0);
+    } else {
+      showToast("Error", "Error while posting", "error");
     }
     setLoading(false);
-    showToast("Error", "Error while posting", "error");
   };
 
   return (
@@ -85,7 +91,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
       <Divider className="py-2 mx-3" />
       <div className="flex items-end justify-center pt-2">
         <Button
-        loading={loading}
+          loading={loading}
           btnsize="sm"
           disabled={!postValue}
           data-post-button="true"
