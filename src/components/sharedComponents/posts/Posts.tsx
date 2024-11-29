@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Divider } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import { Post } from "./Post";
 import { getMyPosts } from "../../../controllers/postsController/getMyPostsController";
 import Loader from "../Loader";
@@ -16,8 +16,8 @@ const Posts = () => {
       if (data?.postsData?.length > 0) {
         setPosts(data?.postsData);
         setMedia(data?.media);
-        setLoading(false);
       }
+      setLoading(false);
     };
     fetchPosts();
   }, []);
@@ -35,7 +35,9 @@ const Posts = () => {
       ))}
     </div>
   ) : (
-    <></>
+    <div className="mt-12 flex items-center justify-center">
+      <Typography>No posts to show</Typography>
+    </div>
   );
 };
 

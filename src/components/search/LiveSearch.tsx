@@ -228,7 +228,7 @@ const LiveSearch = <T extends ResultsItem>({
                     }}
                   />
                   {showResults && value && value.length > 0 && (
-                    <div className="mt-2 py-2 bg-white shadow-lg rounded-2xl max-h-96 overflow-y-auto z-10">
+                    <div className="mt-2 py-2 bg-white shadow-lg rounded-2xl max-h-[30rem] overflow-y-auto z-10">
                       {results?.length > 0 &&
                         results.map((res, index) => (
                           <ResultItem

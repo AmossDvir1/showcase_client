@@ -24,6 +24,8 @@ import MiniProfilePicture from "./sharedComponents/profilePicture/MiniProfilePic
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/rootReducer";
 import ChatDrawer from "./chat/ChatDrawer";
+import SwipeableMobileDrawer from "./sharedComponents/SwipeableMobileDrawer";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 interface Props {
   menuItems: string[];
@@ -36,6 +38,8 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
   const isTablet = useMediaQuery(600);
   const userInfo = useAppSelector((state: RootState) => state.user.userInfo);
   const navigate = useNavigate();
+  const [mobileUserDrawerOpen, setMobileUserDrawerOpen] = useState(false);
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -50,6 +54,10 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
     setCreateDialogOpen(true);
   };
 
+  const toggleDrawer = () => {
+    setMobileUserDrawerOpen((prev) => !prev);
+  };
+
   const onLogOut = async () => {
     auth.logout();
   };
@@ -60,6 +68,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
 
   const onOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
+    setMobileUserDrawerOpen(true);
   };
 
   const handleCloseNavMenu = () => {
@@ -68,16 +77,19 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
 
   const onProfileClick = () => {
     setAnchorElUser(null);
+    setMobileUserDrawerOpen(false);
     navigate(`/profile/${userInfo?.urlMapping}`);
   };
 
   const onSettingsClick = () => {
     setAnchorElUser(null);
+    setMobileUserDrawerOpen(false);
     navigate("/settings");
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+    setMobileUserDrawerOpen(false);
   };
 
   return (
@@ -235,15 +247,16 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 </Grid>
 
                 {/* Messaging */}
-                {isMobile && <Grid item>
-                  <MenuItem
-                    className="cursor-default lg:px-4 xs:pl-2 xs:pr-0"
-                    disableRipple
-                  >
-
-                    <ChatDrawer onMenuBar></ChatDrawer>
-                  </MenuItem>
-                </Grid>}
+                {isMobile && (
+                  <Grid item>
+                    <MenuItem
+                      className="cursor-default lg:px-4 xs:pl-2 xs:pr-0"
+                      disableRipple
+                    >
+                      <ChatDrawer onMenuBar></ChatDrawer>
+                    </MenuItem>
+                  </Grid>
+                )}
                 {/* </ResponsiveComponent> */}
                 <Grid item>
                   <MenuItem
@@ -270,38 +283,80 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 )}
               </Grid>
             </ProtectedComponent>
-            <Menu
-              disableScrollLock
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem onClick={onProfileClick}>
-                <Typography textAlign="center">{"Profile"}</Typography>
-              </MenuItem>
-              <MenuItem onClick={onSettingsClick}>
-                <Typography textAlign="center">{"Settings"}</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  onLogOut();
-                  handleCloseUserMenu();
+            {isMobile ? (
+              <SwipeableMobileDrawer
+                open={mobileUserDrawerOpen}
+                toggleDrawer={toggleDrawer}
+                buttons={[
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    onClick={onProfileClick}
+                    sx={{
+                      width: "80%",
+                      height: "3rem",
+                      fontSize: "1rem",
+                    }}
+                  >
+                    Profile
+                  </Button>,
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    onClick={onSettingsClick}
+                    sx={{ width: "80%", height: "3rem", fontSize: "1rem" }}
+                    // startIcon={<AddCircleIcon></AddCircleIcon>}
+                  >
+                    Settings
+                  </Button>,
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    onClick={onSettingsClick}
+                    sx={{ width: "80%", height: "3rem", fontSize: "1rem" }}
+                    startIcon={<LogoutIcon />}
+                  >
+                    Log Out
+                  </Button>,
+                ]}
+              ></SwipeableMobileDrawer>
+            ) : (
+              <Menu
+                disableScrollLock
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
                 }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
               >
-                <Typography textAlign="center">{"Log Out"}</Typography>
-              </MenuItem>
-            </Menu>
+                <MenuItem onClick={onProfileClick}>
+                  <Typography textAlign="center">{"Profile"}</Typography>
+                </MenuItem>
+                <MenuItem onClick={onSettingsClick}>
+                  <Typography textAlign="center">{"Settings"}</Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    onLogOut();
+                    handleCloseUserMenu();
+                  }}
+                >
+                  <Typography textAlign="center">{"Log Out"}</Typography>
+                </MenuItem>
+              </Menu>
+            )}
           </Box>
         </Toolbar>
       </Container>

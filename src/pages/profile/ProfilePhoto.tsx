@@ -9,6 +9,7 @@ import useMediaQuery from "../../components/responsiveness/useMediaQuery";
 import { grey } from "@mui/material/colors";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import PictureViewer from "./PictureViewer";
+import SwipeableMobileDrawer from "../../components/sharedComponents/SwipeableMobileDrawer";
 
 interface ProfilePhotoProps {
   userProfile?: boolean;
@@ -121,45 +122,23 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
       )}
 
       {userProfile && isMobile && (
-        <SwipeableDrawer
-          anchor="bottom"
+        <SwipeableMobileDrawer
           open={drawerOpen}
-          onClose={toggleDrawer}
-          onOpen={toggleDrawer}
-          swipeAreaWidth={drawerBleeding}
-          disableSwipeToOpen={false}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          sx={{
-            zIndex: 1500,
-            "& .MuiPaper-root": {
-              height: "30%", // Adjust drawer height
-              pt: "50px",
-              borderTopLeftRadius: "16px",
-              borderTopRightRadius: "16px",
-            },
-          }}
-        >
-          <Puller />
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              paddingRight: "4px",
-              paddingLeft: "4px",
-            }}
-          >
+          toggleDrawer={toggleDrawer}
+          buttons={[
             <Button
               fullWidth
               variant="outlined"
               color="primary"
               onClick={onViewPictureClick}
-              sx={{ mb: 4, width: "80%", height: "3.5rem", fontSize: "1rem" }}
+              sx={{
+                width: "80%",
+                height: "3.5rem",
+                fontSize: "1rem",
+              }}
             >
               View Picture
-            </Button>
+            </Button>,
             <Button
               fullWidth
               variant="outlined"
@@ -169,9 +148,9 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
               startIcon={<AddCircleIcon></AddCircleIcon>}
             >
               Upload a New Picture
-            </Button>
-          </div>
-        </SwipeableDrawer>
+            </Button>,
+          ]}
+        ></SwipeableMobileDrawer>
       )}
     </div>
   );

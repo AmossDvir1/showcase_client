@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal, Box, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 interface PictureViewerProps {
   open: boolean;
   onClose: () => void;
@@ -21,8 +20,6 @@ const PictureViewer: React.FC<PictureViewerProps> = ({
       aria-describedby="view-profile-picture"
     >
       <Box
-        // className="flex justify-center items-center h-screen w-screen fixed top-11"
-        // sx={{top: '11rem', position:'fixed'}}
         sx={{
           position: "fixed",
           top: 0,
