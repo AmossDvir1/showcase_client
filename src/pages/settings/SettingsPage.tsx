@@ -6,11 +6,13 @@ import DeviceManagement from './security/DeviceManagement';
 
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [loadingProfileSettings, setLoadingProfileSettings] = useState<boolean>(false);
   const [initialProfileSettings, setInitialProfileSettings] = useState<IProfileSettings>();
 
 useEffect(() => {
     const fetchUserSettings = async () => {
         try {
+          setLoadingProfileSettings(true);
           const res = await getUserSettings();
           if (res?.profile) {
             setInitialProfileSettings(res.profile);
@@ -18,6 +20,7 @@ useEffect(() => {
         } catch (err) {
           console.error("Failed to fetch user settings", err);
         }
+        setLoadingProfileSettings(false);
       };
       fetchUserSettings();
 }, []);
@@ -31,7 +34,7 @@ useEffect(() => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 0:
-        return <ProfileSettings initialSettings={initialProfileSettings}/>;
+        return <ProfileSettings loading={loadingProfileSettings} initialSettings={initialProfileSettings}/>;
       case 1:
         return <SecuritySettings />;
       case 2:

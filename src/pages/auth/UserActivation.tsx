@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { showToast } from "../../utils/toast";
+import { style } from "@mui/system";
 
 const LEGAL_CHARS = "0123456789";
 
@@ -184,8 +185,9 @@ const UserActivation: React.FC = () => {
                 key={index}
                 ref={(el) => (verificationCodeInputs.current[index] = el)}
                 type="text"
-                className="border border-gray-300 px-4 py-2 rounded-md w-9 mx-1 text-center"
+                className="font-sans font-medium text-primary border border-gray-300 px-2 w-4 md:px-4 py-2 rounded-md md:w-7 mx-1 text-center"
                 value={value}
+                
                 disabled={
                   reqState.sent && reqState.processed && reqState.success
                 }

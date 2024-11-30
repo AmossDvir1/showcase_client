@@ -15,11 +15,11 @@ const Layout: React.FC<RouteProps & LayoutProps> = ({ withMenu = true }) => {
 
   return (
     <>
+    <ActivationBar></ActivationBar>
       {withMenu && (
         <>
-          <ActivationBar></ActivationBar>
+          
           <MenuBar
-            menuItems={["Projects", "Support", "About Us"]}
             userSettings={["Profile", "Settings"]}
           />
         </>

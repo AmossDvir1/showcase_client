@@ -15,6 +15,7 @@ import ActivationLayout from "./pages/auth/ActivationLayout";
 import Profile from "./pages/profile/ProfilePage";
 import { WebSocketProvider } from "./context/WebSocketContext";
 import SettingsPage from "./pages/settings/SettingsPage";
+import AboutUs from "./pages/AboutUs";
 
 const rootElement = document.getElementById("root");
 
@@ -66,6 +67,7 @@ const App = () => {
                   }
                 ></Route> */}
                   <Route index element={<HomePage></HomePage>} />
+                  <Route path="about" element={<AboutUs />} />
                   <Route path="sign_up" element={<SignUp></SignUp>} />
                   <Route path="login" element={<Login></Login>} />
                   <Route element={<ProtectedRoute></ProtectedRoute>}>

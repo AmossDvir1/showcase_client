@@ -1,4 +1,3 @@
-
 // import { Socket } from "socket.io-client";
 
 interface ProjectForm {
@@ -57,7 +56,6 @@ interface ChipItem {
 type ResultsItemTypes = "profile" | "post" | "project";
 
 interface ResultsItem {
-
   id: string;
   title: string;
   content: string;
@@ -140,11 +138,18 @@ interface IWork {
   primary: boolean;
 }
 
+interface ILivingPlace {
+  city: string;
+  country: string;
+}
+
 interface IProfileSettings {
   technologies?: ChipItem[];
   bio?: string;
   work?: IWork[] | [];
   relationshipStatus?: string;
+  livingPlace?: ILivingPlace;
+  from?: ILivingPlace;
 }
 
 interface IUserSettings {
