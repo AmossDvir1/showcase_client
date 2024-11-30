@@ -28,11 +28,10 @@ import SwipeableMobileDrawer from "./sharedComponents/SwipeableMobileDrawer";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 interface Props {
-  menuItems: string[];
   userSettings: string[];
 }
 
-export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
+export const MenuBar: React.FC<Props> = ({ userSettings }) => {
   const auth = useAuth();
   const isMobile = useMediaQuery(600);
   const isTablet = useMediaQuery(600);
@@ -60,6 +59,11 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
 
   const onLogOut = async () => {
     auth.logout();
+  };
+
+  const onAboutUsClick = () => {
+    handleCloseNavMenu();
+    navigate("/about");
   };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -126,11 +130,15 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 display: { sm: "block", md: "none" },
               }}
             >
-              {menuItems.map((page) => (
-                <MenuItem disableRipple key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem disableRipple onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">{"Projects"}</Typography>
+              </MenuItem>
+              <MenuItem disableRipple onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">{"Support"}</Typography>
+              </MenuItem>
+              <MenuItem disableRipple onClick={onAboutUsClick}>
+                <Typography textAlign="center">{"About Us"}</Typography>
+              </MenuItem>
             </Menu>
           </Box>
           <ResponsiveComponent breakpoint="md">
@@ -150,7 +158,7 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
             // sx={{ flexGrow: 2 }}
           >
             <ResponsiveComponent breakpoint="md">
-              {menuItems.map((page) => (
+              {/* {menuItems.map((page) => (
                 <MuiButton
                   key={page}
                   onClick={handleCloseNavMenu}
@@ -164,7 +172,16 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                 >
                   {page}
                 </MuiButton>
-              ))}
+              ))} */}
+              <MuiButton className="my-1 text-white block font-normal" disableRipple onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">{"Projects"}</Typography>
+              </MuiButton>
+              <MuiButton className="my-1 text-white block font-normal" disableRipple onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">{"Support"}</Typography>
+              </MuiButton>
+              <MuiButton className="my-1 text-white block font-normal" disableRipple onClick={onAboutUsClick}>
+                <Typography textAlign="center">{"About Us"}</Typography>
+              </MuiButton>
             </ResponsiveComponent>
             <div className="pl-3 xs:max-sm:pl-0 xs:max-sm:w-full">
               <Search></Search>
@@ -307,7 +324,6 @@ export const MenuBar: React.FC<Props> = ({ menuItems, userSettings }) => {
                     color="primary"
                     onClick={onSettingsClick}
                     sx={{ width: "80%", height: "3rem", fontSize: "1rem" }}
-                    // startIcon={<AddCircleIcon></AddCircleIcon>}
                   >
                     Settings
                   </Button>,

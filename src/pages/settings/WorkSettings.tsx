@@ -180,7 +180,8 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
               </Typography>
             )}
             <div className="flex flex-row justify-center items-center">
-              <Typography className="text-black text-sm">Add work</Typography>
+              <div className="cursor-pointer" onClick={openWorkDialog}>
+              <Typography className="text-black text-sm">Add work</Typography></div>
               <IconButton
                 onClick={openWorkDialog}
                 disableRipple

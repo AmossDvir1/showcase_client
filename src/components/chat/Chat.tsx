@@ -4,10 +4,8 @@ import {
   IconButton,
   Typography,
   Divider,
-  TextField,
   Popper,
   Collapse,
-  InputAdornment,
   Link,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -17,15 +15,15 @@ import { Button } from "../sharedComponents/Button";
 import MiniProfilePicture from "../sharedComponents/profilePicture/MiniProfilePicture";
 import { useWebSocket } from "../../context/WebSocketContext";
 import Loader from "../sharedComponents/Loader";
-import SendIcon from "@mui/icons-material/Send";
 import { toggleChatWindow } from "../../redux/slices/chats";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/rootReducer";
 import { useNavigate } from "react-router-dom";
 import BubbleMessage from "../sharedComponents/BubbleMessage";
 import moment from "moment";
-
 import InfiniteScroll from "react-infinite-scroll-component";
+import ChatInput from "./ChatInput";
+import TypingBubble from "./TypingBubble";
 
 interface ChatProps {
   friend: UserDetails;
@@ -49,6 +47,11 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
   const [loadMore, setLoadMore] = useState(false);
   const [hasFetched, setHasFetched] = useState<boolean>(false);
   const [chatId, setChatId] = useState<string>("");
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
+  const [isUserTyping, setIsUserTyping] = useState<boolean>(false);
+  const [isFriendTyping, setIsFriendTyping] = useState<boolean>(false);
 
   const [loadingMoreMessages, setLoadingMoreMessages] = useState(false);
   const [skip, setSkip] = useState(0);
@@ -63,11 +66,45 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
     dispatch(toggleChatWindow(friend.id));
   };
 
+  const onTyping = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setInputString(e.target.value); // Update the input value
+
+    // If user starts typing, set isUserTyping to true
+    if (!isUserTyping) {
+      setIsUserTyping(true); // Set the state to indicate the user is typing
+    }
+
+    // Clear the previous timeout and set a new one to stop typing after 2 seconds
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    const timeout = setTimeout(() => {
+      setIsUserTyping(false); // Reset typing state after inactivity
+    }, 2000); // 2 seconds timeout
+
+    setTypingTimeout(timeout); // Set the timeout reference
+  };
+
+  useEffect(() => {
+    if (socket && isUserTyping !== null) {
+      // Emit the typing event to the server with the current typing status
+      socket.emit("typing", { friendId: friend.id, isTyping: isUserTyping });
+    }
+  }, [isUserTyping, socket, friend.id]);
+
+  useEffect(() => {
+    // Clear timeout on component unmount to avoid memory leaks
+    return () => {
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+      }
+    };
+  }, [typingTimeout]);
+
   const setMessages = (messages: Message[]) => {
-    // const uniqueMessages: Message[] = removeDuplicatesByProperty(
-    //   messages,
-    //   "_id"
-    // );
     const sortedMessages = messages.sort((msg1, msg2) =>
       msg1.createdAt < msg2.createdAt ? 1 : -1
     );
@@ -88,10 +125,18 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
       socket.on("newMessage", (data: { newMessage: Message }) => {
         if (
           data?.newMessage?.chatId === chatId ||
-          data?.newMessage.senderId.id === friend.id || 
+          data?.newMessage.senderId.id === friend.id ||
           data?.newMessage.senderId.id === userInfo?.id
         ) {
+          setIsFriendTyping(false);
           setChatHistory((prev) => setMessages([...prev, data.newMessage]));
+        }
+      });
+
+      socket.on("typing", (data: { friendId: string; isTyping: boolean }) => {
+        // Check if the incoming friendId matches the friend's ID in the current chat
+        if (data.friendId === friend.id) {
+          setIsFriendTyping(data.isTyping);
         }
       });
     }
@@ -99,8 +144,11 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
     return () => {
       socket?.off("newMessage");
       socket?.off("conversation");
+      socket?.off("typing");
     };
   }, [socket, friend.id]);
+
+  // useEffect(, [isFriendTyping]);
 
   // Function to fetch messages for pagination
   const fetchMessages = useCallback(async () => {
@@ -242,6 +290,7 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
                         scrollableTarget="scrollableDiv"
                         dataLength={chatHistory.length}
                       >
+                        {isFriendTyping && <TypingBubble></TypingBubble>}
                         {chatHistory.map((message, index) => (
                           <BubbleMessage
                             key={index}
@@ -264,71 +313,11 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
 
                   {/* Message Input */}
                   <Box className="p-2 max-h-20">
-                    <TextField
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          // handle sending message here
-                          e.preventDefault();
-                          onSendMessage();
-                        }
-                      }}
-                      onChange={(e) => setInputString(e.target.value)}
-                      value={inputString}
-                      sx={{ borderRadius: "8px" }}
-                      placeholder="Write a message..."
-                      fullWidth
-                      // rows={4}
-                      multiline
-                      InputProps={{
-                        sx: {
-                          borderRadius: "8px",
-                          cursor: "default",
-                          padding: "10px",
-                        },
-
-                        inputProps: {
-                          className:
-                            " max-h-16 input-no-ring lg:text-sm xs:text-xs",
-                          style: {
-                            // overflow: 'auto',
-                            borderTopLeftRadius: "8px",
-                            borderBottomLeftRadius: "8px",
-                          },
-                        },
-                        endAdornment: (
-                          <InputAdornment
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                            position="end"
-                          >
-                            <IconButton
-                              disabled={!inputString}
-                              className={`flex items-center p-0 px-1 justify-center ${
-                                inputString
-                                  ? "text-primary cursor-pointer"
-                                  : "text-gray-300 cursor-default"
-                              }`}
-                              onClick={onSendMessage}
-                              disableRipple
-                            >
-                              {false ? (
-                                <Loader />
-                              ) : (
-                                <SendIcon
-                                  className={`flex items-center justify-center w-[20px] ${
-                                    inputString
-                                      ? "cursor-pointer"
-                                      : "cursor-default"
-                                  }`}
-                                />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
+                    <ChatInput
+                      onSendMessage={onSendMessage}
+                      onTyping={onTyping}
+                      inputString={inputString}
+                      isTyping={isUserTyping}
                     />
                   </Box>
                 </Box>

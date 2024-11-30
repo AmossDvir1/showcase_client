@@ -14,6 +14,7 @@ import { AppDispatch } from "../../../redux/store";
 import { RootState } from "../../../redux/rootReducer";
 import { fetchUserInfo } from "../../../redux/slices/user";
 import { showToast } from "../../../utils/toast";
+import MiniProfilePicture from "../profilePicture/MiniProfilePicture";
 
 interface WritePostProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
 export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
@@ -72,12 +73,13 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
     >
       {userInfo?.username && (
         <div className="flex px-1 pt-1">
-          <Avatar
-            alt={userInfo?.username?.toUpperCase() || ""}
-            src="/static/images/avatar/1.jpg"
-            className="bg-gradient-to-b from-rose-400 via-fuchsia-500 to-indigo-500 mx-2"
-            sx={{ width: 40, height: 40 }}
-          />
+          <div className="mx-2">
+            <MiniProfilePicture
+              userDetails={userInfo}
+              size="medium"
+              active={false}
+            ></MiniProfilePicture>
+          </div>
           <PostInput
             postValue={postValue}
             setPostValue={setPostValue}

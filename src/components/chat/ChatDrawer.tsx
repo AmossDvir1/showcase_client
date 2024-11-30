@@ -6,22 +6,19 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useRef, useState } from "react";
-import { Button } from "../sharedComponents/Button";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
 import { IoChatboxEllipses } from "react-icons/io5";
 import MiniProfilePicture from "../sharedComponents/profilePicture/MiniProfilePicture";
 import { RootState } from "../../redux/rootReducer";
 import ChatContacts from "./ChatContacts";
-import useMediaQuery from "../responsiveness/useMediaQuery";
+
 interface ChatDrawerProps {
   onMenuBar?: boolean;
 }
 
 const ChatDrawer: React.FC<ChatDrawerProps> = ({ onMenuBar = false }) => {
   const chatBottomRef = useRef(null);
-  const isMobile = useMediaQuery(600);
   const [chatMenuOpen, setChatMenuOpen] = useState(false);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -52,23 +49,12 @@ const ChatDrawer: React.FC<ChatDrawerProps> = ({ onMenuBar = false }) => {
           ref={chatBottomRef}
           className="md:w-44 xs:w-30 flex justify-center items"
         >
-          <Button
-            btnsize={isMobile ? "xs" : "sm"}
-            round
-            className="relative rounded-full bg-primary h-full w-full text-white px-4 py-2 hover:bg-primary-light focus:outline-none"
+          <IconButton
             onClick={onOpenChatDrawer}
+            className="bg-primary text-white p-4 mb-2"
           >
-            <div className="flex items-center">
-              Chat
-              <ExpandLessIcon
-                className={isMobile ? "w-4" : "w-6"}
-                style={{
-                  transition: "all 0.28s ease",
-                  transform: `rotate(${chatMenuOpen ? "0.5turn" : 0})`,
-                }}
-              />
-            </div>
-          </Button>
+            <IoChatboxEllipses></IoChatboxEllipses>
+          </IconButton>
         </div>
       )}
       {

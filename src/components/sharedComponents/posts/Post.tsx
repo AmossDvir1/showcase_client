@@ -169,7 +169,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
           </div>
         </div>
       ) : (
-        <div className="flex w-full flex-col px-2 md:px-3">
+        <div className="flex w-full flex-col px-2 md:px-3 min-w-60">
           <div className="flex">
             <div className="mr-2">
               <MiniProfilePicture

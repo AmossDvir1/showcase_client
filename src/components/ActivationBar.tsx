@@ -17,11 +17,11 @@ const ActivationBar: React.FC<Props> = ({ visible }) => {
   return (
     <>
       {auth?.checkFinished && !(auth?.isActivated) && auth?.isAuthenticated && (
-        <Button bgcolorhover="hover:bg-[#FFB32F]" bgcolor="bg-[#FFC232]" textclassname="flex tracking-[0.25em] text-[rgb(0,0,0)]"
-          className=" cursor-pointer text-red-400 flex h-14 w-full bg-[#f7a311]"
+        <Button bgcolorhover="hover:bg-[#FFB32F]" bgcolor="bg-[#FFC232]" textclassname=" flex tracking-[0.25em] text-[rgb(0,0,0)]"
+          className="cursor-pointer flex h-20 w-full bg-[#f7a311] z-[1500]"
           onClick={onBarClick}
         >
-          <WarningAmberIcon></WarningAmberIcon><Typography className="text-xl ml-5">Activate Your Account</Typography>
+          <div className="flex items-center justify-center"><WarningAmberIcon></WarningAmberIcon><Typography className="md:text-xl text-md ml-5">Activate Your Account</Typography></div>
         </Button>
       )}
     </>

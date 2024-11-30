@@ -14,9 +14,11 @@ import { fetchTechnologiesInventory } from "../../controllers/technologiesContro
 import { updateUserProfileSettings } from "../../controllers/userSettingsController/profileSettings/updateUserProfileSettings";
 import { Button } from "../../components/sharedComponents/Button";
 import WorkSettings from "./WorkSettings";
+import Loader from "../../components/sharedComponents/Loader";
 
 interface ProfileSettingsProps {
   initialSettings?: IProfileSettings;
+  loading?: boolean;
 }
 
 const defaultSettings = {
@@ -28,6 +30,7 @@ const defaultSettings = {
 
 const ProfileSettings: React.FC<ProfileSettingsProps> = ({
   initialSettings = defaultSettings,
+  loading = false,
 }) => {
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
   const [bio, setBio] = useState<string>(initialSettings?.bio ?? "");
@@ -91,6 +94,15 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
     updateProfileSettings();
   };
 
+  if (loading)
+    return (
+      <div className="flex flex-col items-center justify-center mb-4">
+        <Typography className="text-gray-800 text-center my-6">
+          Loading Settings...
+        </Typography>
+        <Loader size="md"></Loader>
+      </div>
+    );
   return (
     <Box className="flex flex-col p-4 bg-gray-50 rounded-md shadow-md">
       <Typography variant="h5" className="mb-6 text-primary">

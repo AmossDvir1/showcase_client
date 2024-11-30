@@ -3,10 +3,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
 import ProfilePictureUploader from "../../components/sharedComponents/profilePicture/ProfilePictureUploader";
 import { convertPictureToURI } from "../../utils/utils";
-import { Button, Menu, MenuItem, styled } from "@mui/material";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import { Button, Menu, MenuItem } from "@mui/material";
 import useMediaQuery from "../../components/responsiveness/useMediaQuery";
-import { grey } from "@mui/material/colors";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import PictureViewer from "./PictureViewer";
 import SwipeableMobileDrawer from "../../components/sharedComponents/SwipeableMobileDrawer";
@@ -15,19 +13,6 @@ interface ProfilePhotoProps {
   userProfile?: boolean;
   profilePicture?: string | null;
 }
-const Puller = styled("div")(({ theme }) => ({
-  width: 30,
-  height: 6,
-  backgroundColor: grey[300],
-  borderRadius: 3,
-  position: "absolute",
-  top: 8,
-  left: "calc(50% - 15px)",
-  ...theme.applyStyles("dark", {
-    backgroundColor: grey[900],
-  }),
-}));
-const drawerBleeding = 56;
 
 const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
   userProfile = false,
@@ -37,7 +22,8 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
   const [uploaderOpen, setUploaderOpen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [viewerOpen, setViewerOpen] = useState(false); // State for Picture Viewer
+  const [viewerOpen, setViewerOpen] = useState(false);
+
 
   const isMobile = useMediaQuery(600);
 
@@ -108,7 +94,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
           alt="profilePicture"
         ></img>
       )}
-      {userProfile && (
+      {userProfile && !isMobile && (
         <Menu
           anchorEl={menuAnchor}
           disableScrollLock
