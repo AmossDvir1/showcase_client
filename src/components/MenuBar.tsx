@@ -173,13 +173,25 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                   {page}
                 </MuiButton>
               ))} */}
-              <MuiButton className="my-1 text-white block font-normal" disableRipple onClick={handleCloseNavMenu}>
+              <MuiButton
+                className="my-1 text-white block font-normal"
+                disableRipple
+                onClick={handleCloseNavMenu}
+              >
                 <Typography textAlign="center">{"Projects"}</Typography>
               </MuiButton>
-              <MuiButton className="my-1 text-white block font-normal" disableRipple onClick={handleCloseNavMenu}>
+              <MuiButton
+                className="my-1 text-white block font-normal"
+                disableRipple
+                onClick={handleCloseNavMenu}
+              >
                 <Typography textAlign="center">{"Support"}</Typography>
               </MuiButton>
-              <MuiButton className="my-1 text-white block font-normal" disableRipple onClick={onAboutUsClick}>
+              <MuiButton
+                className="my-1 text-white block font-normal"
+                disableRipple
+                onClick={onAboutUsClick}
+              >
                 <Typography textAlign="center">{"About Us"}</Typography>
               </MuiButton>
             </ResponsiveComponent>
@@ -331,7 +343,11 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                     fullWidth
                     variant="outlined"
                     color="primary"
-                    onClick={onSettingsClick}
+                    onClick={() => {
+                      onLogOut();
+                      setAnchorElUser(null);
+                      setMobileUserDrawerOpen(false);
+                    }}
                     sx={{ width: "80%", height: "3rem", fontSize: "1rem" }}
                     startIcon={<LogoutIcon />}
                   >
