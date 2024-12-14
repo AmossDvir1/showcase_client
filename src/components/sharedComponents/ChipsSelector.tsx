@@ -8,7 +8,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
 import { Chip } from "./Chip";
-import { Typography } from "@mui/material";
+import Typography from "./Typography";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 interface Props {
   setSelectedChips: React.Dispatch<React.SetStateAction<ChipItem[]>>;
@@ -77,26 +77,9 @@ const ChipsSelector: React.FC<Props> = ({
           required
           sx={{
             fontWeight: 400,
-            //         "& .MuiSvgIcon-root": {
-            //           margin: '0 auto',
-            //           display: 'flex',
-
-            //   // right: "unset",
-            //   // left: "7px",
-            // },
-            // "& .MuiSelect-iconOutlined": {
-            //   // transform: 'none'
-            //   // margin: '0 auto',
-            //   // display: 'flex',
-            //   // right: "unset",
-            //   // top: 'calc(100% - 18px)',
-            //   pointerEvents: "none !important",
-            //   right: selectedChips.length === 0 ? "" : "40px",
-            //   // display: selectedChips.length === 0 ? "" : "none",
-            // },
+  
           }}
           labelId="demo-multiple-chip-label"
-          // id="demo-multiple-chip"
           multiple
           value={selectedChips?.map((chip) => chip.label) as never[]}
           onChange={onChipChange}

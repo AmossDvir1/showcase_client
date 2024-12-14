@@ -1,6 +1,6 @@
 import React from "react";
-import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Typography from "../sharedComponents/Typography";
 
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import NotificationStatusDot from "./NotificationStatusDot";

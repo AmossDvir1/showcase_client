@@ -1,5 +1,6 @@
 import React from "react";
-import { Tooltip, Typography } from "@mui/material";
+import { Tooltip } from "@mui/material";
+import Typography from "../Typography";
 import likeImg from "../../../assets/like.png";
 
 interface TooltipUsersContentProps {

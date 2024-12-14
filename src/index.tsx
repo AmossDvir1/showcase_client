@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { Box } from "@mui/material";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 const root = ReactDOM.createRoot(
@@ -11,9 +10,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Box className=" text-indigo-50 bg-main-bg h-screen">
         <App />
-      </Box>
     </Provider>
   </React.StrictMode>
 );

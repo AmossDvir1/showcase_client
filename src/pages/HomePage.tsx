@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
+import Typography from "../components/sharedComponents/Typography";
 import { toTitleCase } from "../utils/utils";
 import { Button } from "../components/sharedComponents/Button";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +9,7 @@ import { WritePost } from "../components/sharedComponents/posts/WritePost";
 import Posts from "../components/sharedComponents/posts/Posts";
 import useMediaQuery from "../components/responsiveness/useMediaQuery";
 import { useAuth } from "../context/AuthContext";
+import CustomButton from "../components/sharedComponents/CustomButton";
 
 const GridItem: React.FC<{
   children?: ReactNode;
@@ -64,9 +66,7 @@ export const HomePage: React.FC<Props> = () => {
                 </Button>
               }
             >
-              <Button round btnsize={isMobile ? "sm": "lg"} onClick={() => navigate("/explore")}>
-                explore
-              </Button>
+              <CustomButton rounded={false} size="large" className="font-normal" variant="outlined" onClick={() => navigate("/explore")}>explore</CustomButton>
             </ProtectedComponent>
           </GridItem>
         </Grid>

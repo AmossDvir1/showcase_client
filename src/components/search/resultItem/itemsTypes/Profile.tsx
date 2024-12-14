@@ -1,5 +1,6 @@
 import { FC } from "react";
-import { Avatar, Typography } from "@mui/material";
+import { Avatar } from "@mui/material";
+import Typography from "../../../sharedComponents/Typography";
 import Person2Icon from "@mui/icons-material/Person2";
 import { convertPictureToURI } from "../../../../utils/utils";
 

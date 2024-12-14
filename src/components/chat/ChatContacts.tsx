@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import MiniProfilePicture from "../sharedComponents/profilePicture/MiniProfilePicture";
-import { Typography } from "@mui/material";
+import Typography from "../sharedComponents/Typography";
+
 import { useWebSocket } from "../../context/WebSocketContext";
 import { useDispatch } from "react-redux";
 import { addOpenChat } from "../../redux/slices/chats";

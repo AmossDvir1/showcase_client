@@ -7,8 +7,8 @@ import {
   DialogTitle,
   FormControl,
   IconButton,
-  Typography,
 } from "@mui/material";
+import Typography from "../../components/sharedComponents/Typography";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -115,7 +115,7 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
             {workList?.length > 0 ? (
               workList.map((work, index) => (
                 <div
-                  className="flex my-2 items-center justify-between hover:bg-gray-100 p-2 rounded transition duration-200"
+                  className="flex my-2 items-center justify-between hover:bg-gray-100 dark:hover:bg-dark-paper-light p-2 rounded transition duration-200"
                   onMouseEnter={() => setHoveredRow(index)} // Set hovered row
                   onMouseLeave={() => setHoveredRow(null)} // Reset on leave
                   key={index}

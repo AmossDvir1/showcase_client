@@ -1,4 +1,3 @@
-import { TextField } from "@mui/material";
 import React, { RefObject } from "react";
 
 interface PostInputProps {
@@ -28,7 +27,11 @@ const PostInput: React.FC<PostInputProps> = ({
     >
       <textarea
         dir="auto"
-        className="w-full placeholder:text-sm font-sans h-full p-2 rounded-2xl border border-gray-300 focus:primary-2 focus:border-primary-400 resize-none transition-all duration-300"
+        className="w-full dark:placeholder:text-neutral-400
+                    placeholder:text-sm font-sans h-full dark:bg-dark-paper-light 
+                  dark:text-dark-text-light bg-slate-100 cursor-auto p-2 rounded-2xl border
+                  border-gray-300 focus:primary-2 focus:border-primary-400 resize-none
+                    transition-all duration-300"
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
           setPostValue(e.target.value)
         }
@@ -40,14 +43,6 @@ const PostInput: React.FC<PostInputProps> = ({
             ? "What's on your mind, " + userInfo?.firstName + "?"
             : ""
         }`}
-        //         className={`${
-        //           isExpanded ? "h-[13vh]" : "h-0"
-        //         } whitespace-normal break-words mx-2 min-h-[40px] min-w-[250px] resize-none transition-width duration-300 w-full font-sans rounded-3xl border-0
-        //      focus:ring-inset focus:ring-indigo-600 !important
-        //     bg-gray-200
-        //     hover:ring-indigo-400 !important text-gray-900 ring-1
-        // ring-gray-300 placeholder:text-gray-400
-        //  focus:ring-2 xs:text-xs lg:text-sm sm:leading-6 lg:py-2 xs:py-2.5`}
         {...rest}
       ></textarea>
     </div>

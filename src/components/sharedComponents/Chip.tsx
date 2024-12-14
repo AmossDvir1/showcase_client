@@ -1,6 +1,7 @@
 import React from "react";
 import { Avatar, ChipProps, Chip as MuiChip } from "@mui/material/";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { useAppSelector } from "../../redux/hooks";
 
 interface Props extends ChipProps {
   label: string;
@@ -24,9 +25,11 @@ export const Chip: React.FC<Props> = ({
   iconSrc,
   ...rest
 }) => {
+  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark"
+
   return (
     <MuiChip
-      {...(onChipDelete ? { deleteIcon: <CancelIcon /> } : {})}
+      {...(onChipDelete ? { deleteIcon: <CancelIcon className="dark:text-dark-text-light dark:hover:text-dark-text-muted" /> } : {})}
       onMouseDown={(event) => event.stopPropagation()}
       {...(onChipDelete ? { onDelete: (e) => onChipDelete(e, label) } : {})}
       key={id ?? ""}
@@ -51,11 +54,11 @@ export const Chip: React.FC<Props> = ({
       
       sx={{
         cursor: 'default',
-        color: textColor ?? "black",
+        color: textColor ?? (isDarkMode ? "#d0d5db":"black"),
         borderWidth: "1px",
         borderStyle: 'solid',
         borderColor: outlineColor || "#a8a8a8",
-        backgroundColor: backgroundColor ?? "#F7F7F7",
+        backgroundColor: backgroundColor ?? (isDarkMode ? "transparent":"#F7F7F7"),
         ...(radius !== null && {
           "&.MuiChip-root": {
             borderRadius: `${radius}px`,

@@ -206,18 +206,18 @@ const getDeviceInfo = (): {
   };
 };
 
-const getDeviceImage = (deviceType: string): string => {
+const getDeviceImage = (deviceType: string, isDarkMode: boolean = false): string => {
   switch (deviceType.toLowerCase()) {
     case "desktop":
-      return "/images/devices/desktop.png";
+      return `/images/devices/${isDarkMode ? "darkMode/": ""}desktop.png`;
     case "laptop":
-      return "/images/devices/laptop.png";
+      return `/images/devices/${isDarkMode ? "darkMode/": ""}laptop.png`;
     case "tablet":
-      return "/images/devices/tablet.png";
+      return `/images/devices/${isDarkMode ? "darkMode/": ""}tablet.png`;
     case "mobile":
-      return "/images/devices/mobile.png";
+      return `/images/devices/${isDarkMode ? "darkMode/": ""}mobile.png`;
     default:
-      return "/images/devices/default.png"; // Optional default image
+      return `/images/devices/${isDarkMode ? "darkMode/": ""}default.png`; // Optional default image
   }
 };
 

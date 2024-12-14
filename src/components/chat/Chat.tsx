@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Box,
   IconButton,
-  Typography,
   Divider,
   Popper,
   Collapse,
@@ -24,6 +23,7 @@ import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ChatInput from "./ChatInput";
 import TypingBubble from "./TypingBubble";
+import Typography from "../sharedComponents/Typography";
 
 interface ChatProps {
   friend: UserDetails;

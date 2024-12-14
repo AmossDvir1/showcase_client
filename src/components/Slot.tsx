@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import Typography from "./sharedComponents/Typography";
 import useResponsiveText from "../utils/useResponsiveText";
 import PublicIcon from "@mui/icons-material/Public";
 import Diversity3Icon from "@mui/icons-material/Diversity3";

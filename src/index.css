@@ -1,5 +1,13 @@
 @tailwind base;
 
+body{
+  @apply bg-main-bg;
+}
+html.dark body {
+  @apply bg-dark-main-bg;
+}
+
+
 *::-webkit-scrollbar {
   width: 10px;
   height: 10px;

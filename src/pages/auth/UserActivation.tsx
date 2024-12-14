@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import Typography from "../../components/sharedComponents/Typography";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Button } from "../../components/sharedComponents/Button";
 import {

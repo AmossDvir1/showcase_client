@@ -1,4 +1,4 @@
-import { Avatar, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import React, {
   TextareaHTMLAttributes,
   useEffect,
@@ -15,9 +15,14 @@ import { RootState } from "../../../redux/rootReducer";
 import { fetchUserInfo } from "../../../redux/slices/user";
 import { showToast } from "../../../utils/toast";
 import MiniProfilePicture from "../profilePicture/MiniProfilePicture";
+import CustomButton from "../CustomButton";
+import { useAppSelector } from "../../../redux/hooks";
 
 interface WritePostProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
 export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
+
+  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark"
+
   const dispatch = useDispatch<AppDispatch>();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const userInfoStatus = useSelector((state: RootState) => state.user.status);
@@ -69,7 +74,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
 
   return (
     <div
-      className={`w-full bg-slate-50 flex flex-col rounded-lg transition-width duration-300 my-2 xs:py-3`}
+      className={`w-full bg-white dark:bg-dark-paper flex flex-col rounded-lg transition-width duration-300 my-2 xs:py-3 dark:border-none border-gray-300 border-solid border-[1px]`}
     >
       {userInfo?.username && (
         <div className="flex px-1 pt-1">
@@ -92,19 +97,17 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
       )}
       <Divider className="py-2 mx-3" />
       <div className="flex items-end justify-center pt-2">
-        <Button
+        <CustomButton
+          className="py-[1px] px-4"
+          glow={isDarkMode}
+          variant="outlined"
+          loadingText="Posting..."
           loading={loading}
-          btnsize="sm"
           disabled={!postValue}
-          data-post-button="true"
-          onMouseDown={(e) => {
-            e.stopPropagation();
-          }}
-          round
           onClick={onCreatePost}
         >
           Post
-        </Button>
+        </CustomButton>
       </div>
     </div>
   );

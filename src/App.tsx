@@ -1,8 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createTheme } from "@mui/material/styles";
-import { ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider, ThemeOptions } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material";
 import { HomePage } from "./pages/HomePage";
 import { SignUp } from "./pages/auth/SignUp";
@@ -16,47 +15,32 @@ import Profile from "./pages/profile/ProfilePage";
 import { WebSocketProvider } from "./context/WebSocketContext";
 import SettingsPage from "./pages/settings/SettingsPage";
 import AboutUs from "./pages/AboutUs";
+import { useAppSelector } from "./redux/hooks";
+import { useEffect } from "react";
+import { createMuiTheme } from "./utils/theme";
 
 const rootElement = document.getElementById("root");
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#7573C5",
-    },
-  },
-  typography: {
-    fontFamily: ["pop"].join(","),
-  },
-  components: {
-    MuiPopover: {
-      defaultProps: {
-        container: rootElement,
-      },
-    },
-    MuiTypography: {
-      styleOverrides: {
-        root: { lineHeight: "1.3" },
-      },
-    },
-    MuiPopper: {
-      defaultProps: {
-        container: rootElement,
-      },
-    },
-    MuiDialog: {
-      defaultProps: {
-        container: rootElement,
-      },
-    },
-  },
-});
 
 const App = () => {
+
+  const themeMode = useAppSelector((state) => state.theme.mode);
+  
+  const muiTheme = createMuiTheme(themeMode, rootElement);
+
+  useEffect(() => {
+    // Add or remove the 'dark' class on the root html element: 
+    if (themeMode === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [themeMode]);
+  
   return (
     <StyledEngineProvider injectFirst>
       <AuthProvider>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={muiTheme}>
           <WebSocketProvider>
             <Router>
               <Routes>

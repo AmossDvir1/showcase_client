@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Tab, Box, Typography, Divider } from '@mui/material';
+import { Tabs, Tab, Box, Divider } from '@mui/material';
+import Typography from '../../components/sharedComponents/Typography';
 import ProfileSettings from './ProfileSettings';
 import { getUserSettings } from '../../controllers/userSettingsController/profileSettings/getUserSettings';
 import DeviceManagement from './security/DeviceManagement';
+import GeneralSettings from './general/GeneralSettings';
 
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -34,10 +36,12 @@ useEffect(() => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 0:
-        return <ProfileSettings loading={loadingProfileSettings} initialSettings={initialProfileSettings}/>;
+        return <GeneralSettings />;
       case 1:
-        return <SecuritySettings />;
+        return <ProfileSettings loading={loadingProfileSettings} initialSettings={initialProfileSettings}/>;
       case 2:
+        return <SecuritySettings />;
+      case 3:
         return <NotificationSettings />;
       default:
         return null;
@@ -49,8 +53,7 @@ useEffect(() => {
       <Typography variant="h4" className="mb-4">
         Settings
       </Typography>
-      <Box className="w-screen md:w-[600px] rounded-xl bg-gray-50" >
-        {/* Tabs for Navigation */}
+      <Box className="w-screen md:w-[600px] rounded-xl bg-gray-50 dark:bg-dark-paper-dark" >
         <Tabs
         className="p-0 m-0"
           value={activeTab}
@@ -59,6 +62,7 @@ useEffect(() => {
           // textColor="secondary"
           centered
         >
+          <Tab className="px-16 md:px-8 xs:max-md:m-0 xs:max-md:w-[10%]" label="General" />
           <Tab className="px-16 md:px-8 xs:max-md:m-0 xs:max-md:w-[10%]" label="Profile" />
           <Tab className="px-16 md:px-8 xs:max-md:w-[10%]" label="Security" />
           <Tab className="px-16 md:px-8 xs:max-md:w-[10%]" label="Notifications" />
@@ -66,7 +70,7 @@ useEffect(() => {
           <Divider className="w-full flex"></Divider>
 
         {/* Tab Content */}
-        <Box className="mt-6 p-4 bg-gray-50 rounded-xl shadow-md">
+        <Box className="mt-6 p-4 bg-gray-50 dark:bg-dark-paper rounded-xl shadow-md">
           {renderTabContent()}
         </Box>
       </Box>

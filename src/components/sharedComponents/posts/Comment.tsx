@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Typography } from "@mui/material";
+import Typography from "../Typography";
 import LikeComment from "./LikeComment";
 import { useNavigate } from "react-router-dom";
 import Link from "@mui/material/Link";
@@ -30,11 +30,11 @@ const Comment: React.FC<CommentProps> = ({ post, comment, media = [] }) => {
         </div>
       </div>
       <div className="flex flex-col">
-        <div className="bg-slate-200 rounded-3xl px-3 pt-3 pb-3 min-w-[12rem] w-[calc(100%)]">
+        <div className="bg-slate-200 dark:bg-dark-paper-light rounded-3xl px-3 pt-3 pb-3 min-w-[12rem] w-[calc(100%)]">
           {commentData.likes.length > 0 && <LikeIcon className="relative z-10 float-right bottom-5" users={commentData.likes}></LikeIcon>}
           <Typography>
             <Link
-              className="text-black font-normal"
+              className="text-black dark:text-dark-text-light font-normal"
               underline="hover"
               component="button"
               onClick={onUserClick}

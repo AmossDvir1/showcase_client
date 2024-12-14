@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import Typography from "../../../../components/sharedComponents/Typography";
 import ChipsSelector from "../../../../components/sharedComponents/ChipsSelector";
 interface Props {}
 

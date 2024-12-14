@@ -10,12 +10,14 @@ import ResultItem from "./resultItem/ResultItem";
 import SearchValueItem from "./resultItem/itemsTypes/SearchValueItem";
 import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
+import Loader from "../sharedComponents/Loader";
 
 interface Props<T> {
   results?: T[];
   onChange: (value: string) => void;
   onSelect?: (item: T) => void;
   value?: string;
+  loading?: boolean;
 }
 
 const LiveSearch = <T extends ResultsItem>({
@@ -23,6 +25,7 @@ const LiveSearch = <T extends ResultsItem>({
   value,
   onChange,
   onSelect,
+  loading = false,
 }: Props<T>): JSX.Element => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -38,7 +41,7 @@ const LiveSearch = <T extends ResultsItem>({
 
   const onItemClick = (index: number) => {
     onChange("");
-    setAnchorEl(null)
+    setAnchorEl(null);
     const selectedItem = results[index];
     onSelect?.(selectedItem);
     navigate(`/${selectedItem.type}/${selectedItem.urlMapping}`);
@@ -112,9 +115,9 @@ const LiveSearch = <T extends ResultsItem>({
     <div className="flex items-center justify-center">
       <IconButton
         onClick={onSearchIconClick}
-        className="p-2 ml-2 rounded-full bg-gray-200 md:hidden"
+        className="p-2 ml-2 rounded-full bg-gray-200 dark:bg-dark-paper-light md:hidden"
       >
-        <SearchIcon></SearchIcon>
+        <SearchIcon />
       </IconButton>
       <div
         tabIndex={1}
@@ -163,18 +166,23 @@ const LiveSearch = <T extends ResultsItem>({
                   containerRef={index === focusedIndex ? resultContainer : null}
                 ></ResultItem>
               ))}
-            {(showResults || results.length === 0) && value?.length > 0 && (
-              <SearchValueItem
-                isFocused={results.length === focusedIndex}
-                value={value}
-                onItemClick={onResultItemClick}
-                index={results.length}
-                containerRef={
-                  // resultContainer
-                  results.length === focusedIndex ? resultContainer : null
-                }
-              ></SearchValueItem>
-            )}
+            {(showResults || results.length === 0) &&
+              value?.length > 0 &&
+              (loading ? (
+                <div className="flex items-center justify-center">
+                <Loader size="sm"></Loader></div>
+              ) : (
+                <SearchValueItem
+                  isFocused={results.length === focusedIndex}
+                  value={value}
+                  onItemClick={onResultItemClick}
+                  index={results.length}
+                  containerRef={
+                    // resultContainer
+                    results.length === focusedIndex ? resultContainer : null
+                  }
+                />
+              ))}
           </div>
         )}
       </div>

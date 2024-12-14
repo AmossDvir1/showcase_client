@@ -6,9 +6,9 @@ import {
   DialogTitle,
   Divider,
   IconButton,
-  Typography,
   useMediaQuery,
 } from "@mui/material";
+import Typography from "../Typography";
 import { useTheme } from "@mui/material/styles";
 import { Button } from "../Button";
 import { Popup } from "../Popup";
@@ -147,7 +147,7 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
       <Dialog
         PaperProps={{
           className:
-            "flex lg:w-[60%] lg:h-[60%] sm:w-full sm:h-full bg-zinc-100",
+            "flex lg:w-[60%] lg:h-[60%] sm:w-full sm:h-full bg-zinc-100 dark:bg-dark-paper",
         }}
         fullScreen={fullScreen}
         open={open}

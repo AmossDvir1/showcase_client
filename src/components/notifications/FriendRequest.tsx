@@ -1,11 +1,10 @@
 import React from "react";
-import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { confirmFriendship } from "../../controllers/friendsController/confirmFriendship";
 
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import { Button as MuiButton } from "@mui/material/";
-
+import Typography from "../sharedComponents/Typography";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { Button } from "../sharedComponents/Button";
 import NotificationStatusDot from "./NotificationStatusDot";
