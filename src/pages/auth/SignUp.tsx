@@ -1,5 +1,6 @@
 import React, { useState, useEffect, FormEvent } from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
+import Typography from "../../components/sharedComponents/Typography";
 import { TextField } from "../../components/sharedComponents/TextField";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";

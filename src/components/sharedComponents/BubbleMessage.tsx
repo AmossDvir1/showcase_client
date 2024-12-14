@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, Collapse, Typography } from "@mui/material";
+import { Box, Collapse } from "@mui/material";
+import Typography from "./Typography";
 import MiniProfilePicture from "../sharedComponents/profilePicture/MiniProfilePicture";
 import { formatTimeShort } from "../../utils/utils";
 

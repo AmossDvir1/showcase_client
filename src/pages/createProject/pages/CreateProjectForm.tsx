@@ -5,7 +5,8 @@ import React, {
   useContext,
   useState,
 } from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
+import Typography from "../../../components/sharedComponents/Typography";
 import { TextField } from "../../../components/sharedComponents/TextField";
 import { TextBox } from "../../../components/sharedComponents/TextBox";
 import { Switch } from "../../../components/sharedComponents/Switch";

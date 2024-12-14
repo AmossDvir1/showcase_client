@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Divider,
-  IconButton,
-  InputAdornment,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, IconButton, InputAdornment } from "@mui/material";
+import Typography from "../Typography";
 import { PostMenu } from "./PostMenu";
 import PostInput from "./PostInput";
-import { Button } from "../Button";
 import { Button as MuiButton } from "@mui/material";
 import { deletePost } from "../../../controllers/postsController/deletePostController";
 import { updatePost } from "../../../controllers/postsController/updatePostController";
@@ -29,10 +23,10 @@ import MiniProfilePicture from "../profilePicture/MiniProfilePicture";
 import { Collapse } from "@mui/material";
 import Loader from "../Loader";
 import LikeIcon from "./LikeIcon";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
+import { useAppSelector, useAppDispatch } from "../../../redux/hooks";
 import { RootState } from "../../../redux/rootReducer";
 import { fetchUserInfo } from "../../../redux/slices/user";
+import CustomButton from "../CustomButton";
 
 interface PostProps {
   post: Post;
@@ -41,18 +35,19 @@ interface PostProps {
 }
 export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
   const navigate = useNavigate();
-
-  const dispatch = useDispatch<AppDispatch>();
-  const userInfo = useSelector((state: RootState) => state.user.userInfo);
-  const userInfoStatus = useSelector((state: RootState) => state.user.status);
+  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
+  const dispatch = useAppDispatch();
+  const userInfo = useAppSelector((state: RootState) => state.user.userInfo);
+  const userInfoStatus = useAppSelector(
+    (state: RootState) => state.user.status
+  );
   useEffect(() => {
     // Dispatch the async action to fetch user info only if it's not already present
-    if (!userInfo && userInfoStatus !== 'loading') {
+    if (!userInfo && userInfoStatus !== "loading") {
       dispatch(fetchUserInfo());
     }
   }, [dispatch, userInfo, userInfoStatus]);
 
-  
   const [likesCount, setLikesCount] = useState(post?.likes?.length ?? 0);
   const [commentsCount, setCommentsCount] = useState(
     post?.comments?.length ?? 0
@@ -65,7 +60,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
   const [commentOpen, setCommentOpen] = useState(false);
   const [showCommentsOpen, setShowCommentsOpen] = useState(false);
   const [userStr, setUserStr] = useState("");
-    const [commentSubmitLoading, setCommentSubmitLoading] = useState(false);
+  const [commentSubmitLoading, setCommentSubmitLoading] = useState(false);
   const [commentString, setCommentString] = useState("");
 
   const onDeletePost = async () => {
@@ -115,7 +110,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
       const res = await addComment(postData._id, commentString);
       setCommentSubmitLoading(false);
       setPostData(res.data.postData);
-      setCommentsCount(prev => prev + 1);
+      setCommentsCount((prev) => prev + 1);
       setCommentString("");
       setShowCommentsOpen(true);
     } catch (err: any) {
@@ -127,25 +122,25 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
     setValue(previousState);
     setIsEditMode(false);
   };
-  return isDeleted || !postData? (
+  return isDeleted || !postData ? (
     <></>
   ) : (
     <Box
       className={`w-full my-2 relative 
-      bg-slate-50 flex rounded-lg ${
+      bg-slate-50 dark:bg-dark-paper flex rounded-lg ${
         !isEditMode ? "justify-between" : ""
       } xs:py-3 shadow-[-4px_4px_8px_1px_rgba(0,0,0,0.17)] `}
     >
       {isEditMode ? (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full px-6">
           <div className="flex justify-between">
             <div className="flex">
-              <Typography className="text-black">Edit Post</Typography>
+              <Typography className="">Edit Post</Typography>
             </div>
             <div className="flex items-end">
               <Tooltip title="Cancel">
                 <CancelIcon
-                  className="cursor-pointer mb-2 fill-primary hover:fill-primary-light"
+                  className="cursor-pointer mb-2 fill-primary hover:fill-primary-light dark:fill-dark-text-light"
                   onClick={onCancel}
                 ></CancelIcon>
               </Tooltip>
@@ -157,15 +152,14 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
             postValue={value}
           ></PostInput>
           <div className="pt-4 flex items-center justify-center">
-            <Button
-              fullWidth
-              className="mx-1 w-[20%]"
-              btnsize="xs"
-              round
+            <CustomButton
+              className="mx-1"
+              variant={isDarkMode ? "outlined" : "contained"}
+              size="small"
               onClick={onUpdatePost}
             >
               Save
-            </Button>
+            </CustomButton>
           </div>
         </div>
       ) : (
@@ -181,7 +175,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
               <div className="flex flex-row items-center">
                 <Typography>
                   <Link
-                    className="text-black font-normal"
+                    className="text-black dark:text-dark-text-light font-normal"
                     underline="hover"
                     component="button"
                     onClick={onUserClick}
@@ -192,15 +186,12 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                 <Divider className="mx-4" orientation="vertical"></Divider>
                 <ElapsedTimeLabel date={postData?.createdAt} />
               </div>
-              {/* <Box dir={'ltr'}> */}
               <Typography
-              
-                className="pt-3 text-slate-900 font-light lg:text-base xs:text-sm text-wrap text-left"
-                sx={{ unicodeBidi: "plaintext", overflowWrap:'anywhere' }}
+                className="pt-3 text-slate-900 dark:text-dark-text-light font-light lg:text-base xs:text-sm text-wrap text-left"
+                sx={{ unicodeBidi: "plaintext", overflowWrap: "anywhere" }}
               >
                 {value}
               </Typography>
-              {/* </Box> */}
             </div>
           </div>
 
@@ -217,19 +208,23 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
               {likesCount > 0 && (
                 <div className="flex flex-row pt-5 items-center">
                   <LikeIcon users={postData?.likes}></LikeIcon>
-                  <Typography className="text-primary pl-[3px] cursor-default">
+                  <Typography className="dark:text-dark-text-light text-primary pl-[3px] cursor-default">
                     {likesCount}
                   </Typography>
                 </div>
               )}
               {commentsCount > 0 && (
                 <div className="flex flex-row pt-5 items-center">
-                  <Typography className="flex items-end text-primary pl-[3px] xs:text-sm lg:text-base cursor-pointer">
+                  <Typography className="flex items-end pl-[3px] xs:text-sm lg:text-base cursor-pointer">
                     <Link
+                      className="text-black dark:text-dark-text-light"
                       underline="hover"
                       component="button"
                       onClick={() => setShowCommentsOpen(!showCommentsOpen)}
-                    >{`${commentsCount} comment${commentsCount===1 ?"" :"s"}`}</Link>
+                    >
+                      {`${commentsCount}`}
+                      &nbsp;{`comment${commentsCount === 1 ? "" : "s"}`}
+                    </Link>
                   </Typography>
                 </div>
               )}
@@ -239,7 +234,12 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
           <Collapse in={commentsCount > 0 && showCommentsOpen}>
             <Divider className="w-full my-3"></Divider>
             {postData?.comments?.map((comment, index) => (
-              <Comment media={media} key={index} post={postData} comment={comment}></Comment>
+              <Comment
+                media={media}
+                key={index}
+                post={postData}
+                comment={comment}
+              ></Comment>
             ))}
           </Collapse>
 
@@ -247,13 +247,17 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
           <div className="flex flex-row w-full justify-between pt-3">
             <div className="flex flex-row">
               <MuiButton variant="text" onClick={onLikeClick}>
-                {postData?.likes?.some(like => like.id === userInfo?.id) ? (
+                {postData?.likes?.some((like) => like.id === userInfo?.id) ? (
                   <ThumbUpIcon className="text-primary pr-1 w-5" />
                 ) : (
                   <ThumbUpOutlinedIcon className="text-gray-400 pr-1 w-5" />
                 )}
                 <Typography
-                  className={`${postData?.likes?.some(like => like.id === userInfo?.id)? "text-primary": "text-gray-400"} pl-1 lg:text-sm xs:text-xs`}
+                  className={`${
+                    postData?.likes?.some((like) => like.id === userInfo?.id)
+                      ? "text-primary dark:text-primary"
+                      : "dark:text-gray-400 text-gray-400"
+                  } pl-1 lg:text-sm xs:text-xs`}
                 >
                   Like
                 </Typography>
@@ -262,7 +266,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
             <div className="flex flex-row">
               <MuiButton variant="text" onClick={onCommentClick}>
                 <InsertCommentOutlinedIcon className="text-primary pr-1 w-5" />
-                <Typography className="text-primary pl-1 lg:text-sm xs:text-xs">
+                <Typography className="dark:text-primary text-primary pl-1 lg:text-sm xs:text-xs">
                   Comment
                 </Typography>
               </MuiButton>
@@ -279,15 +283,21 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                 InputProps={{
                   sx: { borderRadius: "100px", cursor: "default" },
                   inputProps: {
-                    className: "input-no-ring lg:text-sm xs:text-xs",
+                    className: "input-no-ring lg:text-sm xs:text-xs dark:bg-dark-paper-light dark:placeholder:text-neutral-400 dark:text-dark-text-light",
                     style: {
-                     
                       borderTopLeftRadius: "100px",
                       borderBottomLeftRadius: "100px",
                     },
                   },
                   endAdornment: (
-                    <InputAdornment sx={{ display: "flex", alignItems: "center", justifyContent: "center" }} position="end">
+                    <InputAdornment
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      position="end"
+                    >
                       <IconButton
                         disabled={!commentString}
                         className={`flex items-center p-0 px-1 justify-center ${
@@ -298,11 +308,17 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                         onClick={onAddComment}
                         disableRipple
                       >
-                        {commentSubmitLoading ? <Loader/>:<SendIcon
-                          className={`flex items-center justify-center w-[20px] ${
-                            commentString ? "cursor-pointer" : "cursor-default"
-                          }`}
-                        />}
+                        {commentSubmitLoading ? (
+                          <Loader />
+                        ) : (
+                          <SendIcon
+                            className={`flex items-center justify-center w-[20px] ${
+                              commentString
+                                ? "cursor-pointer"
+                                : "cursor-default"
+                            }`}
+                          />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   ),

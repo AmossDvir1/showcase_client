@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import Typography from "../components/sharedComponents/Typography";
 import { ToastPosition, TypeOptions, toast } from "react-toastify";
 
 const errorOptions = {

@@ -4,7 +4,8 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import Typography from "./sharedComponents/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
@@ -97,7 +98,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
   };
 
   return (
-    <AppBar className="bg-main-bg border-solid border-b-[1px] border-t-0 border-r-0 border-l-0 border-[#6e6e6e] fixed top-0 left-0 right-0 z-index: 100">
+    <AppBar className="bg-main-bg dark:bg-dark-main-bg border-solid border-b-[1px] border-t-0 border-r-0 border-l-0 border-[#6e6e6e] fixed top-0 left-0 right-0 z-index: 100">
       <Container className="xl:max-w-full 2xl:max-w-[80%] px-0 xs:max-w-[] xs:px-4">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -141,17 +142,21 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
               </MenuItem>
             </Menu>
           </Box>
-          <ResponsiveComponent breakpoint="md">
-            <AdbIcon sx={{ display: "flex", mr: 1 }} />
-          </ResponsiveComponent>
           <Typography
             className="mr-2 flex flex-nowrap xs:tracking-[0.2em] sm:tracking-[0.2em] lg:tracking-[0.4em] xs:text-sm sm:text-sm lg:text-lg text-white decoration-transparent font-semibold"
             variant="h6"
             noWrap
             component="a"
-            href="/"
           >
-            {isTablet ? "S".toUpperCase() : "Showcase".toUpperCase()}
+            <Link
+              className="flex"
+              underline="none"
+              component="button"
+              onClick={() => navigate("/")}
+            >
+              <AdbIcon className="flex  mr-1" />
+              {isTablet ? "" : "Showcase".toUpperCase()}
+            </Link>
           </Typography>
           <Box
             className="flex items-center justify-start"

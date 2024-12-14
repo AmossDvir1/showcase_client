@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { Typography } from "@mui/material";
 import AppsIcon from "@mui/icons-material/Apps";
+import Typography from "../../../sharedComponents/Typography";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   details: ResultsItem;

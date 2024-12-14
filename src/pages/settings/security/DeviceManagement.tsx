@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography } from "@mui/material";
+import Typography from "../../../components/sharedComponents/Typography";
 import { serverReq } from "../../../API/utils/axiosConfig";
 import { Chip } from "../../../components/sharedComponents/Chip";
 import Loader from "../../../components/sharedComponents/Loader";
@@ -8,6 +8,7 @@ import { LoadingButton } from "@mui/lab";
 import LogoutIcon from "@mui/icons-material/Logout";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { getDeviceImage } from "../../../utils/utils";
+import { useAppSelector } from "../../../redux/hooks";
 
 interface ISession {
   _id: string;
@@ -19,6 +20,8 @@ interface ISession {
 
 const DeviceManagement: React.FC = () => {
   const auth = useAuth();
+  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark"
+
   const [sessions, setSessions] = useState<ISession[]>([]);
   const [loadingSessions, setLoadingSessions] = useState(false);
   const [error, setError] = useState("");
@@ -76,7 +79,7 @@ const DeviceManagement: React.FC = () => {
   if (error) return <Typography className="text-black">{error}</Typography>;
 
   return (
-    <div className="bg-gray-50 px-6 pb-6">
+    <div className="bg-gray-50 dark:bg-dark-paper px-6 pb-6">
       <div className="max-w-4xl mx-auto">
         <Typography className="text-gray-800 text-2xl font-medium mb-6">
           {"Device Management"}
@@ -90,16 +93,16 @@ const DeviceManagement: React.FC = () => {
             {sessions?.map((session) => (
               <div
                 key={session._id}
-                className="bg-white p-4 shadow-md rounded-lg flex flex-col md:flex-row items-center md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4"
+                className="bg-white dark:bg-dark-paper-light p-4 shadow-md rounded-lg flex flex-col md:flex-row items-center md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4"
               >
                 {/* Device Image */}
                 <img
                   src={
                     process.env.PUBLIC_URL +
-                    getDeviceImage(session?.device?.deviceType)
+                    getDeviceImage(session?.device?.deviceType, isDarkMode)
                   }
                   alt={session?.device?.deviceType}
-                  className="w-12 h-12 object-contain"
+                  className="w-12 h-12 object-contain "
                 />
 
                 {/* Device Details */}

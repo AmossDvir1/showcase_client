@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { serverReq } from "../../API/utils/axiosConfig";
-import { Divider, Typography } from "@mui/material";
+import { Divider } from "@mui/material";
+import Typography from "../../components/sharedComponents/Typography";
 import RelationshipStatusButton from "../../components/RelationshipStatusButton";
 import ProfilePhoto from "./ProfilePhoto";
 import { getProfile } from "../../controllers/profilesController/getProfileController";
@@ -76,7 +77,7 @@ const Profile: React.FC = () => {
   const isCurrentUser = userInfo?.urlMapping === userData.urlMapping;
   return (
     <div className="min-w-4xl max-w-6xl m-auto">
-      <div className="flex flex-col rounded-lg bg-white pb-8">
+      <div className="flex flex-col rounded-lg bg-white dark:bg-dark-paper-dark pb-8">
         <CoverPhoto
           coverPhoto={userData?.coverPhoto}
           userProfile={isCurrentUser}
@@ -129,7 +130,7 @@ const Profile: React.FC = () => {
           <Divider className="w-full"></Divider>
         </div>
         <div className="flex flex-col items-center xs:mx-4 lg:mx-12 mb-2">
-          <WritePost></WritePost>
+          {isCurrentUser && <WritePost></WritePost>}
         <ProfilePosts userData={userData}></ProfilePosts>
         </div>
       </div>

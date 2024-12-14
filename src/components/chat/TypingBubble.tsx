@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import Typography from "../sharedComponents/Typography";
 
 // Using Tailwind's built-in `@keyframes` for dot animation
 const TypingBubble: React.FC = () => {

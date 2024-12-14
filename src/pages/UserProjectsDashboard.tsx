@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
+import Typography from "../components/sharedComponents/Typography";
 import { Slot } from "../components/Slot";
 import { EmptySlot } from "../components/EmptySlot";
 import { CreateProjectDialog } from "./createProject/CreateProjectDialog";

@@ -3,8 +3,8 @@ import {
   ButtonProps,
   Grid,
   Button as MuiButton,
-  Typography,
 } from "@mui/material";
+import Typography from "./Typography";
 import Loader from "./Loader";
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";

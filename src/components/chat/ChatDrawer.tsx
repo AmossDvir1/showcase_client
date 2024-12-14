@@ -3,7 +3,6 @@ import {
   Divider,
   IconButton,
   Popper,
-  Typography,
 } from "@mui/material";
 import React, { useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,6 +11,7 @@ import { IoChatboxEllipses } from "react-icons/io5";
 import MiniProfilePicture from "../sharedComponents/profilePicture/MiniProfilePicture";
 import { RootState } from "../../redux/rootReducer";
 import ChatContacts from "./ChatContacts";
+import Typography from "../sharedComponents/Typography";
 
 interface ChatDrawerProps {
   onMenuBar?: boolean;

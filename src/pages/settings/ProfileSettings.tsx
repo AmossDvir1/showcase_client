@@ -6,8 +6,8 @@ import {
   InputLabel,
   FormControl,
   Box,
-  Typography,
 } from "@mui/material";
+import Typography from "../../components/sharedComponents/Typography";
 import ChipsSelector from "../../components/sharedComponents/ChipsSelector";
 import { showToast } from "../../utils/toast";
 import { fetchTechnologiesInventory } from "../../controllers/technologiesController/fetchTechnologiesInventory";
@@ -15,6 +15,7 @@ import { updateUserProfileSettings } from "../../controllers/userSettingsControl
 import { Button } from "../../components/sharedComponents/Button";
 import WorkSettings from "./WorkSettings";
 import Loader from "../../components/sharedComponents/Loader";
+import CustomButton from "../../components/sharedComponents/CustomButton";
 
 interface ProfileSettingsProps {
   initialSettings?: IProfileSettings;
@@ -104,7 +105,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
       </div>
     );
   return (
-    <Box className="flex flex-col p-4 bg-gray-50 rounded-md shadow-md">
+    <Box className="flex flex-col p-4 bg-gray-50 dark:bg-dark-paper rounded-md shadow-md">
       <Typography variant="h5" className="mb-6 text-primary">
         Edit Profile Settings
       </Typography>
@@ -117,8 +118,9 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
         variant="outlined"
         fullWidth
         value={bio}
+        inputProps={{className: "dark:text-dark-text-light"}}
         onChange={(e) => setBio(e.target.value)}
-        className="mb-6"
+        className="mb-6 dark:bg-dark-paper-light dark:text-dark-text-light"
         placeholder="Tell us about yourself..."
       />
 
@@ -126,6 +128,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
       <FormControl fullWidth className="mb-6">
         <InputLabel>Relationship Status</InputLabel>
         <Select
+        className="dark:text-dark-text-light dark:border-white"
           MenuProps={{
             disableScrollLock: true,
             autoFocus: false,
@@ -161,15 +164,17 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
       </FormControl>
 
       {/* Save Button */}
-      <Button
-        className="w-full mt-2"
-        variant="contained"
+      <CustomButton
+        className="mt-2 py-1"
+        size="medium"
+        variant="outlined"
         loading={isSaveLoading}
         color="primary"
+        fullWidth
         onClick={onSave}
       >
         Save Changes
-      </Button>
+      </CustomButton>
     </Box>
   );
 };

@@ -1,5 +1,5 @@
 import { FC, RefObject } from "react";
-import { Typography } from "@mui/material";
+import Typography from "../../../sharedComponents/Typography";
 import SearchIcon from "@mui/icons-material/Search";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {

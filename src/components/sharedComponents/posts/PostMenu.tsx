@@ -3,7 +3,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { Typography } from "@mui/material";
+import Typography from "../Typography";
 
 interface PostMenuProps {
   onEditClick: () => void;
@@ -38,6 +38,7 @@ export const PostMenu: React.FC<PostMenuProps> = ({
   return (
     <div className="absolute right-3 top-2">
       <IconButton
+      className="dark:text-dark-text-light"
         aria-label="more"
         id="long-button"
         aria-controls={open ? "long-menu" : undefined}

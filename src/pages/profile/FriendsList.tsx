@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getUserFriendsDetails } from "../../controllers/friendsController/getUserFriends";
-import { Link, Typography } from "@mui/material";
+import { Link } from "@mui/material";
+import Typography from "../../components/sharedComponents/Typography";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/sharedComponents/Loader";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import { Typography } from "@mui/material";
+import Typography from "./sharedComponents/Typography";
 import { Button } from "./sharedComponents/Button";
 
 interface Props {

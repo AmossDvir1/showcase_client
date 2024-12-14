@@ -4,8 +4,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Typography,
 } from "@mui/material";
+import Typography from "../../components/sharedComponents/Typography";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import Link from "@mui/material/Link";
@@ -13,6 +13,7 @@ import Loader from "../../components/sharedComponents/Loader";
 import { Button } from "../../components/sharedComponents/Button";
 import { convertPictureToURI } from "../../utils/utils";
 import { getUserFriendsDetails } from "../../controllers/friendsController/getUserFriends";
+import CustomButton from "../../components/sharedComponents/CustomButton";
 
 type Friend = {
   username: string;
@@ -54,7 +55,7 @@ const ProfileFriendsCard: React.FC<ProfileFriendsCardProps> = ({ userId }) => {
   const closeDialog = () => setIsDialogOpen(false);
 
   return (
-    <div className="bg-[#fcfcfc] shadow-lg border-zinc-200 border-solid border-[1px] p-4 rounded-lg h-full flex flex-col">
+    <div className="bg-[#fcfcfc] dark:bg-dark-paper shadow-lg border-zinc-200 border-solid border-[1px] p-4 rounded-lg h-full flex flex-col">
       <div className="flex flex-col mb-4 justify-center">
         <Typography className="text-black text-xl font-medium">
           Friends
@@ -85,7 +86,7 @@ const ProfileFriendsCard: React.FC<ProfileFriendsCardProps> = ({ userId }) => {
               )}
               <Typography component={"div"}>
                 <Link
-                  className="text-black font-normal"
+                  className="text-black dark:text-dark-text-light font-normal"
                   underline="hover"
                   component="button"
                   onClick={() => onFriendClick(friend)}
@@ -97,14 +98,18 @@ const ProfileFriendsCard: React.FC<ProfileFriendsCardProps> = ({ userId }) => {
           ))
         )}
       </div>
-      <Button
-        btnsize={"sm"}
-        round
-        className="bg-primary w-full text-white px-4 py-2 hover:bg-primary-light focus:outline-none mt-auto"
-        onClick={openDialog}
-      >
-        <Typography>See All Friends</Typography>
-      </Button>
+      <div className="mt-auto w-full">
+        <CustomButton
+        fullWidth
+          className="w-full px-4 py-2 text-sm"
+          variant="outlined"
+          size="medium"
+          glow={false}
+          onClick={openDialog}
+        >
+          See All Friends
+        </CustomButton>
+      </div>
 
       <Dialog open={isDialogOpen} onClose={closeDialog} fullWidth maxWidth="sm">
         <DialogTitle>All Friends</DialogTitle>

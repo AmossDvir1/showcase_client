@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Typography,
   Box,
   Button,
   Paper,
@@ -9,6 +8,7 @@ import {
   Zoom,
   Fade,
 } from "@mui/material";
+import Typography from "../components/sharedComponents/Typography";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 

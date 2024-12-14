@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Divider, Typography } from "@mui/material";
 import { Post } from "./Post";
 import { getMyPosts } from "../../../controllers/postsController/getMyPostsController";

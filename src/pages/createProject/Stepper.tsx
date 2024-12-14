@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import Typography from "../../components/sharedComponents/Typography";
 
 interface Props {
   steps: Array<{ label: string; content: JSX.Element }>;

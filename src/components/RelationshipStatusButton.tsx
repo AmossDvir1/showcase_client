@@ -1,4 +1,5 @@
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
+import Typography from "./sharedComponents/Typography";
 import React, { useState } from "react";
 import { serverReq } from "../API/utils/axiosConfig";
 import { confirmFriendship } from "../controllers/friendsController/confirmFriendship";

@@ -1,4 +1,5 @@
-import { Link, Typography } from "@mui/material";
+import { Link } from "@mui/material";
+import Typography from "../Typography";
 import React, { useEffect } from "react";
 import { likeComment } from "../../../controllers/postsController/likeCommentController";
 import { useDispatch, useSelector } from "react-redux";

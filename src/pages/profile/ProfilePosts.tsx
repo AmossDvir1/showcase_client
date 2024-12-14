@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getUserPosts } from "../../controllers/postsController/getUserPostsController";
 import { Post } from "../../components/sharedComponents/posts/Post";
-import { Divider, Typography } from "@mui/material";
+import { Divider } from "@mui/material";
+import Typography from "../../components/sharedComponents/Typography";
 import Loader from "../../components/sharedComponents/Loader";
 
 interface ProfilePostsProps {

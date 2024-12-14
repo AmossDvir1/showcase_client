@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import Typography from "../../components/sharedComponents/Typography";
 import React from "react";
 
 import { useNavigate } from "react-router-dom";

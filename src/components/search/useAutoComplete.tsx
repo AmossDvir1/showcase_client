@@ -1,30 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getSearchSuggestions } from "../../API/services/searchSuggestions";
+import debounce from 'lodash/debounce';
 
-export const useAutoComplete = (
-  searchQuery: string,
-  debounceTime: number = 200
-) => {
+export const useAutoComplete = (searchQuery: string, debounceTime: number = 300) => {
   const [suggestions, setSuggestions] = useState<ResultsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchQuery) {
-        setLoading(true);
-
-        const fetchPreviews = async () => {
-          const previews = await getSearchSuggestions(searchQuery);
-          setSuggestions(previews);
-        };
-        fetchPreviews();
-      } else {
-        setSuggestions([]);
+  const fetchSuggestionsDebounced = useCallback(debounce(async (query: string) => {
+    if (query) {
+      setLoading(true);
+      try {
+        const previews = await getSearchSuggestions(query);
+        setSuggestions(previews);
+      } catch (error) {
+        console.error("Error fetching suggestions:", error);
+        setSuggestions([]); // Handle errors gracefully
+      } finally {
+        setLoading(false);
       }
-    }, debounceTime);
+    } else {
+      setSuggestions([]);
+    }
+  }, debounceTime), [debounceTime]);
 
-    return () => clearTimeout(timer);
-  }, [searchQuery, debounceTime]);
+
+  useEffect(() => {
+    fetchSuggestionsDebounced(searchQuery); // Call the debounced function
+
+    // Cleanup: Cancel any pending debounced requests when the component unmounts or searchQuery changes.
+    return () => fetchSuggestionsDebounced.cancel();
+  }, [searchQuery, fetchSuggestionsDebounced]);
 
   return { suggestions, loading };
 };

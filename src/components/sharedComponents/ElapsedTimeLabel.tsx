@@ -1,5 +1,6 @@
 import React from "react";
-import { Typography } from "@mui/material";
+// import Typography from "./Typography";
+import {Typography} from "@mui/material";
 import { formatTime } from "../../utils/utils";
 import { Tooltip } from "./Tooltip";
 
@@ -11,7 +12,7 @@ const ElapsedTimeLabel: React.FC<ElapsedTimeLabelProps> = ({ date }) => {
 
   return (
     <Tooltip title={exactTime} placement={"bottom"}>
-      <Typography className="text-gray-500 text-sm cursor-default">
+      <Typography className="text-gray-500 dark:text-dark-text-light text-sm cursor-default">
         {relativeTime}
       </Typography>
     </Tooltip>
