@@ -12,7 +12,7 @@ const ElapsedTimeLabel: React.FC<ElapsedTimeLabelProps> = ({ date }) => {
 
   return (
     <Tooltip title={exactTime} placement={"bottom"}>
-      <Typography className="text-gray-500 dark:text-dark-text-light text-sm cursor-default">
+      <Typography className="text-gray-500 dark:text-dark-text text-sm cursor-default">
         {relativeTime}
       </Typography>
     </Tooltip>

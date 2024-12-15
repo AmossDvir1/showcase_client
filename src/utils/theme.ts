@@ -4,9 +4,15 @@ export const colors = {
   primary: "#7573C5",
   secondary: "#c4fcff",
   mainBg: "#f2f4f7",
-  darkMainBg: "#0D0D12",
   lightText: "#ffffff",
-  darkText: "#000000",
+  lightPaper: "#ffffff",
+  darkPaper: "#1b2937",
+  darkPaperLight: "#424e5b",
+  darkPaperDark: "#0e1827",
+  darkMainBg: "#040a17",
+  darkText: "#d0d5db",
+  darkTextLight:"#e1e4e8",
+  
 };
 
 export const createMuiTheme = (
@@ -22,12 +28,11 @@ export const createMuiTheme = (
       ...(mode === "dark"
         ? {
             background: {
-              default: "#040a17",
-              paper: "#1e263c",
-              
+              default: colors.darkMainBg,
+              paper: colors.darkPaper,
             },
             text: {
-              primary: "#7573C5",
+              primary: colors.darkText,
             },
           }
         : //   Light theme:
@@ -39,7 +44,7 @@ export const createMuiTheme = (
             text: {
               primary: "#7573C5",
             },
-          }),
+          }),   
     },
     typography: {
       fontFamily: ["pop"].join(","),

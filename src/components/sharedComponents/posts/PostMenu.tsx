@@ -38,7 +38,7 @@ export const PostMenu: React.FC<PostMenuProps> = ({
   return (
     <div className="absolute right-3 top-2">
       <IconButton
-      className="dark:text-dark-text-light"
+      className="dark:text-dark-text"
         aria-label="more"
         id="long-button"
         aria-controls={open ? "long-menu" : undefined}

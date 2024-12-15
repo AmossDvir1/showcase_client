@@ -13,7 +13,7 @@ const NotificationDetails: React.FC<NotificationDetailsProps> = ({
   return (
     <div
       className={`max-w-md flex px-6 py-1.5
-      ${notification?.status === "unread" && "bg-neutral-100"}`}
+      ${notification?.status === "unread" && "bg-paper dark:bg-dark-paper"}`}
     >
       {notification?.type === "friendRequest" && (
         <FriendRequest notification={notification}></FriendRequest>

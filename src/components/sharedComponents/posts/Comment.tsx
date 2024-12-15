@@ -34,7 +34,7 @@ const Comment: React.FC<CommentProps> = ({ post, comment, media = [] }) => {
           {commentData.likes.length > 0 && <LikeIcon className="relative z-10 float-right bottom-5" users={commentData.likes}></LikeIcon>}
           <Typography>
             <Link
-              className="text-black dark:text-dark-text-light font-normal"
+              className="text-black dark:text-dark-text font-normal"
               underline="hover"
               component="button"
               onClick={onUserClick}

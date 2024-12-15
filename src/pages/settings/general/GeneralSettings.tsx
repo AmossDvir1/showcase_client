@@ -7,9 +7,7 @@ import { setThemeMode } from "../../../redux/slices/themeSlice";
 const GeneralSettings: React.FC = () => {
   const dispatch = useAppDispatch(); // Get dispatch function
 
-  const onThemeSwitchChange = (
-    checked: boolean
-  ) => {
+  const onThemeSwitchChange = (checked: boolean) => {
     dispatch(setThemeMode(checked ? "dark" : "light")); // Dispatch the action
   };
 
@@ -21,7 +19,7 @@ const GeneralSettings: React.FC = () => {
       <div className="flex items-center">
         <Typography>Dark Mode</Typography>
         <Switch
-           
+          isDarkLightStyling
           checked={useAppSelector((state) => state.theme.mode) === "dark"}
           onChange={(value: boolean) => onThemeSwitchChange(value)}
         />

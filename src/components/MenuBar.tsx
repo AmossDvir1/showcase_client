@@ -22,17 +22,27 @@ import ResponsiveComponent from "./responsiveness/ResponsiveComponent";
 import NotificationIcon from "./notifications/NotificationIcon";
 import useMediaQuery from "./responsiveness/useMediaQuery";
 import MiniProfilePicture from "./sharedComponents/profilePicture/MiniProfilePicture";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/rootReducer";
 import ChatDrawer from "./chat/ChatDrawer";
 import SwipeableMobileDrawer from "./sharedComponents/SwipeableMobileDrawer";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { Switch } from "./sharedComponents/Switch";
+import { setThemeMode } from "../redux/slices/themeSlice";
+import { colors } from "../utils/theme";
 
 interface Props {
   userSettings: string[];
 }
 
 export const MenuBar: React.FC<Props> = ({ userSettings }) => {
+  const dispatch = useAppDispatch();
+
+  const onThemeSwitchChange = (checked: boolean) => {
+    dispatch(setThemeMode(checked ? "dark" : "light")); // Dispatch the action
+  };
+  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark"
+
   const auth = useAuth();
   const isMobile = useMediaQuery(600);
   const isTablet = useMediaQuery(600);
@@ -163,21 +173,6 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
             // sx={{ flexGrow: 2 }}
           >
             <ResponsiveComponent breakpoint="md">
-              {/* {menuItems.map((page) => (
-                <MuiButton
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  disableRipple
-                  sx={{
-                    my: 1,
-                    color: "white",
-                    display: "block",
-                    fontWeight: "400",
-                  }}
-                >
-                  {page}
-                </MuiButton>
-              ))} */}
               <MuiButton
                 className="my-1 text-white block font-normal"
                 disableRipple
@@ -249,7 +244,11 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                     item
                     className="flex text-center justify-center cursor-default"
                   >
-                    <MenuItem disableRipple disabled={!auth.isActivated}>
+                    <MenuItem
+                      className="hover:bg-transparent"
+                      disableRipple
+                      disabled={!auth.isActivated}
+                    >
                       <Typography
                         onClick={() => navigate("/my-projects")}
                         textAlign="center"
@@ -261,7 +260,10 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                 </ResponsiveComponent>
 
                 <Grid item>
-                  <MenuItem className="cursor-default px-2" disableRipple>
+                  <MenuItem
+                    className="cursor-default px-2 hover:bg-transparent"
+                    disableRipple
+                  >
                     <Button
                       className="outline outline-1 w-0 min-w-0"
                       btnsize="xs"
@@ -284,7 +286,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                 {isMobile && (
                   <Grid item>
                     <MenuItem
-                      className="cursor-default lg:px-4 xs:pl-2 xs:pr-0"
+                      className="cursor-default lg:px-4 xs:pl-2 xs:pr-0 hover:bg-transparent"
                       disableRipple
                     >
                       <ChatDrawer onMenuBar></ChatDrawer>
@@ -294,16 +296,31 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                 {/* </ResponsiveComponent> */}
                 <Grid item>
                   <MenuItem
-                    className="cursor-default lg:px-4 xs:pl-2 xs:pr-0"
+                    className="cursor-default lg:px-4 xs:pl-2 xs:pr-0 hover:bg-transparent"
                     disableRipple
                   >
                     <NotificationIcon></NotificationIcon>
                   </MenuItem>
                 </Grid>
+                <Grid item>
+                  <MenuItem
+                    className="cursor-default lg:px-2 xs:pl-2 xs:pr-0 mx-0 hover:bg-transparent"
+                    disableRipple
+                  >
+                    <Switch
+                      size={isMobile ? "small" : "medium"}
+                      isDarkLightStyling
+                      onChange={(value: boolean) => onThemeSwitchChange(value)}
+                      checked={
+                        useAppSelector((state) => state.theme.mode) === "dark"
+                      }
+                    ></Switch>
+                  </MenuItem>
+                </Grid>
                 {userInfo && (
                   <Grid item>
                     <MenuItem
-                      className="cursor-default lg:px-4 xs:ml-0 xs:pr-0"
+                      className="cursor-default lg:px-4 xs:ml-0 xs:pr-0 hover:bg-transparent"
                       onClick={onOpenNavMenu}
                       disableRipple
                     >
@@ -328,6 +345,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                     color="primary"
                     onClick={onProfileClick}
                     sx={{
+                      color: isDarkMode? colors.darkText: colors.primary,
                       width: "80%",
                       height: "3rem",
                       fontSize: "1rem",
@@ -340,7 +358,12 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                     variant="outlined"
                     color="primary"
                     onClick={onSettingsClick}
-                    sx={{ width: "80%", height: "3rem", fontSize: "1rem" }}
+                    sx={{
+                      color: isDarkMode? colors.darkText: colors.primary,
+                      width: "80%",
+                      height: "3rem",
+                      fontSize: "1rem",
+                    }}
                   >
                     Settings
                   </Button>,
@@ -353,7 +376,12 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                       setAnchorElUser(null);
                       setMobileUserDrawerOpen(false);
                     }}
-                    sx={{ width: "80%", height: "3rem", fontSize: "1rem" }}
+                    sx={{
+                      color: isDarkMode? colors.darkText: colors.primary,
+                      width: "80%",
+                      height: "3rem",
+                      fontSize: "1rem",
+                    }}
                     startIcon={<LogoutIcon />}
                   >
                     Log Out

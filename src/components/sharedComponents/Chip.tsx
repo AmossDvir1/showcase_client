@@ -29,7 +29,7 @@ export const Chip: React.FC<Props> = ({
 
   return (
     <MuiChip
-      {...(onChipDelete ? { deleteIcon: <CancelIcon className="dark:text-dark-text-light dark:hover:text-dark-text-muted" /> } : {})}
+      {...(onChipDelete ? { deleteIcon: <CancelIcon className="dark:text-dark-text dark:hover:text-dark-text-muted" /> } : {})}
       onMouseDown={(event) => event.stopPropagation()}
       {...(onChipDelete ? { onDelete: (e) => onChipDelete(e, label) } : {})}
       key={id ?? ""}

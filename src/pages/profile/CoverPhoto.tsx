@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import ProfilePictureUploader from "../../components/sharedComponents/profilePicture/ProfilePictureUploader";
-import { Button, Menu, MenuItem, Paper } from "@mui/material";
+import { Menu, MenuItem, Paper } from "@mui/material";
 import SwipeableMobileDrawer from "../../components/sharedComponents/SwipeableMobileDrawer";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import PictureViewer from "./PictureViewer";
 import useMediaQuery from "../../components/responsiveness/useMediaQuery";
 import { convertPictureToURI } from "../../utils/utils";
+import { colors } from "../../utils/theme";
+import { useAppSelector } from "../../redux/hooks";
+import { Button } from "../../components/sharedComponents/Button";
 
 interface CoverPhotoProps {
   userProfile?: boolean;
@@ -26,6 +29,7 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({
   const [menuPosition, setMenuPosition] = useState([0, 0]); // State to save the position where you clicked
 
   const isMobile = useMediaQuery(600);
+  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
 
   const toggleDrawer = () => {
     setDrawerOpen((prev) => !prev);
@@ -120,12 +124,12 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({
             <Button
               fullWidth
               variant="outlined"
-              color="primary"
               onClick={onViewPictureClick}
               sx={{
                 width: "80%",
                 height: "3.5rem",
                 fontSize: "1rem",
+                color: isDarkMode ? colors.darkText : colors.primary,
               }}
             >
               View Picture
@@ -133,9 +137,13 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({
             <Button
               fullWidth
               variant="outlined"
-              color="primary"
               onClick={onAddPictureClick}
-              sx={{ width: "80%", height: "3.5rem", fontSize: "1rem" }}
+              sx={{
+                width: "80%",
+                height: "3.5rem",
+                fontSize: "1rem",
+                color: isDarkMode ? colors.darkText : colors.primary,
+              }}
               startIcon={<AddCircleIcon></AddCircleIcon>}
             >
               Upload a New Picture

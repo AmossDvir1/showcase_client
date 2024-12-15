@@ -29,7 +29,7 @@ const PostInput: React.FC<PostInputProps> = ({
         dir="auto"
         className="w-full dark:placeholder:text-neutral-400
                     placeholder:text-sm font-sans h-full dark:bg-dark-paper-light 
-                  dark:text-dark-text-light bg-slate-100 cursor-auto p-2 rounded-2xl border
+                  dark:text-dark-text bg-slate-100 cursor-auto p-2 rounded-2xl border
                   border-gray-300 focus:primary-2 focus:border-primary-400 resize-none
                     transition-all duration-300"
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
