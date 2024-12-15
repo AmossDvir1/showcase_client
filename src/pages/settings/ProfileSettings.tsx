@@ -118,9 +118,9 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
         variant="outlined"
         fullWidth
         value={bio}
-        inputProps={{className: "dark:text-dark-text-light"}}
+        inputProps={{className: "dark:text-dark-text"}}
         onChange={(e) => setBio(e.target.value)}
-        className="mb-6 dark:bg-dark-paper-light dark:text-dark-text-light"
+        className="mb-6 dark:bg-dark-paper-light dark:text-dark-text"
         placeholder="Tell us about yourself..."
       />
 
@@ -128,7 +128,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
       <FormControl fullWidth className="mb-6">
         <InputLabel>Relationship Status</InputLabel>
         <Select
-        className="dark:text-dark-text-light dark:border-white"
+        className="dark:text-dark-text"
           MenuProps={{
             disableScrollLock: true,
             autoFocus: false,

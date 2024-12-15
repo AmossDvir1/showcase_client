@@ -2,6 +2,7 @@
 
 body{
   @apply bg-main-bg;
+  transition: background 0.7s;
 }
 html.dark body {
   @apply bg-dark-main-bg;
@@ -56,3 +57,40 @@ textarea {
 input {
   --tw-ring-shadow: 0 0 #000 !important;
 } */
+
+div{
+  transition: background 0.7s ease;
+}
+span{
+  transition: background 0.7s ease;
+}
+button{
+  transition: background 0.7s ease;
+}
+h1{
+  transition: background 0.7s ease;
+}
+h2{
+  transition: background 0.7s ease;
+}
+h3{
+  transition: background 0.7s ease;
+}
+h4{
+  transition: background 0.7s ease;
+}
+h5{
+  transition: background 0.7s ease;
+}
+h6{
+  transition: background 0.7s ease;
+}
+svg{
+  transition: background 0.7s ease;
+}
+a{
+  transition: background 0.7s ease;
+}
+path{
+  transition: background 0.7s ease;
+}

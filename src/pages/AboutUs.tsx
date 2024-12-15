@@ -16,44 +16,50 @@ const AboutUs: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <Box className="bg-gray-100 py-16 max-h-full flex items-center justify-center">
+    <Box className="bg-paper dark:bg-dark-paper py-16 max-h-full flex items-center justify-center">
       <div className="px-4 md:px-8 flex flex-col items-center justify-center">
         {/* Header Section */}
         <Fade in timeout={1000}>
-          <Typography
-            variant="h1"
-            className="text-3xl md:text-5xl font-normal mb-8 text-gray-800 text-center"
-            gutterBottom
-          >
-            About{" "}
-            <Box component="div" className="inline text-primary font-medium">
-              Showcase
-            </Box>
-          </Typography>
+          <div>
+            <Typography
+              variant="h1"
+              className="text-3xl md:text-5xl font-normal mb-8 text-gray-800 text-center"
+              gutterBottom
+            >
+              About{" "}
+              <Box component="div" className="inline text-primary font-medium">
+                Showcase
+              </Box>
+            </Typography>
+          </div>
         </Fade>
         <Fade in timeout={1500}>
-          <Typography
-            variant="h3"
-            className="text-xl md:text-2xl font-medium mb-6 text-gray-700 text-center"
-            gutterBottom
-          >
-            Connecting Developers, Building the Future Together
-          </Typography>
+          <div>
+            <Typography
+              variant="h3"
+              className="text-xl md:text-2xl font-medium mb-6 text-gray-700 text-center"
+              gutterBottom
+            >
+              Connecting Developers, Building the Future Together
+            </Typography>
+          </div>
         </Fade>
         <Fade in timeout={2000}>
-          <Box className="md:max-w-[60%] max-w-[80%] mx-auto text-gray-600 mb-8 md:mb-8">
-            <Typography paragraph className="mb-4 text-base md:text-lg">
-              Showcase is more than just a platform; it's a movement designed to
-              empower developers worldwide. Our mission is to foster a global
-              community where creativity thrives, ideas converge, and
-              collaboration leads to innovation.
-            </Typography>
-            <Typography paragraph className="text-base md:text-lg">
-              With Showcase, you can share your work, inspire others, and find
-              the motivation to achieve your best. Join us as we redefine what's
-              possible in the tech world!
-            </Typography>
-          </Box>
+          <div>
+            <Box className="md:max-w-[60%] max-w-[80%] mx-auto text-gray-600 mb-8 md:mb-8">
+              <Typography paragraph className="mb-4 text-base md:text-lg">
+                Showcase is more than just a platform; it's a movement designed
+                to empower developers worldwide. Our mission is to foster a
+                global community where creativity thrives, ideas converge, and
+                collaboration leads to innovation.
+              </Typography>
+              <Typography paragraph className="text-base md:text-lg">
+                With Showcase, you can share your work, inspire others, and find
+                the motivation to achieve your best. Join us as we redefine
+                what's possible in the tech world!
+              </Typography>
+            </Box>
+          </div>
         </Fade>
 
         {/* Our Values Section */}
@@ -108,7 +114,7 @@ const AboutUs: React.FC = () => {
                         boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
                       },
                     }}
-                    className="flex flex-col items-center p-6"
+                    className="flex flex-col items-center p-6 bg-paper-light dark:bg-dark-paper-light"
                   >
                     <CardContent className="flex flex-col items-center">
                       <Typography
@@ -185,33 +191,35 @@ const AboutUs: React.FC = () => {
             </Typography>
           ) : (
             <Fade in timeout={3000}>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                component={Link}
-                to="/sign_up"
-                sx={{
-                  padding: "10px 20px",
-                  fontSize: "1.2rem",
-                  borderRadius: "8px",
-                  textTransform: "none",
-                  animation: "pulse 1.5s infinite",
-                  "@keyframes pulse": {
-                    "0%": {
-                      boxShadow: "0 0 0 0 rgba(117, 115, 197, 0.4)", // Primary color with transparency
+              <div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  component={Link}
+                  to="/sign_up"
+                  sx={{
+                    padding: "10px 20px",
+                    fontSize: "1.2rem",
+                    borderRadius: "8px",
+                    textTransform: "none",
+                    animation: "pulse 1.5s infinite",
+                    "@keyframes pulse": {
+                      "0%": {
+                        boxShadow: "0 0 0 0 rgba(117, 115, 197, 0.4)", // Primary color with transparency
+                      },
+                      "70%": {
+                        boxShadow: "0 0 10px 20px rgba(117, 115, 197, 0)", // Primary color with no transparency at 70%
+                      },
+                      "100%": {
+                        boxShadow: "0 0 0 0 rgba(117, 115, 197, 0)", // Reset to no shadow
+                      },
                     },
-                    "70%": {
-                      boxShadow: "0 0 10px 20px rgba(117, 115, 197, 0)", // Primary color with no transparency at 70%
-                    },
-                    "100%": {
-                      boxShadow: "0 0 0 0 rgba(117, 115, 197, 0)", // Reset to no shadow
-                    },
-                  },
-                }}
-              >
-                Join Our Community Today
-              </Button>
+                  }}
+                >
+                  Join Our Community Today
+                </Button>
+              </div>
             </Fade>
           )}
         </Box>

@@ -53,7 +53,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
     setIsExpanded(false);
 
     // Scroll the textarea to the top
-    if (textareaRef.current) {
+    if (textareaRef?.current?.scrollTop ) {
       textareaRef.current.scrollTop = 0;
     }
   };

@@ -140,7 +140,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
             <div className="flex items-end">
               <Tooltip title="Cancel">
                 <CancelIcon
-                  className="cursor-pointer mb-2 fill-primary hover:fill-primary-light dark:fill-dark-text-light"
+                  className="cursor-pointer mb-2 fill-primary hover:fill-primary-light dark:fill-dark-text"
                   onClick={onCancel}
                 ></CancelIcon>
               </Tooltip>
@@ -175,7 +175,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
               <div className="flex flex-row items-center">
                 <Typography>
                   <Link
-                    className="text-black dark:text-dark-text-light font-normal"
+                    className="text-black dark:text-dark-text font-normal"
                     underline="hover"
                     component="button"
                     onClick={onUserClick}
@@ -187,7 +187,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                 <ElapsedTimeLabel date={postData?.createdAt} />
               </div>
               <Typography
-                className="pt-3 text-slate-900 dark:text-dark-text-light font-light lg:text-base xs:text-sm text-wrap text-left"
+                className="pt-3 text-slate-900 dark:text-dark-text font-light lg:text-base xs:text-sm text-wrap text-left"
                 sx={{ unicodeBidi: "plaintext", overflowWrap: "anywhere" }}
               >
                 {value}
@@ -208,7 +208,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
               {likesCount > 0 && (
                 <div className="flex flex-row pt-5 items-center">
                   <LikeIcon users={postData?.likes}></LikeIcon>
-                  <Typography className="dark:text-dark-text-light text-primary pl-[3px] cursor-default">
+                  <Typography className="dark:text-dark-text text-primary pl-[3px] cursor-default">
                     {likesCount}
                   </Typography>
                 </div>
@@ -217,7 +217,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                 <div className="flex flex-row pt-5 items-center">
                   <Typography className="flex items-end pl-[3px] xs:text-sm lg:text-base cursor-pointer">
                     <Link
-                      className="text-black dark:text-dark-text-light"
+                      className="text-black dark:text-dark-text"
                       underline="hover"
                       component="button"
                       onClick={() => setShowCommentsOpen(!showCommentsOpen)}
@@ -283,7 +283,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                 InputProps={{
                   sx: { borderRadius: "100px", cursor: "default" },
                   inputProps: {
-                    className: "input-no-ring lg:text-sm xs:text-xs dark:bg-dark-paper-light dark:placeholder:text-neutral-400 dark:text-dark-text-light",
+                    className: "input-no-ring lg:text-sm xs:text-xs dark:bg-dark-paper-light dark:placeholder:text-neutral-400 dark:text-dark-text",
                     style: {
                       borderTopLeftRadius: "100px",
                       borderBottomLeftRadius: "100px",

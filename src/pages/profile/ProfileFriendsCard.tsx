@@ -86,7 +86,7 @@ const ProfileFriendsCard: React.FC<ProfileFriendsCardProps> = ({ userId }) => {
               )}
               <Typography component={"div"}>
                 <Link
-                  className="text-black dark:text-dark-text-light font-normal"
+                  className="text-black dark:text-dark-text font-normal"
                   underline="hover"
                   component="button"
                   onClick={() => onFriendClick(friend)}

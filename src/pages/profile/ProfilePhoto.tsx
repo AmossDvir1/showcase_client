@@ -8,6 +8,8 @@ import useMediaQuery from "../../components/responsiveness/useMediaQuery";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import PictureViewer from "./PictureViewer";
 import SwipeableMobileDrawer from "../../components/sharedComponents/SwipeableMobileDrawer";
+import { colors } from "../../utils/theme";
+import { useAppSelector } from "../../redux/hooks";
 
 interface ProfilePhotoProps {
   userProfile?: boolean;
@@ -24,7 +26,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [viewerOpen, setViewerOpen] = useState(false);
 
-
+  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
   const isMobile = useMediaQuery(600);
 
   const onMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -121,6 +123,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
                 width: "80%",
                 height: "3.5rem",
                 fontSize: "1rem",
+                color: isDarkMode ? colors.darkText : colors.primary,
               }}
             >
               View Picture
@@ -130,7 +133,12 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
               variant="outlined"
               color="primary"
               onClick={onAddPictureClick}
-              sx={{ width: "80%", height: "3.5rem", fontSize: "1rem" }}
+              sx={{
+                width: "80%",
+                height: "3.5rem",
+                fontSize: "1rem",
+                color: isDarkMode ? colors.darkText : colors.primary,
+              }}
               startIcon={<AddCircleIcon></AddCircleIcon>}
             >
               Upload a New Picture
