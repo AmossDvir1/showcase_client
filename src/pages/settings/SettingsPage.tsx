@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, Box, Divider } from '@mui/material';
 import Typography from '../../components/sharedComponents/Typography';
-import ProfileSettings from './ProfileSettings';
+import ProfileSettings from './profile/ProfileSettings';
 import { getUserSettings } from '../../controllers/userSettingsController/profileSettings/getUserSettings';
 import DeviceManagement from './security/DeviceManagement';
 import GeneralSettings from './general/GeneralSettings';

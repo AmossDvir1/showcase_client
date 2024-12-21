@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Collapse } from "@mui/material";
-import Typography from "./Typography";
+import Typography from "../sharedComponents/Typography";
 import MiniProfilePicture from "../sharedComponents/profilePicture/MiniProfilePicture";
 import { formatTimeShort } from "../../utils/utils";
 
@@ -30,11 +30,11 @@ const BubbleMessage: React.FC<BubbleMessageProps> = ({
       {isOwnMessage ? (
         <div className="flex flex-col items-end">
           <div
-            className="py-2 px-3 flex bg-[#c0bee9] rounded-[18px] max-w-[70%] w-fit"
+            className="py-2 px-3 flex bg-[#c0bee9] dark:bg-primary rounded-[18px] max-w-[70%] w-fit"
             onMouseOver={onMouseOver}
             onMouseOut={onMouseOut}
           >
-            <Typography sx={{overflowWrap:'anywhere'}} className="text-wrap text-sm">
+            <Typography sx={{overflowWrap:'anywhere'}} className="text-wrap text-sm font-normal dark:text-paper-light">
               {message.content}
             </Typography>
           </div>
@@ -54,7 +54,7 @@ const BubbleMessage: React.FC<BubbleMessageProps> = ({
           </div>
           <div className="flex flex-col items-start">
             <div
-              className="py-2 px-3 flex justify-start bg-gray-200 rounded-[18px] max-w-[70%] w-fit"
+              className="py-2 px-3 flex justify-start bg-gray-200 dark:bg-dark-paper-light rounded-[18px] max-w-[70%] w-fit"
               onMouseOver={onMouseOver}
               onMouseOut={onMouseOut}
             >

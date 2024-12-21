@@ -58,7 +58,7 @@ const ChipsSelector: React.FC<Props> = ({
   };
 
   return (
-    <div className="pt-12">
+    <div>
       <FormControl
         sx={{
           width: "100%",

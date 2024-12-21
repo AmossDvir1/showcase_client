@@ -12,6 +12,7 @@ import MiniProfilePicture from "../sharedComponents/profilePicture/MiniProfilePi
 import { RootState } from "../../redux/rootReducer";
 import ChatContacts from "./ChatContacts";
 import Typography from "../sharedComponents/Typography";
+import { useNavigate } from "react-router-dom";
 
 interface ChatDrawerProps {
   onMenuBar?: boolean;
@@ -19,6 +20,7 @@ interface ChatDrawerProps {
 
 const ChatDrawer: React.FC<ChatDrawerProps> = ({ onMenuBar = false }) => {
   const chatBottomRef = useRef(null);
+  const navigate = useNavigate();
   const [chatMenuOpen, setChatMenuOpen] = useState(false);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -29,6 +31,10 @@ const ChatDrawer: React.FC<ChatDrawerProps> = ({ onMenuBar = false }) => {
     setChatMenuOpen((previousOpen) => !previousOpen);
   };
 
+  const navigateToMessenger = () => {
+    navigate("/messenger");
+  }
+
   const open = Boolean(anchorEl) && chatMenuOpen;
 
   return (
@@ -37,7 +43,8 @@ const ChatDrawer: React.FC<ChatDrawerProps> = ({ onMenuBar = false }) => {
         <IconButton
           ref={chatBottomRef}
           className="px-1"
-          onClick={onOpenChatDrawer}
+          onClick={navigateToMessenger}
+          // onClick={onOpenChatDrawer}
         >
           <IoChatboxEllipses
             className="fill-primary w-5 h-5"

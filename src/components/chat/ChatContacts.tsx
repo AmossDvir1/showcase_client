@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import MiniProfilePicture from "../sharedComponents/profilePicture/MiniProfilePicture";
 import Typography from "../sharedComponents/Typography";
 
