@@ -13,11 +13,9 @@ import Typography from "../sharedComponents/Typography";
 
 interface ChatBodyProps {
   friend: UserDetails;
-  fullWidth?: boolean;
-  fullHeight?: boolean;
 }
 
-const ChatBody: React.FC<ChatBodyProps> = ({ friend, fullWidth=false, fullHeight=false }) => {
+const ChatBody: React.FC<ChatBodyProps> = ({ friend }) => {
   const friendName = `${friend.firstName} ${friend.lastName}`;
   const [inputString, setInputString] = useState("");
   const { socket } = useWebSocket();
