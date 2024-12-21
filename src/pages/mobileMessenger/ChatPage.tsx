@@ -23,7 +23,7 @@ const ChatPage: React.FC<ChatPageProps> = ({ friend, onBackToFriends }) => {
   };
 
   return (
-    <Dialog fullScreen className="h-[100vh]" open={true}>
+    <Dialog fullScreen className="h-[100svh]" open={true}>
         <Box className="flex items-center py-4 px-3 dark:bg-dark-paper-light bg-paper">
           <IconButton
             className="text-primary dark:text-paper"
@@ -48,8 +48,8 @@ const ChatPage: React.FC<ChatPageProps> = ({ friend, onBackToFriends }) => {
             </Link>
           </Typography>
         </Box>
-        <Box className="flex-1 overflow-auto ">
-          <ChatBody friend={friend} fullWidth fullHeight></ChatBody>
+        <Box className="flex-1 overflow-auto pb-[env(safe-area-inset-bottom)]">
+          <ChatBody friend={friend}></ChatBody>
         </Box>
     </Dialog>
   );
