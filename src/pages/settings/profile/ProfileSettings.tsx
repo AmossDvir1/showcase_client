@@ -7,15 +7,18 @@ import {
   FormControl,
   Box,
 } from "@mui/material";
-import Typography from "../../components/sharedComponents/Typography";
-import ChipsSelector from "../../components/sharedComponents/ChipsSelector";
-import { showToast } from "../../utils/toast";
-import { fetchTechnologiesInventory } from "../../controllers/technologiesController/fetchTechnologiesInventory";
-import { updateUserProfileSettings } from "../../controllers/userSettingsController/profileSettings/updateUserProfileSettings";
-import { Button } from "../../components/sharedComponents/Button";
+import Typography from "../../../components/sharedComponents/Typography";
+import ChipsSelector from "../../../components/sharedComponents/ChipsSelector";
+import { showToast } from "../../../utils/toast";
+import { fetchTechnologiesInventory } from "../../../controllers/technologiesController/fetchTechnologiesInventory";
+import { updateUserProfileSettings } from "../../../controllers/userSettingsController/profileSettings/updateUserProfileSettings";
+import { Button } from "../../../components/sharedComponents/Button";
 import WorkSettings from "./WorkSettings";
-import Loader from "../../components/sharedComponents/Loader";
-import CustomButton from "../../components/sharedComponents/CustomButton";
+import Loader from "../../../components/sharedComponents/Loader";
+import CustomButton from "../../../components/sharedComponents/CustomButton";
+
+import GeoSettings from "./GeoSettings";
+import { City, Country, State } from "react-country-state-city/dist/esm/types";
 
 interface ProfileSettingsProps {
   initialSettings?: IProfileSettings;
@@ -27,6 +30,7 @@ const defaultSettings = {
   relationshipStatus: "",
   technologies: [],
   work: [],
+  currentCity: { country: "", state: "", city: "" },
 };
 
 const ProfileSettings: React.FC<ProfileSettingsProps> = ({
@@ -38,6 +42,11 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
   const [workList, setWorkList] = useState<IWork[]>(
     initialSettings?.work ?? []
   );
+  const [currentCity, setCurrentCity] = useState<{
+    country: Country | string;
+    state: State | string;
+    city: City | string;
+  }>(initialSettings?.currentCity ?? { city: "", state: "", country: "" });
   const [relationshipStatus, setRelationshipStatus] = useState<string>(
     initialSettings?.relationshipStatus ?? ""
   );
@@ -80,6 +89,11 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
         bio,
         work: workList,
         relationshipStatus,
+        currentCity: {
+          city: currentCity.city.toString(),
+          state: currentCity.state.toString(),
+          country: currentCity.country.toString(),
+        },
       });
       showToast("Settings Saved Successfully", "Save Success", "success");
       return res.data;
@@ -94,6 +108,11 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
   const onSave = () => {
     updateProfileSettings();
   };
+  const locationList = {
+    country: currentCity.country,
+    state: currentCity.state,
+    city: currentCity.city,
+  };
 
   if (loading)
     return (
@@ -106,7 +125,10 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
     );
   return (
     <Box className="flex flex-col p-4 bg-gray-50 dark:bg-dark-paper rounded-md shadow-md">
-      <Typography variant="h5" className="mb-6 text-primary">
+      <Typography
+        variant="h5"
+        className="mb-6 text-primary flex items-center justify-center"
+      >
         Edit Profile Settings
       </Typography>
 
@@ -118,7 +140,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
         variant="outlined"
         fullWidth
         value={bio}
-        inputProps={{className: "dark:text-dark-text"}}
+        inputProps={{ className: "dark:text-dark-text" }}
         onChange={(e) => setBio(e.target.value)}
         className="mb-6 dark:bg-dark-paper-light dark:text-dark-text"
         placeholder="Tell us about yourself..."
@@ -128,7 +150,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
       <FormControl fullWidth className="mb-6">
         <InputLabel>Relationship Status</InputLabel>
         <Select
-        className="dark:text-dark-text"
+          className="dark:text-dark-text"
           MenuProps={{
             disableScrollLock: true,
             autoFocus: false,
@@ -145,6 +167,15 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
         </Select>
       </FormControl>
 
+      {/* Current city */}
+      <FormControl fullWidth className="mb-6">
+        <Typography className="text-lg">Current City</Typography>
+        <GeoSettings
+          currentCity={currentCity}
+          setCurrentCity={setCurrentCity}
+        />
+      </FormControl>
+
       <WorkSettings
         workList={workList}
         setWorkList={setWorkList}
@@ -152,9 +183,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
 
       {/* Programming Languages */}
       <FormControl fullWidth className="mb-6">
-        <div className="mb-2">
-          <InputLabel>Programming Languages</InputLabel>
-        </div>
+        <Typography className="mb-4 text-lg">Programming Languages</Typography>
 
         <ChipsSelector
           setSelectedChips={setSelectedTechnologies}

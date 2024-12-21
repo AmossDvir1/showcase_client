@@ -18,6 +18,7 @@ import AboutUs from "./pages/AboutUs";
 import { useAppSelector } from "./redux/hooks";
 import { useEffect } from "react";
 import { createMuiTheme } from "./utils/theme";
+import MobileMessenger from "./pages/mobileMessenger/MobileMessenger";
 
 const rootElement = document.getElementById("root");
 
@@ -62,6 +63,10 @@ const App = () => {
                     <Route
                       path="settings"
                       element={<SettingsPage></SettingsPage>}
+                    ></Route>
+                    <Route
+                      path="messenger"
+                      element={<MobileMessenger></MobileMessenger>}
                     ></Route>
                     <Route path="/:type/:urlName" element={<Profile />} />
                   </Route>

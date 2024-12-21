@@ -8,18 +8,20 @@ import {
   FormControl,
   IconButton,
 } from "@mui/material";
-import Typography from "../../components/sharedComponents/Typography";
+import Typography from "../../../components/sharedComponents/Typography";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { TextField } from "../../components/sharedComponents/TextField";
+import { TextField } from "../../../components/sharedComponents/TextField";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
-import { Switch } from "../../components/sharedComponents/Switch";
-import { extractMonthYear } from "../../utils/utils";
-import { Chip } from "../../components/sharedComponents/Chip";
-import useMediaQuery from "../../components/responsiveness/useMediaQuery";
+import { Switch } from "../../../components/sharedComponents/Switch";
+import { extractMonthYear } from "../../../utils/utils";
+import { Chip } from "../../../components/sharedComponents/Chip";
+import useMediaQuery from "../../../components/responsiveness/useMediaQuery";
+import { colors } from "../../../utils/theme";
+import WorkDialog from "./WorkDialog";
 interface WorkSettingsProps {
   workList: IWork[];
   setWorkList: React.Dispatch<React.SetStateAction<IWork[]>>;
@@ -41,7 +43,10 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const isMobile = useMediaQuery(600);
 
-  const openWorkDialog = () => setIsWorkDialogOpen(true);
+  const openNewWorkDialog = () => {
+    resetInputs();
+    setIsWorkDialogOpen(true);
+  };
   const closeWorkDialog = () => setIsWorkDialogOpen(false);
 
   const isAddButtonDisabled = (): boolean => {
@@ -61,7 +66,7 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
     setWorkPlaceInput(work.workPlace);
     setStartedAtInput(dayjs(work.startedAt));
     setPrimary(work.primary);
-    openWorkDialog();
+    setIsWorkDialogOpen(true);
     setRowIndexInEditMode(index);
     setIsEditMode(true);
   };
@@ -180,10 +185,11 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
               </Typography>
             )}
             <div className="flex flex-row justify-center items-center">
-              <div className="cursor-pointer" onClick={openWorkDialog}>
-              <Typography className="text-black text-sm">Add work</Typography></div>
+              <div className="cursor-pointer" onClick={openNewWorkDialog}>
+                <Typography className="text-black text-sm">Add work</Typography>
+              </div>
               <IconButton
-                onClick={openWorkDialog}
+                onClick={openNewWorkDialog}
                 disableRipple
                 disableTouchRipple
                 disableFocusRipple
@@ -195,88 +201,22 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
         </div>
       </FormControl>
       {/*  Add work dialog */}
-      <Dialog
-        open={isWorkDialogOpen}
-        onClose={closeWorkDialog}
-        fullScreen={isMobile}
-        fullWidth
-        disableScrollLock
-      >
-        <DialogTitle className="pt-20">Add Work</DialogTitle>
-        <DialogContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {/* First Column */}
-            <div className="flex flex-col">
-              <div className="flex flex-row my-3 md:my-4 items-center">
-                <Typography className="mr-6 min-w-[80px]">
-                  Job Title:
-                </Typography>
-                <TextField
-                  value={jobTitleInput}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setJobTitleInput(e.target.value)
-                  }
-                />
-              </div>
-              <div className="flex flex-row my-3 md:my-4 items-center">
-                <Typography className="mr-6 min-w-[80px]">At: </Typography>
-                <TextField
-                  value={workPlaceInput}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setWorkPlaceInput(e.target.value)
-                  }
-                />
-              </div>
-            </div>
-
-            {/* Second Column */}
-            <div className="flex flex-col justify-center items-center">
-              <div className="flex flex-row my-3 md:my-4 items-center">
-                <Typography className="mr-6 min-w-[80px]">
-                  Make Primary
-                </Typography>
-                <Switch
-                  checked={primary}
-                  onChange={(value) => setPrimary(value)}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Date Picker (spanning both columns) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div className="flex flex-col col-span-2 my-3 md:my-4">
-              <Typography className="w-full pb-3">Since: </Typography>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  className="flex w-full md:w-1/2"
-                  defaultValue={dayjs().startOf("month")}
-                  value={startedAtInput}
-                  onChange={(value: Dayjs | null) =>
-                    setStartedAtInput(
-                      value ? value.startOf("month") : dayjs().startOf("month")
-                    )
-                  }
-                  label="Month and Year"
-                  views={["month", "year"]}
-                />
-              </LocalizationProvider>
-            </div>
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeWorkDialog} color="primary">
-            Close
-          </Button>
-          <Button
-            onClick={() => (isEditMode ? onSaveChanges() : onAddWork())}
-            disabled={isAddButtonDisabled()}
-            color="primary"
-          >
-            {isEditMode ? "Save Changes" : "Add"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <WorkDialog
+        isOpen={isWorkDialogOpen}
+        jobTitleInput={jobTitleInput}
+        setJobTitleInput={setJobTitleInput}
+        workPlaceInput={workPlaceInput}
+        setWorkPlaceInput={setWorkPlaceInput}
+        primary={primary}
+        setPrimary={setPrimary}
+        startedAtInput={startedAtInput}
+        setStartedAtInput={setStartedAtInput}
+        closeDialog={closeWorkDialog}
+        onSaveChanges={onSaveChanges}
+        onAddWork={onAddWork}
+        isEditMode={isEditMode}
+        isAddButtonDisabled={isAddButtonDisabled}
+      ></WorkDialog>
     </div>
   );
 };

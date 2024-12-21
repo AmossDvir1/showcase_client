@@ -138,8 +138,9 @@ interface IWork {
   primary: boolean;
 }
 
-interface ILivingPlace {
+interface ICurrentCity {
   city: string;
+  state: string;
   country: string;
 }
 
@@ -148,8 +149,8 @@ interface IProfileSettings {
   bio?: string;
   work?: IWork[] | [];
   relationshipStatus?: string;
-  livingPlace?: ILivingPlace;
-  from?: ILivingPlace;
+  currentCity?: ICurrentCity;
+  from?: ICurrentCity;
 }
 
 interface IUserSettings {

@@ -50,12 +50,12 @@ const StyledButton = styled(Button, {
       ? "#ffffff"
       : "#ffffff", // Default text color
   border:
-    variant === "outlined" ? `2px solid ${theme.palette.primary.main}` : "none", // Default border
+    variant === "outlined" ? size === "small" ? `2px solid ${theme.palette.primary.main}`:`3px solid ${theme.palette.primary.main}` : "none", // Default border
   boxShadow: "none",
 
   "&:hover": {
     background: variant === "outlined" ? "transparent" : "#7573C5",
-    border: variant === "outlined" ? `2px solid #b2adff` : "none",
+    border: variant === "outlined" ? size === "small" ? "2px solid #b2adff" : "3px solid #b2adff" : "none",
     color:
       variant === "outlined"
         ? theme.palette.primary.main
