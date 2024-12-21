@@ -83,8 +83,12 @@ type DateTimeFormatOptions = {
 };
 
 const formatTime = (
-  timestamp: string
+  timestamp?: string
 ): { relativeTime: string; exactTime: string } => {
+  if (!timestamp) {
+    return { relativeTime: "", exactTime: "" };
+  }
+
   const now = new Date();
   const diff = now.getTime() - new Date(timestamp).getTime();
 
@@ -206,18 +210,21 @@ const getDeviceInfo = (): {
   };
 };
 
-const getDeviceImage = (deviceType: string, isDarkMode: boolean = false): string => {
+const getDeviceImage = (
+  deviceType: string,
+  isDarkMode: boolean = false
+): string => {
   switch (deviceType.toLowerCase()) {
     case "desktop":
-      return `/images/devices/${isDarkMode ? "darkMode/": ""}desktop.png`;
+      return `/images/devices/${isDarkMode ? "darkMode/" : ""}desktop.png`;
     case "laptop":
-      return `/images/devices/${isDarkMode ? "darkMode/": ""}laptop.png`;
+      return `/images/devices/${isDarkMode ? "darkMode/" : ""}laptop.png`;
     case "tablet":
-      return `/images/devices/${isDarkMode ? "darkMode/": ""}tablet.png`;
+      return `/images/devices/${isDarkMode ? "darkMode/" : ""}tablet.png`;
     case "mobile":
-      return `/images/devices/${isDarkMode ? "darkMode/": ""}mobile.png`;
+      return `/images/devices/${isDarkMode ? "darkMode/" : ""}mobile.png`;
     default:
-      return `/images/devices/${isDarkMode ? "darkMode/": ""}default.png`; // Optional default image
+      return `/images/devices/${isDarkMode ? "darkMode/" : ""}default.png`; // Optional default image
   }
 };
 

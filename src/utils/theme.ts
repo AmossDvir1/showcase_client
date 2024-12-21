@@ -12,6 +12,7 @@ export const colors = {
   darkMainBg: "#040a17",
   darkText: "#d0d5db",
   darkTextLight:"#e1e4e8",
+  hover: '#e9ecf2'
   
 };
 

@@ -81,7 +81,7 @@ const MiniProfilePicture: React.FC<MiniProfilePictureProps> = ({
       ) : (
           <Avatar
             username={userDetails?.firstName}
-            alt={userDetails.firstName?.toUpperCase() || ""}
+            alt={userDetails?.firstName?.toUpperCase() || ""}
             src="/static/images/avatar/1.jpg"
             className="bg-gradient-to-b from-rose-400 via-fuchsia-500 to-indigo-500"
             sx={{ width: circleSize, height: circleSize, fontSize: `${circleSize/2}px` }}

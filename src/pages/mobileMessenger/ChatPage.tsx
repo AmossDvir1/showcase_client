@@ -6,6 +6,7 @@ import MiniProfilePicture from "../../components/sharedComponents/profilePicture
 import Typography from "../../components/sharedComponents/Typography";
 import { useWebSocket } from "../../context/WebSocketContext";
 import { useNavigate } from "react-router-dom";
+import Dialog from "@mui/material/Dialog";
 
 interface ChatPageProps {
   friend: UserDetails;
@@ -22,32 +23,35 @@ const ChatPage: React.FC<ChatPageProps> = ({ friend, onBackToFriends }) => {
   };
 
   return (
-    <Box className="dark:bg-dark-paper-light bg-paper h-[100vh] z-[2000] overflow-y-hidden absolute w-[100vw] top-0">
-      <Box className="flex items-center py-4 px-3 ">
-        <IconButton className="text-primary dark:text-paper" onClick={onBackToFriends}>
-          <ArrowBackIcon />
-        </IconButton>
-        <div className="px-2">
-          <MiniProfilePicture
-            userDetails={friend}
-            active={onlineFriends.some((item) => item.id === friend.id)}
-          ></MiniProfilePicture>
-        </div>
-        <Typography component={"span"} className="pl-2">
-          <Link
-            className="dark:text-dark-text text-black font-normal"
-            underline="hover"
-            component="button"
-            onClick={onChatNameClick}
+    <Dialog fullScreen className="h-[100vh]" open={true}>
+        <Box className="flex items-center py-4 px-3 dark:bg-dark-paper-light bg-paper">
+          <IconButton
+            className="text-primary dark:text-paper"
+            onClick={onBackToFriends}
           >
-            {friendName}
-          </Link>
-        </Typography>
-      </Box>
-      <Box className="flex-1 overflow-auto ">
-        <ChatBody friend={friend} fullWidth fullHeight></ChatBody>
-      </Box>
-    </Box>
+            <ArrowBackIcon />
+          </IconButton>
+          <div className="px-2">
+            <MiniProfilePicture
+              userDetails={friend}
+              active={onlineFriends.some((item) => item.id === friend.id)}
+            ></MiniProfilePicture>
+          </div>
+          <Typography component={"span"} className="pl-2">
+            <Link
+              className="dark:text-dark-text text-black font-normal"
+              underline="hover"
+              component="button"
+              onClick={onChatNameClick}
+            >
+              {friendName}
+            </Link>
+          </Typography>
+        </Box>
+        <Box className="flex-1 overflow-auto ">
+          <ChatBody friend={friend} fullWidth fullHeight></ChatBody>
+        </Box>
+    </Dialog>
   );
 };
 

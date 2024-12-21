@@ -1,7 +1,6 @@
 import React from "react";
 import { styled, SwipeableDrawer } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useAppSelector } from "../../redux/hooks";
 
 const Puller = styled("div")(({ theme }) => ({
   width: 30,
@@ -27,7 +26,6 @@ const SwipeableMobileDrawer: React.FC<SwipeableMobileDrawerProps> = ({
   toggleDrawer,
   buttons,
 }) => {
-  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
 
   return (
     <SwipeableDrawer
@@ -66,6 +64,7 @@ const SwipeableMobileDrawer: React.FC<SwipeableMobileDrawerProps> = ({
       >
         {buttons.map((button, index) => (
           <div
+            key={index}
             style={{
               marginBottom: index === buttons.length - 1 ? "0px" : "20px",
               width: "100%",

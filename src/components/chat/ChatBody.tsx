@@ -158,13 +158,15 @@ const ChatBody: React.FC<ChatBodyProps> = ({ friend, fullWidth=false, fullHeight
   };
 
   return (
-    <Box className={`z-30 relative bg-paper-light dark:bg-dark-paper  rounded-lg shadow-md ${fullWidth? "w-full":'w-72'}
-     ${fullWidth? "h-[85vh]":'h-96'}  flex flex-col`}>
+    <Box className={`z-30 bg-paper-light dark:bg-dark-paper  rounded-lg shadow-md 
+        
+        
+      h-full flex flex-col`}>
       {/* Chat Messages Area */}
       <Box
         id="scrollableDiv"
         className={`flex ${
-          chatHistory?.length > 0 ? "flex-col-reverse" : "flex-col"
+          chatHistory?.length > 0 ? "flex-col-reverse" : "flex-col items-center justify-center"
         }  overflow-y-auto p-2 h-full`}
       >
         {chatHistory?.length > 0 ? (
@@ -206,7 +208,7 @@ const ChatBody: React.FC<ChatBodyProps> = ({ friend, fullWidth=false, fullHeight
               ></BubbleMessage>
             ))}
           </InfiniteScroll>
-        ) : (
+        ) : (loadingMoreMessages ? <div className=""><Loader size="md" /></div>:
           <Typography variant="body2" color="textSecondary">
             Start your conversation with {friendName}...
           </Typography>
@@ -221,7 +223,6 @@ const ChatBody: React.FC<ChatBodyProps> = ({ friend, fullWidth=false, fullHeight
           onSendMessage={onSendMessage}
           onTyping={onTyping}
           inputString={inputString}
-          isTyping={isUserTyping}
         />
       </Box>
     </Box>

@@ -9,14 +9,12 @@ interface ChatInputProps {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   inputString: string;
-  isTyping: boolean;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({
   onSendMessage,
   onTyping,
   inputString,
-  isTyping,
 }) => {
   return (
     <TextField
@@ -39,7 +37,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
           padding: "10px",
         },
         inputProps: {
-          className: "max-h-16 input-no-ring lg:text-sm xs:text-xs",
+          className: "max-h-16 input-no-ring lg:text-sm xs:text-xs text-black dark:text-dark-text-light",
           style: {
             borderTopLeftRadius: "8px",
             borderBottomLeftRadius: "8px",
