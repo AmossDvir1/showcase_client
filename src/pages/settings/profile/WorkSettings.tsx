@@ -1,26 +1,12 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  IconButton,
-} from "@mui/material";
+import { FormControl, IconButton } from "@mui/material";
 import Typography from "../../../components/sharedComponents/Typography";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { TextField } from "../../../components/sharedComponents/TextField";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
-import { Switch } from "../../../components/sharedComponents/Switch";
 import { extractMonthYear } from "../../../utils/utils";
 import { Chip } from "../../../components/sharedComponents/Chip";
-import useMediaQuery from "../../../components/responsiveness/useMediaQuery";
-import { colors } from "../../../utils/theme";
 import WorkDialog from "./WorkDialog";
 interface WorkSettingsProps {
   workList: IWork[];
@@ -41,7 +27,6 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
     null
   );
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
-  const isMobile = useMediaQuery(600);
 
   const openNewWorkDialog = () => {
     resetInputs();
@@ -120,7 +105,7 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
             {workList?.length > 0 ? (
               workList.map((work, index) => (
                 <div
-                  className="flex my-2 items-center justify-between hover:bg-gray-100 dark:hover:bg-dark-paper-light p-2 rounded transition duration-200"
+                  className="flex my-2 items-center justify-between hover:bg-hover dark:hover:bg-dark-paper-light p-2 rounded transition duration-200"
                   onMouseEnter={() => setHoveredRow(index)} // Set hovered row
                   onMouseLeave={() => setHoveredRow(null)} // Reset on leave
                   key={index}

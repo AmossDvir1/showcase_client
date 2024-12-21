@@ -283,7 +283,10 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                 InputProps={{
                   sx: { borderRadius: "100px", cursor: "default" },
                   inputProps: {
-                    className: "input-no-ring lg:text-sm xs:text-xs dark:bg-dark-paper-light dark:placeholder:text-neutral-400 dark:text-dark-text",
+                    className: `input-no-ring lg:text-sm xs:text-xs dark:bg-dark-paper-light
+                      dark:placeholder:text-neutral-400 dark:text-dark-text
+                      text-black 
+                      `,
                     style: {
                       borderTopLeftRadius: "100px",
                       borderBottomLeftRadius: "100px",

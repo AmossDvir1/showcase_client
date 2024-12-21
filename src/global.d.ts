@@ -157,3 +157,10 @@ interface IUserSettings {
   profile: IProfileSettings;
   security?: [];
 }
+
+
+interface ChatPreview{
+  friendId: string;
+  lastMessageAt: string;
+  lastMessageContent: string;
+}

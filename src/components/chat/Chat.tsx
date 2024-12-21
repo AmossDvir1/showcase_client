@@ -48,7 +48,7 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
     dispatch(toggleChatWindow(friend.id));
   };
 
-  return (
+  return ( isMobile ? <></>:
     <div className="relative flex z-30">
       <div ref={chatBottomRef} className="md:w-64 xs:w-30">
         <Button
@@ -110,8 +110,8 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
                   )}
                 </Box>
                 <Divider />
-
-                <ChatBody friend={friend}></ChatBody>
+                <div className="w-72 h-96 flex flex-col">
+                <ChatBody friend={friend}></ChatBody></div>
               </Collapse>
             </div>
           )}

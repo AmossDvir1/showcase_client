@@ -22,6 +22,7 @@ module.exports = {
         secondary: "#c4fcff",
         "main-bg": "#f2f4f7",
         'paper-light':'#fcfcfc',
+        'hover':"#e9ecf2",
         paper: "#f3f3f3",
         // Dark mode colors
         dark: {

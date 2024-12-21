@@ -27,7 +27,7 @@ const PostInput: React.FC<PostInputProps> = ({
     >
       <textarea
         dir="auto"
-        className="w-full dark:placeholder:text-neutral-400
+        className="w-full dark:placeholder:text-neutral-400 
                     placeholder:text-sm font-sans h-full dark:bg-dark-paper-light 
                   dark:text-dark-text bg-slate-100 cursor-auto p-2 rounded-2xl border
                   border-gray-300 focus:primary-2 focus:border-primary-400 resize-none

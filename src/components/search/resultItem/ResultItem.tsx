@@ -2,6 +2,7 @@ import { FC, RefObject, useEffect } from "react";
 import Profile from "./itemsTypes/Profile";
 import Post from "./itemsTypes/Post";
 import Project from "./itemsTypes/Project";
+import { colors } from "../../../utils/theme";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   onItemClick: (selectedIndex: number) => void;
@@ -40,11 +41,11 @@ const ResultItem: FC<Props> = ({
 
   return (
     <div
-      className="cursor-pointer hover:bg-gray-200 p-2"
+      className="cursor-pointer hover:bg-hover p-2"
       onMouseDown={() => onItemClick && onItemClick(index)}
       ref={containerRef}
       style={{
-        backgroundColor: isFocused ? "rgba(40,0,0,0.1)" : "",
+        backgroundColor: isFocused ? colors.hover : "",
       }}
       {...rest}
     >

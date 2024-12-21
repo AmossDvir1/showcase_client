@@ -1,6 +1,7 @@
 import { FC, RefObject } from "react";
 import Typography from "../../../sharedComponents/Typography";
 import SearchIcon from "@mui/icons-material/Search";
+import { colors } from "../../../../utils/theme";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   value: string;
@@ -19,11 +20,11 @@ const SearchValueItem: FC<Props> = ({
 }): JSX.Element => {
   return (
     <div
-      className="cursor-pointer hover:bg-gray-200 p-2 flex items-center"
+      className="cursor-pointer hover:bg-hover p-2 flex items-center"
       onMouseDown={() => onItemClick && onItemClick()}
       ref={containerRef}
       style={{
-        backgroundColor: isFocused ? "rgba(40,0,0,0.1)" : "",
+        backgroundColor: isFocused ? colors.hover : "",
       }}
     >
       <SearchIcon className="text-primary mr-2"></SearchIcon>
