@@ -169,6 +169,10 @@ const removeDuplicatesByProperty = <T, K extends keyof T>(
   });
 };
 
+const removeDuplicateValues = <T> (arr: T[]): T[] => {
+  return [...new Set(arr)]
+}
+
 const convertPictureToURI = (picStr: string) => {
   if (picStr === null) {
     return "";
@@ -243,4 +247,5 @@ export {
   extractMonthYear,
   getDeviceInfo,
   getDeviceImage,
+  removeDuplicateValues
 };
