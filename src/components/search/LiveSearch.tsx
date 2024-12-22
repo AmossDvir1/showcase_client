@@ -141,7 +141,7 @@ const LiveSearch = <T extends ResultsItem>({
             className="w-full bg-transparent rounded-full focus:outline-none p-[3px] active:outline-none"
             inputProps={{
               spellCheck: false,
-              autocomplete: 'off',
+              autoComplete: 'off',
               "aria-label": "search",
               className: "input-no-ring text-sm",
               style: {
@@ -232,7 +232,7 @@ const LiveSearch = <T extends ResultsItem>({
                     className="w-full bg-transparent rounded-full focus:outline-none"
                     inputProps={{
                       spellCheck: false,
-                      autocomplete: 'off',
+                      autoComplete: 'off',
                       "aria-label": "search",
                       style: {
                         borderRadius: "8px",

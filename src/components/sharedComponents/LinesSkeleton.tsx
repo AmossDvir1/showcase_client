@@ -18,7 +18,7 @@ const LinesSkeleton: React.FC<LinesSkeletonProps> = ({
       animation="wave"
       className={clsx("w-[40%]", className)}
       {...rest}
-    ></Skeleton>
+    />
   ) : (
     <div>
       {Array.from({ length: numOfLines }).map((_, index) => (
@@ -28,7 +28,7 @@ const LinesSkeleton: React.FC<LinesSkeletonProps> = ({
           className={clsx("", className)}
           style={{ width: getRandomWidth() }}
           {...rest}
-        ></Skeleton>
+        />
       ))}
     </div>
   );

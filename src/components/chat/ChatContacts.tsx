@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { addOpenChat } from "../../redux/slices/chats";
 
 const ChatContacts: React.FC = () => {
-  const { onlineFriends } = useWebSocket();
+  const { conversationsIds } = useWebSocket();
   
   const dispatch = useDispatch();
 
@@ -17,9 +17,9 @@ const ChatContacts: React.FC = () => {
 
   return (
     <div>
-      {onlineFriends?.length > 0 && onlineFriends?.map((friend) => (
+      {/* {conversations?.length > 0 && conversations?.map((friend) => (
         <div
-          key={friend.id}
+          key={friend.friendId}
           className="px-1 hover:bg-indigo-200 rounded-md flex flex-row items-center justify-start m-1 py-1"
           onClick={(e) => onAddChat(friend)}
         >
@@ -34,7 +34,7 @@ const ChatContacts: React.FC = () => {
             <Typography className="cursor-default text-sm">{`${friend.firstName} ${friend.lastName}`}</Typography>
           </div>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 };

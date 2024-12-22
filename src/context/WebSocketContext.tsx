@@ -9,7 +9,11 @@ import { io, Socket } from "socket.io-client";
 import { AppDispatch } from "../redux/store";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../redux/slices/notifications";
-import { removeDuplicatesById } from "../utils/utils";
+import {
+  removeDuplicatesById,
+  removeDuplicatesByProperty,
+  removeDuplicateValues,
+} from "../utils/utils";
 import { AUTHENTICATION_ERROR } from "../utils/constants";
 import { useAuth } from "./AuthContext";
 import { refreshToken } from "../controllers/auth/getValidRefereshToken";
@@ -22,12 +26,14 @@ import { CustomSocket } from "../types/socket";
 // Define the context
 interface WebSocketContextType {
   socket: Socket | null;
-  onlineFriends: UserDetails[];
+  // onlineFriends: UserDetails[];
+  conversationsIds: string[];
 }
 
 const WebSocketContext = createContext<WebSocketContextType>({
   socket: null,
-  onlineFriends: [],
+  // onlineFriends: [],
+  conversationsIds: [],
 });
 
 export const useWebSocket = () => useContext(WebSocketContext);
@@ -36,7 +42,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [onlineFriends, setOnlineFriends] = useState<UserDetails[]>([]);
+  const [conversationsIds, setConversationsIds] = useState<string[]>([]);
   const { isAuthenticated, isActivated, setAccessToken } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -79,27 +85,23 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
         dispatch(addNotification(data));
       });
 
-      newSocket.on("onlineFriends", (friends) => {
-        setOnlineFriends(removeDuplicatesById(friends));
+      newSocket.on("conversations", (conversationsIds: string[]) => {
+        setConversationsIds(removeDuplicateValues(conversationsIds));
       });
 
-      newSocket.on("friendOnline", (newFriend) => {
-        const { friendOnline } = newFriend;
-        setOnlineFriends((prev) =>
-          removeDuplicatesById([...prev, friendOnline])
+      newSocket.on("friendOnline", (newConv: string) => {
+        setConversationsIds((prev) => removeDuplicateValues([...prev, newConv]));
+      });
+
+      newSocket.on("friendOffline", (offlineConv: string) => {
+        setConversationsIds(
+          (prev) => (prev = prev.filter((conv) => conv !== offlineConv))
         );
       });
 
-      newSocket.on("friendOffline", (newFriend) => {
-        const { friendOffline } = newFriend;
-        setOnlineFriends((prev) =>
-          prev.filter((friend) => friend.id !== friendOffline.id)
-        );
-      });
-
-      newSocket.on('authError', async (data) => {
+      newSocket.on("authError", async (data) => {
         console.error(data.message);
-      
+
         // Attempt to refresh the token via HTTP API
         const refreshTokenData = await refreshToken(); // Implement this based on your API
         const accessToken = refreshTokenData?.accessToken;
@@ -114,7 +116,9 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
           newSocket.auth.sessionId = sessionId; // Update token in auth
           newSocket.connect(); // Reconnect the WebSocket
         } else {
-          console.error("Failed to refresh token. User needs to re-authenticate.");
+          console.error(
+            "Failed to refresh token. User needs to re-authenticate."
+          );
         }
       });
 
@@ -145,7 +149,9 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [isAuthenticated, establishSocketConnection]);
 
   return (
-    <WebSocketContext.Provider value={{ socket, onlineFriends }}>
+    <WebSocketContext.Provider
+      value={{ socket, /*onlineFriends*/ conversationsIds }}
+    >
       {children}
     </WebSocketContext.Provider>
   );

@@ -158,9 +158,15 @@ interface IUserSettings {
   security?: [];
 }
 
+interface LastMessage {
+  content: string;
+  createdAt: Date | null;
+}
 
-interface ChatPreview{
+interface ChatPreview {
   friendId: string;
-  lastMessageAt: string;
-  lastMessageContent: string;
+  chatId: string;
+  lastMessage: LastMessage;
+  friendDetails: UserDetails;
+  isOnline: boolean;
 }

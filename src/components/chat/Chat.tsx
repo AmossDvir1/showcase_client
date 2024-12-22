@@ -33,7 +33,7 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
 
-  const { onlineFriends } = useWebSocket();
+  // const { onlineFriends } = useWebSocket();
 
   const onChatNameClick = () => {
     navigate(`/profile/${friend.urlMapping}`);
@@ -90,7 +90,7 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
                 <Box className="flex items-center justify-between p-2 bg-indigo-100 dark:bg-dark-paper-light rounded-t-lg">
                   <MiniProfilePicture
                     userDetails={friend}
-                    active={onlineFriends.some((item) => item.id === friend.id)}
+                    // active={onlineFriends.some((item) => item.id === friend.id)}
                   ></MiniProfilePicture>
 
                   <Typography component={"span"}>
