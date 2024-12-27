@@ -11,8 +11,6 @@ import { useDispatch } from "react-redux";
 import { addNotification } from "../redux/slices/notifications";
 import {
   removeDuplicatesById,
-  removeDuplicatesByProperty,
-  removeDuplicateValues,
 } from "../utils/utils";
 import { AUTHENTICATION_ERROR } from "../utils/constants";
 import { useAuth } from "./AuthContext";
@@ -27,7 +25,7 @@ import { CustomSocket } from "../types/socket";
 interface WebSocketContextType {
   socket: Socket | null;
   // onlineFriends: UserDetails[];
-  conversationsIds: string[];
+  conversationsIds: ConversationId[];
 }
 
 const WebSocketContext = createContext<WebSocketContextType>({
@@ -42,7 +40,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [conversationsIds, setConversationsIds] = useState<string[]>([]);
+  const [conversationsIds, setConversationsIds] = useState<ConversationId[]>([]);
   const { isAuthenticated, isActivated, setAccessToken } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -85,15 +83,15 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
         dispatch(addNotification(data));
       });
 
-      newSocket.on("conversations", (conversationsIds: string[]) => {
-        setConversationsIds(removeDuplicateValues(conversationsIds));
+      newSocket.on("conversations", (conversationsIds: ConversationId[]) => {
+        setConversationsIds(removeDuplicatesById(conversationsIds));
       });
 
-      newSocket.on("friendOnline", (newConv: string) => {
-        setConversationsIds((prev) => removeDuplicateValues([...prev, newConv]));
+      newSocket.on("friendOnline", (newConv: ConversationId) => {
+        setConversationsIds((prev) => removeDuplicatesById([...prev, newConv]));
       });
 
-      newSocket.on("friendOffline", (offlineConv: string) => {
+      newSocket.on("friendOffline", (offlineConv: ConversationId) => {
         setConversationsIds(
           (prev) => (prev = prev.filter((conv) => conv !== offlineConv))
         );

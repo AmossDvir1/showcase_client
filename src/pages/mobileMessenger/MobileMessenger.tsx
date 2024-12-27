@@ -18,17 +18,32 @@ const MobileMessenger: React.FC = () => {
     ChatPreview[]
   >([]);
 
+  const sortConversations = (conversations: ChatPreview[]): ChatPreview[] => {
+    return conversations.sort((a, b) => {
+      // Online friends come first
+      if (a.isOnline && !b.isOnline) return -1;
+      if (!a.isOnline && b.isOnline) return 1;
+  
+      // Sort by last message timestamp (most recent first)
+      const dateA = a.lastMessage.createdAt ? new Date(a.lastMessage.createdAt).getTime() : 0;
+      const dateB = b.lastMessage.createdAt ? new Date(b.lastMessage.createdAt).getTime() : 0;
+  
+      return dateB - dateA;
+    });
+  };
+
   useEffect(() => {
     const fetchConvsDetails = async () => {
       setLoadingPreviews(true);
       // Fetch the latest conversation previews
       const previews = await getConversationsPreviews();
-      setConversationsPreviews(previews);
+      const sortedPreviews = sortConversations(previews);
+      setConversationsPreviews(sortedPreviews);
       setLoadingPreviews(false);
     };
   
     fetchConvsDetails();
-  }, [conversationsIds, activeChat]);
+  });
 
   const handleFriendClick = (chat: ChatPreview) => {
     setActiveChat(chat);
@@ -38,12 +53,10 @@ const MobileMessenger: React.FC = () => {
     setActiveChat(null);
   };
 
-  if (!isMobile) return <></>;
-
   return (
     <Box
-      className={`w-full overflow-x-hidden pt-4  ${
-        isDarkMode ? "dark:bg-dark-paper-light" : "bg-white"
+      className={`w-full sm:flex sm:justify-center overflow-x-hidden ${
+        isDarkMode ? "dark:bg-dark-main-bg" : "bg-main-bg"
       }`}
     >
       <Slide
@@ -52,7 +65,7 @@ const MobileMessenger: React.FC = () => {
         mountOnEnter
         unmountOnExit
       >
-        <Box className="w-full absolute">
+        <Box className="w-full sm:flex sm:justify-center absolute sm:static">
           <FriendsList
             numberOfChats={conversationsIds.length}
             onFriendClick={handleFriendClick}

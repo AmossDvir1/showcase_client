@@ -27,7 +27,7 @@ const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
 }) => {
   const primaryWork = work?.find((work) => work.primary);
   return (
-    <div className="bg-[#fcfcfc] dark:bg-dark-paper shadow-lg border-zinc-200 border-solid border-[1px] p-4 rounded-lg h-full flex flex-col">
+    <div className="bg-paper-light dark:bg-dark-paper shadow-lg border-zinc-200 border-solid border-[1px] p-4 rounded-lg h-full flex flex-col">
       <div className="mb-4 flex items-center">
         <FavoriteIcon className="dark:text-gray-400 text-gray-400 mr-2" />
         <Typography className="dark:text-black text-black">

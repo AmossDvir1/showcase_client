@@ -11,6 +11,8 @@ import SearchValueItem from "./resultItem/itemsTypes/SearchValueItem";
 import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import Loader from "../sharedComponents/Loader";
+import { useAppSelector } from "../../redux/hooks";
+import { colors } from "../../utils/theme";
 
 interface Props<T> {
   results?: T[];
@@ -29,6 +31,7 @@ const LiveSearch = <T extends ResultsItem>({
 }: Props<T>): JSX.Element => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
 
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const resultContainer = useRef<HTMLDivElement>(null);
@@ -141,22 +144,23 @@ const LiveSearch = <T extends ResultsItem>({
             className="w-full bg-transparent rounded-full focus:outline-none p-[3px] active:outline-none"
             inputProps={{
               spellCheck: false,
-              autoComplete: 'off',
+              autoComplete: "off",
               "aria-label": "search",
-              className: "input-no-ring text-sm",
+              className:
+                "input-no-ring text-sm bg-paper-light dark:bg-dark-paper-light",
               style: {
                 borderRadius: "100px",
                 paddingTop: 0,
                 paddingBottom: 0,
                 height: "28px",
-                color:'black'
+                color: isDarkMode ? colors.darkTextLight : "black",
               },
             }}
           />
         </div>
 
         {showResults && value && value.length > 0 && (
-          <div className="absolute mt-1 w-full py-2 bg-white shadow-lg rounded-2xl max-h-96 overflow-y-auto z-10">
+          <div className="outline-1 bg-paper outline outline-dark-text-muted absolute mt-1 w-full py-2 dark:bg-dark-paper-dark shadow-lg rounded-2xl max-h-96 overflow-y-auto z-10">
             {showResults &&
               results?.length > 0 &&
               results?.map((res, index) => (
@@ -173,7 +177,8 @@ const LiveSearch = <T extends ResultsItem>({
               value?.length > 0 &&
               (loading ? (
                 <div className="flex items-center justify-center">
-                <Loader size="sm"></Loader></div>
+                  <Loader size="sm"></Loader>
+                </div>
               ) : (
                 <SearchValueItem
                   isFocused={results.length === focusedIndex}
@@ -223,16 +228,17 @@ const LiveSearch = <T extends ResultsItem>({
                 exit: 500, // Closing duration
               }}
             >
-              <div className="bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 p-[3px] rounded-lg shadow-lg">
-                <div className="bg-white rounded-lg shadow-lg">
+              <div className=" bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 p-[3px] rounded-lg shadow-lg">
+                <div className="bg-white dark:bg-dark-paper-dark rounded-lg shadow-lg">
                   <InputBase
                     value={value}
                     onChange={handleChange}
                     placeholder="Search..."
                     className="w-full bg-transparent rounded-full focus:outline-none"
                     inputProps={{
+                      className: "dark:bg-dark-paper-light",
                       spellCheck: false,
-                      autoComplete: 'off',
+                      autoComplete: "off",
                       "aria-label": "search",
                       style: {
                         borderRadius: "8px",
@@ -241,7 +247,7 @@ const LiveSearch = <T extends ResultsItem>({
                     }}
                   />
                   {showResults && value && value.length > 0 && (
-                    <div className="mt-2 py-2 bg-white shadow-lg rounded-2xl max-h-[30rem] overflow-y-auto z-10">
+                    <div className="mt-2 py-2 bg-white dark:bg-dark-paper-dark shadow-lg rounded-2xl max-h-[30rem] overflow-y-auto z-10">
                       {results?.length > 0 &&
                         results.map((res, index) => (
                           <ResultItem

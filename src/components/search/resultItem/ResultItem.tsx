@@ -41,7 +41,7 @@ const ResultItem: FC<Props> = ({
 
   return (
     <div
-      className="cursor-pointer hover:bg-hover p-2"
+      className="cursor-pointer bg-paper hover:bg-hover dark:hover:bg-dark-paper dark:bg-dark-paper-dark p-2"
       onMouseDown={() => onItemClick && onItemClick(index)}
       ref={containerRef}
       style={{
