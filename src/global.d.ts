@@ -170,3 +170,6 @@ interface ChatPreview {
   friendDetails: UserDetails;
   isOnline: boolean;
 }
+interface ConversationId {
+  id: string | number;
+}

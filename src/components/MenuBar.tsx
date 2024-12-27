@@ -41,7 +41,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
   const onThemeSwitchChange = (checked: boolean) => {
     dispatch(setThemeMode(checked ? "dark" : "light")); // Dispatch the action
   };
-  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark"
+  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
 
   const auth = useAuth();
   const isMobile = useMediaQuery(600);
@@ -121,7 +121,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <MenuIcon />
+              <MenuIcon className="dark:text-dark-text-light text-primary" />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -283,16 +283,16 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                 </Grid>
 
                 {/* Messaging */}
-                {isMobile && (
-                  <Grid item>
-                    <MenuItem
-                      className="cursor-default lg:px-4 xs:pl-2 xs:pr-0 hover:bg-transparent"
-                      disableRipple
-                    >
-                      <ChatDrawer onMenuBar></ChatDrawer>
-                    </MenuItem>
-                  </Grid>
-                )}
+
+                <Grid item>
+                  <MenuItem
+                    className="cursor-default lg:px-4 xs:pl-2 xs:pr-0 hover:bg-transparent"
+                    disableRipple
+                  >
+                    <ChatDrawer onMenuBar></ChatDrawer>
+                  </MenuItem>
+                </Grid>
+
                 {/* </ResponsiveComponent> */}
                 <Grid item>
                   <MenuItem
@@ -345,7 +345,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                     color="primary"
                     onClick={onProfileClick}
                     sx={{
-                      color: isDarkMode? colors.darkText: colors.primary,
+                      color: isDarkMode ? colors.darkText : colors.primary,
                       width: "80%",
                       height: "3rem",
                       fontSize: "1rem",
@@ -359,7 +359,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                     color="primary"
                     onClick={onSettingsClick}
                     sx={{
-                      color: isDarkMode? colors.darkText: colors.primary,
+                      color: isDarkMode ? colors.darkText : colors.primary,
                       width: "80%",
                       height: "3rem",
                       fontSize: "1rem",
@@ -377,7 +377,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                       setMobileUserDrawerOpen(false);
                     }}
                     sx={{
-                      color: isDarkMode? colors.darkText: colors.primary,
+                      color: isDarkMode ? colors.darkText : colors.primary,
                       width: "80%",
                       height: "3rem",
                       fontSize: "1rem",

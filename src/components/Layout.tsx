@@ -27,9 +27,9 @@ const Layout: React.FC<RouteProps & LayoutProps> = ({ withMenu = true }) => {
       <Box className="xs:mx-[0rem] sm:mx-[2rem] md:mx-[2rem] lg:mx-[2rem] 2xl:mx-[17rem] my-[2.5rem]">
         <Outlet />
       </Box>
-      <ProtectedComponent>
+      {/* <ProtectedComponent>
         <BottomBar />
-      </ProtectedComponent>
+      </ProtectedComponent> */}
     </>
   );
 };

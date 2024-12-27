@@ -4,6 +4,7 @@ import MiniProfilePicture from "../../components/sharedComponents/profilePicture
 import LinesSkeleton from "../../components/sharedComponents/LinesSkeleton";
 import { formatTime } from "../../utils/utils";
 import { Skeleton } from "@mui/material";
+import useMediaQuery from "../../components/responsiveness/useMediaQuery";
 
 interface FriendListProps {
   onFriendClick: (friend: ChatPreview) => void;
@@ -92,8 +93,9 @@ const FriendsList: React.FC<FriendListProps> = ({
   onFriendClick,
   numberOfChats,
 }) => {
+  const isMobile = useMediaQuery(500)
   return (
-    <div className="overflow-auto p-4 bg-main-bg dark:bg-dark-paper-light">
+    <div className="pt-12 sm:pt-24 sm:w-[50vw] overflow-auto p-4 bg-paper-light sm:rounded-xl dark:bg-dark-paper-light">
       <Typography variant="h5" className="mb-4 dark:text-paper-light">
         Messaging
       </Typography>

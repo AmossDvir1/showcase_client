@@ -13,19 +13,14 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const SearchValueItem: FC<Props> = ({
   value,
-  index,
   containerRef,
-  isFocused,
   onItemClick,
 }): JSX.Element => {
   return (
     <div
-      className="cursor-pointer hover:bg-hover p-2 flex items-center"
+      className="cursor-pointer bg-paper hover:bg-hover dark:bg-dark-paper-dark dark:hover:bg-dark-paper p-2 flex items-center"
       onMouseDown={() => onItemClick && onItemClick()}
       ref={containerRef}
-      style={{
-        backgroundColor: isFocused ? colors.hover : "",
-      }}
     >
       <SearchIcon className="text-primary mr-2"></SearchIcon>
 
