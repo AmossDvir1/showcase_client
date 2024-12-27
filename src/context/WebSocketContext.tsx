@@ -93,7 +93,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
       newSocket.on("friendOffline", (offlineConv: ConversationId) => {
         setConversationsIds(
-          (prev) => (prev = prev.filter((conv) => conv !== offlineConv))
+          (prev) => (removeDuplicatesById(prev.filter((conv) => conv.id !== offlineConv.id)))
         );
       });
 
