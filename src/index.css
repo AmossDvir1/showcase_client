@@ -64,33 +64,12 @@ div{
 span{
   transition: background 0.7s ease;
 }
-button{
-  transition: background 0.7s ease;
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px rgba(117, 117, 117, 0.3) inset;
+  -webkit-text-fill-color: default;
+
 }
-h1{
-  transition: background 0.7s ease;
-}
-h2{
-  transition: background 0.7s ease;
-}
-h3{
-  transition: background 0.7s ease;
-}
-h4{
-  transition: background 0.7s ease;
-}
-h5{
-  transition: background 0.7s ease;
-}
-h6{
-  transition: background 0.7s ease;
-}
-svg{
-  transition: background 0.7s ease;
-}
-a{
-  transition: background 0.7s ease;
-}
-path{
-  transition: background 0.7s ease;
+input {
+  color-scheme: dark;
 }

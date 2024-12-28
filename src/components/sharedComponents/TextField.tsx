@@ -57,12 +57,14 @@ export const TextField: React.FC<Props> = ({
             !isValid
               ? "ring-red-700 hover:ring-2"
               : "focus:ring-inset focus:ring-indigo-600 hover:ring-indigo-400"
-          }  ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 sm:text-sm sm:leading-6 `}
+          }  ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 sm:text-sm sm:leading-6 autofill:bg-black`}
           placeholder={placeholder ?? ""}
           onBlur={(e) =>
             validation && setIsValid(!!validation(e.currentTarget.value))
           }
+          
           onChange={onChange}
+
           {...rest}
         />
       </div>

@@ -18,6 +18,15 @@ const MobileMessenger: React.FC = () => {
     ChatPreview[]
   >([]);
 
+  const fetchConvsDetails = async () => {
+    setLoadingPreviews(true);
+    // Fetch the latest conversation previews
+    const previews = await getConversationsPreviews();
+    const sortedPreviews = sortConversations(previews);
+    setConversationsPreviews(sortedPreviews);
+    setLoadingPreviews(false);
+  };
+
   const sortConversations = (conversations: ChatPreview[]): ChatPreview[] => {
     return conversations.sort((a, b) => {
       // Online friends come first
@@ -33,17 +42,8 @@ const MobileMessenger: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchConvsDetails = async () => {
-      setLoadingPreviews(true);
-      // Fetch the latest conversation previews
-      const previews = await getConversationsPreviews();
-      const sortedPreviews = sortConversations(previews);
-      setConversationsPreviews(sortedPreviews);
-      setLoadingPreviews(false);
-    };
-  
     fetchConvsDetails();
-  });
+  }, [conversationsIds]);
 
   const handleFriendClick = (chat: ChatPreview) => {
     setActiveChat(chat);
@@ -51,6 +51,7 @@ const MobileMessenger: React.FC = () => {
 
   const handleBackToFriends = () => {
     setActiveChat(null);
+    fetchConvsDetails();
   };
 
   return (

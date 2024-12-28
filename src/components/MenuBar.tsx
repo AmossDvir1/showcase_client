@@ -16,7 +16,7 @@ import { Button as MuiButton } from "@mui/material/";
 import { Button } from "./sharedComponents/Button";
 import { CreateProjectDialog } from "../pages/createProject/CreateProjectDialog";
 import { useNavigate } from "react-router-dom";
-import ProtectedComponent from "./sharedComponents/ProtectedComponent";
+import ProtectedComponent from "./ProtectedComponent";
 import Search from "./search/Search";
 import ResponsiveComponent from "./responsiveness/ResponsiveComponent";
 import NotificationIcon from "./notifications/NotificationIcon";
@@ -30,6 +30,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Switch } from "./sharedComponents/Switch";
 import { setThemeMode } from "../redux/slices/themeSlice";
 import { colors } from "../utils/theme";
+import CustomButton from "./sharedComponents/CustomButton";
 
 interface Props {
   userSettings: string[];
@@ -195,9 +196,16 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                 <Typography textAlign="center">{"About Us"}</Typography>
               </MuiButton>
             </ResponsiveComponent>
-            <div className="pl-3 xs:max-sm:pl-0 xs:max-sm:w-full">
-              <Search></Search>
-            </div>
+            <ProtectedComponent checkActivation>
+              <Grid
+                item
+                className="flex text-center justify-center cursor-default"
+              >
+                <div className="pl-3 xs:max-sm:pl-0 xs:max-sm:w-full">
+                  <Search></Search>
+                </div>
+              </Grid>
+            </ProtectedComponent>
           </Box>
 
           <Box sx={{ flexGrow: 0, position: "absolute", right: "0px" }}>
@@ -209,30 +217,54 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                     item
                     className="flex text-center justify-center cursor-default"
                   >
-                    <MenuItem disableRipple>
-                      <MuiButton
+                    <MenuItem className="cursor-default hover:bg-transparent mx-2 md:mx-4" 
+                    disableRipple disableGutters>
+                      <Switch
+                        size={isMobile ? "small" : "medium"}
+                        isDarkLightStyling
+                        onChange={(value: boolean) =>
+                          onThemeSwitchChange(value)
+                        }
+                        checked={
+                          useAppSelector((state) => state.theme.mode) === "dark"
+                        }
+                      />
+                    </MenuItem>
+                  </Grid>
+                  <Grid
+                    item
+                    className="flex text-center justify-center cursor-default"
+                  >
+                    <MenuItem
+                      className="cursor-default hover:bg-transparent mx-2 md:mx-4"
+                      disableRipple
+                      disableGutters
+                    >
+                      <CustomButton
+                        variant="outlined"
+                        size={isMobile ? "small" : "medium"}
+                        className="py-1"
                         onClick={() => navigate("/login")}
                         disableRipple
-                        sx={{
-                          my: 2,
-                          color: "white",
-                          display: "block",
-                          fontWeight: "400",
-                        }}
                       >
                         Login
-                      </MuiButton>
+                      </CustomButton>
                     </MenuItem>
                   </Grid>
                   <Grid item>
-                    <MenuItem className="cursor-default" disableRipple>
-                      <Button
-                        round
-                        btnsize={isMobile ? "xs" : "sm"}
+                    <MenuItem
+                      className="cursor-default hover:bg-transparent mx-2 md:mx-4"
+                      disableRipple
+                      disableGutters
+                    >
+                      <CustomButton
+                        className="py-2"
+                        disableRipple
+                        size={isMobile ? "small" : "medium"}
                         onClick={() => navigate("/sign_up")}
                       >
                         sign up
-                      </Button>
+                      </CustomButton>
                     </MenuItem>
                   </Grid>
                 </Grid>
@@ -314,7 +346,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                       checked={
                         useAppSelector((state) => state.theme.mode) === "dark"
                       }
-                    ></Switch>
+                    />
                   </MenuItem>
                 </Grid>
                 {userInfo && (
