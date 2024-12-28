@@ -4,7 +4,7 @@ import Typography from "../components/sharedComponents/Typography";
 import { toTitleCase } from "../utils/utils";
 import { Button } from "../components/sharedComponents/Button";
 import { useNavigate } from "react-router-dom";
-import ProtectedComponent from "../components/sharedComponents/ProtectedComponent";
+import ProtectedComponent from "../components/ProtectedComponent";
 import { WritePost } from "../components/sharedComponents/posts/WritePost";
 import Posts from "../components/sharedComponents/posts/Posts";
 import useMediaQuery from "../components/responsiveness/useMediaQuery";

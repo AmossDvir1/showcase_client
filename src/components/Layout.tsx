@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { MenuBar } from "./MenuBar";
 import { RouteProps, Outlet } from "react-router-dom";
 import ActivationBar from "./ActivationBar";
-import ProtectedComponent from "./sharedComponents/ProtectedComponent";
+import ProtectedComponent from "./ProtectedComponent";
 import BottomBar from "./sharedComponents/BottomBar";
 
 

@@ -20,23 +20,26 @@ const ProtectedComponent = ({
     (state: RootState) => state.globalState.isActivationToastShown
   );
   const auth = useAuth();
-  const [isActivatedChecked, setIsActivatedChecked] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (
       checkActivation &&
-      auth.checkFinished && 
+      auth.checkFinished &&
       !!auth?.isAuthenticated &&
       !auth?.isActivated &&
-      !isActivatedChecked &&
       !globalActivationToastShown
     ) {
       showToast("Account is Not Activated", "", "warning");
-      setIsActivatedChecked(true);
       dispatch(setActivationToastShown(true));
     }
-  }, [checkActivation, auth?.isActivated, isActivatedChecked]);
+  }, [
+    checkActivation,
+    auth?.isActivated,
+    auth?.checkFinished,
+    auth?.isAuthenticated,
+    dispatch,
+  ]);
 
   if (auth?.checkFinished) {
     if (!auth?.isAuthenticated) {

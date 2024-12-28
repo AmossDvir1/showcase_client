@@ -55,8 +55,10 @@ serverReq.interceptors.response.use(
         // Display error message, logout user, etc.
       }
       localStorage.removeItem("auth");
+      document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     } else if (data?.error === REFRESH_TOKEN_EXPIRED) {
       localStorage.removeItem("auth");
+      document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       window.location.reload();
     }
 

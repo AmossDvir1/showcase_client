@@ -6,15 +6,15 @@ import { TextField } from "../../components/sharedComponents/TextField";
 import PersonIcon from "@mui/icons-material/Person";
 import PasswordIcon from "@mui/icons-material/Password";
 import { Button } from "../../components/sharedComponents/Button";
+import CustomButton from "../../components/sharedComponents/CustomButton";
 import {
   validatePassword,
   validateUsername,
 } from "../../utils/stringValidation";
 import { useNavigate } from "react-router-dom";
+import ValidatedTextField from "../../components/sharedComponents/ValidatedTextField";
 
-interface Props {}
-
-export const Login: React.FC<Props> = () => {
+export const Login: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
@@ -31,67 +31,66 @@ export const Login: React.FC<Props> = () => {
     setIsLoading(false);
   };
 
-  useEffect(
-    () =>
-      setFormValid(
-        validateUsername(username) && validatePassword(password) && !isLoading
-      ),
-    [username, password, isLoading]
-  );
-  return (
-    <Box className="flex items-center flex-col xs:m-auto lg:m-0 lg:mt-24 lg:w-96 lg:h-fit xs:w-56 xs:h-fit bg-white xs:rounded-[30px] lg:rounded-[50px] text-center p-10">
-      <Typography className="text-black xs:text-lg lg:text-3xl lg:pt-7 xs:pt-0 lg:pb-7 xs:pb-3">
-        Log in to Showcase
-      </Typography>
-      <form onSubmit={onLogin}>
-        <Box className="py-3">
-          <TextField
-            validation={validateUsername}
-            placeholder="Username/Email"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setUsername(e.target.value)
-            }
-            value={username}
-            Icon={PersonIcon}
-            type="text"
-            errorText="Must be Between 2 and 20 Characters in Length"
-          ></TextField>
-        </Box>
-        <Box className="py-3">
-          <TextField
-            validation={validatePassword}
-            placeholder="Password"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPassword(e.target.value)
-            }
-            value={password}
-            Icon={PasswordIcon}
-            type="password"
-            errorText="Password Must Combine Lowercase Letters, Uppercase Letters, Numbers, And Special Characters"
-          ></TextField>
-        </Box>
+  useEffect(() => {
+    setFormValid(
+      validateUsername(username) && validatePassword(password) && !isLoading
+    );
+  }, [username, password, isLoading]);
 
-        <Box>
+  return (
+    <Box
+      className="flex items-center justify-center min-h-[calc(70vh)] md:mt-24 mt-16 bg-cover bg-center"
+      style={{
+        backgroundImage: `url('https://source.unsplash.com/1920x1080/?technology,futuristic')`,
+      }}
+    >
+      <Box className="relative z-10 p-8 xs:w-80 lg:w-96 rounded-3xl shadow-lg backdrop-blur-md bg-paper-light dark:bg-dark-paper">
+        <Typography className="text-primary dark:text-dark-text font-extrabold text-3xl text-center mb-4">
+          Welcome Back
+        </Typography>
+        <Typography className="text-gray-500 dark:text-dark-text-muted text-center mb-8">
+          Log in to access your account
+        </Typography>
+        <form onSubmit={onLogin}>
+          <Box className="mb-4">
+            <ValidatedTextField
+              value={username}
+              onChange={setUsername}
+              placeholder="Username or Email"
+              validation={validateUsername}
+              errorText="Must be between 2 and 20 characters"
+              Icon={PersonIcon}
+            />
+          </Box>
+          <Box className="mb-4">
+            <ValidatedTextField
+              value={password}
+              onChange={setPassword}
+              placeholder="Password"
+              validation={validatePassword}
+              errorText="Password must contain uppercase, lowercase, numbers, and special characters"
+              type="password"
+              Icon={PasswordIcon}
+            />
+          </Box>
           <Typography
             onClick={() => navigate("/sign_up")}
-            className="text-black cursor-pointer"
+            className="text-primary dark:text-dark-text-light text-sm cursor-pointer text-center mb-6 hover:underline"
           >
-            Don't Have an Account? Sign Up
+            Don't have an account? Sign Up
           </Typography>
-        </Box>
-        <Box className="xs:pt-4 lg:pt-12">
-          <Button
+          <CustomButton
             disabled={!formValid}
+            variant="outlined"
             loading={isLoading}
-            round
+            fullWidth
             type="submit"
-            className="w-72"
-            textclassname=""
+            className="w-full py-3 font-normal rounded-full"
           >
-            Submit
-          </Button>
-        </Box>
-      </form>
+            Log In
+          </CustomButton>
+        </form>
+      </Box>
     </Box>
   );
 };
