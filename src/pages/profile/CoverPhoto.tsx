@@ -53,7 +53,7 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({
         toggleDrawer();
       } else {
         setMenuOpen(true);
-        setMenuPosition([e.pageX, e.pageY]);
+        setMenuPosition([e.clientX, e.clientY]);
       }
     } else {
       setViewerOpen(true);

@@ -1,4 +1,3 @@
-// import { Socket } from "socket.io-client";
 
 interface ProjectForm {
   projectName: string;
@@ -25,6 +24,7 @@ interface PictureData {
   purpose: ImagePurpose;
   userId: string;
   id: string;
+  imageOffset: ImageOffset;
 }
 
 interface UserDetails {
@@ -79,7 +79,7 @@ interface UserProfile {
   username: string;
   id: string;
   urlMapping: string;
-  profilePicture?: string | null;
+  profilePicture?: PictureData;
   coverPhoto?: string | null;
   profile: IProfileSettings;
 }
@@ -172,4 +172,14 @@ interface ChatPreview {
 }
 interface ConversationId {
   id: string | number;
+}
+
+interface ImageOffset {
+  x: number;
+  y: number;
+}
+
+interface ImageDimensions {
+  width: number;
+  height: number;
 }

@@ -14,17 +14,7 @@ const ActivationBar: React.FC<Props> = ({ visible }) => {
   const onBarClick = () => {
     navigate("/user-activation");
   };
-  if (auth?.checkFinished && !auth?.isActivated && auth?.isAuthenticated) {
-    console.log(
-      "auth?.checkFinished",
-      auth?.checkFinished,
-      "!auth?.isActivated",
-      !auth?.isActivated,
-      "auth?.isAuthenticated",
-      auth?.isAuthenticated
-    );
-    alert("not active");
-  }
+
   return (
     <>
       {auth?.checkFinished && !auth?.isActivated && auth?.isAuthenticated && (
