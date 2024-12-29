@@ -13,7 +13,7 @@ import { useAppSelector } from "../../redux/hooks";
 
 interface ProfilePhotoProps {
   userProfile?: boolean;
-  profilePicture?: string | null;
+  profilePicture?: PictureData;
 }
 
 const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
@@ -66,7 +66,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
         <PictureViewer
           open={viewerOpen}
           onClose={() => setViewerOpen(false)}
-          pictureSrc={convertPictureToURI(profilePicture)} // Pass picture source
+          pictureSrc={convertPictureToURI(profilePicture.imageStringBase64)} // Pass picture source
         />
       )}
       {isHovered && userProfile && !profilePicture ? (
@@ -83,18 +83,21 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
           onMouseLeave={() => setIsHovered(false)}
         ></PersonIcon>
       ) : (
-        <img
-          onClick={(e: React.MouseEvent<HTMLElement>) =>
-            userProfile
-              ? isMobile
-                ? toggleDrawer()
-                : onMenuOpen(e)
-              : setViewerOpen(true)
-          }
-          className="rounded-full w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] hover:brightness-90 object-cover"
-          src={convertPictureToURI(profilePicture)}
-          alt="profilePicture"
-        ></img>
+<img
+  onClick={(e: React.MouseEvent<HTMLElement>) =>
+    userProfile
+      ? isMobile
+        ? toggleDrawer()
+        : onMenuOpen(e)
+      : setViewerOpen(true)
+  }
+  className="rounded-full w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] hover:brightness-90 object-cover"
+  style={{
+    // objectPosition: `${profilePicture.imageOffset?.x}px ${profilePicture.imageOffset?.y}`, // Apply offset
+  }}
+  src={convertPictureToURI(profilePicture.imageStringBase64)}
+  alt="profilePicture"
+/>
       )}
       {userProfile && !isMobile && (
         <Menu

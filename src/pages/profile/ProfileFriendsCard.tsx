@@ -40,7 +40,7 @@ const ProfileFriendsCard: React.FC<ProfileFriendsCardProps> = ({ userId }) => {
   const navigate = useNavigate();
 
   const onFriendClick = (friend: Friend) => {
-    closeDialog()
+    closeDialog();
     navigate(`/profile/${friend.urlMapping}`);
   };
 
@@ -156,8 +156,8 @@ const ProfileFriendsCard: React.FC<ProfileFriendsCardProps> = ({ userId }) => {
         <DialogTitle className="bg-paper-light dark:bg-dark-paper">
           All Friends
         </DialogTitle>
-        <Divider />
-        <DialogContent className="h-[50rem] overflow-y-auto bg-paper-light dark:bg-dark-paper">
+        {/* <Divider /> */}
+        <DialogContent className="h-[50rem] overflow-y-auto bg-paper-light dark:bg-dark-paper pb-3 px-6">
           <div className="sticky top-0 z-10 bg-paper-light dark:bg-dark-paper">
             <MuiTextField
               // className="lg:mt-2 mt-2"
@@ -175,7 +175,14 @@ const ProfileFriendsCard: React.FC<ProfileFriendsCardProps> = ({ userId }) => {
                 },
               }}
             />
-            <Divider className="my-4" />
+            <Typography className="lg:text-base text-sm my-3">
+              {filteredFriends.length > 0
+                ? `Showing ${filteredFriends.length} friend${
+                    filteredFriends.length > 1 ? "s" : ""
+                  }`
+                : `No results`}
+            </Typography>
+            <Divider className="my-3" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             {filteredFriends.map((friend) => (
@@ -208,14 +215,7 @@ const ProfileFriendsCard: React.FC<ProfileFriendsCardProps> = ({ userId }) => {
         <div className="sticky bottom-0 z-10">
           <Divider />
         </div>
-        <DialogActions className="bg-paper-light dark:bg-dark-paper flex justify-between px-8">
-          <Typography className="lg:text-base text-sm">
-            {filteredFriends.length > 0
-              ? `Showing ${filteredFriends.length} friend${
-                  filteredFriends.length > 1 ? "s" : ""
-                }`
-              : `No results`}
-          </Typography>
+        <DialogActions className="bg-paper-light dark:bg-dark-paper flex justify-end px-8">
           <CustomButton
             size="small"
             rounded={false}
