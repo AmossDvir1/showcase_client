@@ -20,10 +20,11 @@ module.exports = {
         primary: "#7573C5",
         "primary-light": "#8A88D8",
         secondary: "#c4fcff",
-        "main-bg": "#f2f4f7",
+        "main-bg": "#f4f6f8",
         'paper-light':'#fcfcfc',
         'hover':"#e9ecf2",
-        paper: "#f3f3f3",
+        paper: "#f2f6fa",
+        'paper-dark': 'rgb(229 231 235)',
         // Dark mode colors
         dark: {
           primary: "#7573c5",

@@ -74,7 +74,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
 
   return (
     <div
-      className={`w-full bg-white dark:bg-dark-paper flex flex-col rounded-lg transition-width duration-300 my-2 xs:py-3 dark:border-none border-gray-300 border-solid border-[1px]`}
+      className={`w-full bg-paper-light dark:bg-dark-paper flex flex-col rounded-none md:rounded-lg transition-width duration-300 my-2 xs:py-3 dark:border-none`}
     >
       {userInfo?.username && (
         <div className="flex px-1 pt-1">

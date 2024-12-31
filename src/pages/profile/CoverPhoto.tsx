@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import ProfilePictureUploader from "../../components/sharedComponents/profilePicture/ProfilePictureUploader";
 import { Menu, MenuItem, Paper } from "@mui/material";
@@ -30,6 +30,22 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({
 
   const isMobile = useMediaQuery(600);
   const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
+
+  useEffect(() => {
+    if (drawerOpen || uploaderOpen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = "0px"; // Prevent layout shift
+    } else {
+      document.body.style.overflow = "unset";
+      document.body.style.paddingRight = "0px";
+    }
+
+    // Cleanup function
+    return () => {
+      document.body.style.overflow = "unset";
+      document.body.style.paddingRight = "0px";
+    };
+  }, [drawerOpen, uploaderOpen]);
 
   const toggleDrawer = () => {
     setDrawerOpen((prev) => !prev);
@@ -82,12 +98,12 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({
         <Paper
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="flex items-center justify-center bg-gray-100 w-full max-w-full max-h-[30rem] lg:h-[30rem] xs:h-52 z-10"
+          className="flex items-center justify-center bg-paper-dark dark:bg-dark-paper-light w-full max-w-full max-h-[30rem] lg:h-[30rem] xs:h-52 z-10"
         >
           {userProfile && isHovered && (
             <AddIcon
               onClick={onAddPictureClick}
-              className="w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] bg-gray-300 fill-slate-50 hover:bg-gray-400 object-cover rounded-full"
+              className="w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] dark:bg-dark-paper hover:dark:bg-dark-paper-dark dark:fill-dark-paper-light bg-gray-300 fill-slate-50 hover:bg-gray-400 object-cover rounded-full"
             ></AddIcon>
           )}
         </Paper>

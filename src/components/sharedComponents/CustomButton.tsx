@@ -5,6 +5,7 @@ import clsx from "clsx";
 import useMediaQuery from "../responsiveness/useMediaQuery";
 import { Grid, Typography } from "@mui/material";
 import Loader from "./Loader";
+import { colors } from "../../utils/theme";
 
 // CustomButtonProps - defines the custom props you want to pass to your button
 interface CustomButtonProps extends ButtonProps {
@@ -72,7 +73,7 @@ const StyledButton = styled(Button, {
   "&.Mui-disabled": {
     background:
       variant === "contained"
-        ? theme.palette.grey[300] // Dimmed background for contained buttons
+        ? theme.palette.mode === "dark" ? colors.darkDisabledButton: theme.palette.grey[300] // Dimmed background for contained buttons
         : "transparent", // Transparent for other variants
     color: theme.palette.grey[500], // Dimmed text color
     border:

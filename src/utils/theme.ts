@@ -12,7 +12,8 @@ export const colors = {
   darkMainBg: "#040a17",
   darkText: "#d0d5db",
   darkTextLight:"#e1e4e8",
-  hover: '#e9ecf2'
+  hover: '#e9ecf2',
+  darkDisabledButton: "#616b75"
   
 };
 
@@ -40,7 +41,7 @@ export const createMuiTheme = (
           {
             background: {
               default: "#f5f5f5",
-              paper: "#ffffff",
+              paper: "#f2f6fa",
             },
             text: {
               primary: "#7573C5",

@@ -127,9 +127,9 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
   ) : (
     <Box
       className={`w-full my-2 relative 
-      bg-slate-50 dark:bg-dark-paper flex rounded-lg ${
+      bg-paper dark:bg-dark-paper flex rounded-none md:rounded-lg ${
         !isEditMode ? "justify-between" : ""
-      } xs:py-3 shadow-[-4px_4px_8px_1px_rgba(0,0,0,0.17)] `}
+      } xs:py-3 border shadow-[-4px_4px_8px_1px_rgba(0,0,0,0.17)] `}
     >
       {isEditMode ? (
         <div className="flex flex-col w-full px-6">

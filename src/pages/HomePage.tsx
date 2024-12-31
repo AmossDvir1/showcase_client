@@ -37,14 +37,14 @@ export const HomePage: React.FC<Props> = () => {
   const isMobile = useMediaQuery(500);
 
   return (
-    <Grid container className="xs:py-0 lg:py-10 xs:px-2">
-      <Grid item xs={12} sm={4} md={4}>
+    <Grid container className="xs:py-8 lg:py-10 xs:px-0">
+      <Grid className="px-8 sm:px-0" item xs={12} sm={4} md={4}>
         <Grid container direction="column">
           <GridItem>
             <Box className="pb-6">
               <Typography className="cursor-default whitespace-pre-line text-start sm:text-2xl md:text-3xl lg:text-4xl">
                 {toTitleCase(
-                  "the Platform to\nshowcase, connect,\nand collaborate"
+                  "the Platform to\nshowcase, connect, and collaborate."
                 )}
               </Typography>
             </Box>

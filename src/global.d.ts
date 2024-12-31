@@ -161,6 +161,7 @@ interface IUserSettings {
 interface LastMessage {
   content: string;
   createdAt: Date | null;
+  sender: string;
 }
 
 interface ChatPreview {
