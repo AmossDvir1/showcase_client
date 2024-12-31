@@ -28,8 +28,7 @@ const Posts = () => {
   ) : posts?.length > 0 ? (
     <div>
       {posts?.map((post: any, index: number) => (
-        <div key={index}>
-          <Divider />
+        <div className="pt-1" key={index}>
           <Post media={media} setPosts={setPosts} post={post}></Post>
         </div>
       ))}

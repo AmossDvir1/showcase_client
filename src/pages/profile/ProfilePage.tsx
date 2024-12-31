@@ -76,8 +76,8 @@ const Profile: React.FC = () => {
 
   const isCurrentUser = userInfo?.urlMapping === userData.urlMapping;
   return (
-    <div className="min-w-4xl max-w-6xl m-auto">
-      <div className="flex flex-col rounded-lg bg-white dark:bg-dark-paper-dark pb-8">
+    <div className="md:min-w-4xl md:max-w-6xl m-auto w-full">
+      <div className="flex flex-col rounded-lg md:bg-paper-light dark:bg-dark-paper-dark pb-8">
         <CoverPhoto
           coverPhoto={userData?.coverPhoto}
           userProfile={isCurrentUser}
@@ -129,7 +129,7 @@ const Profile: React.FC = () => {
         <div className="flex items-center justify-center pt-10 xs:mx-4 lg:mx-12">
           <Divider className="w-full"></Divider>
         </div>
-        <div className="flex flex-col items-center xs:mx-4 lg:mx-12 mb-2">
+        <div className="flex flex-col items-center mx-0 lg:mx-12 mb-2">
           {isCurrentUser && <WritePost></WritePost>}
         <ProfilePosts userData={userData}></ProfilePosts>
         </div>

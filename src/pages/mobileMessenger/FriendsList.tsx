@@ -5,6 +5,8 @@ import LinesSkeleton from "../../components/sharedComponents/LinesSkeleton";
 import { formatTime } from "../../utils/utils";
 import { Skeleton } from "@mui/material";
 import useMediaQuery from "../../components/responsiveness/useMediaQuery";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/rootReducer";
 
 interface FriendListProps {
   onFriendClick: (friend: ChatPreview) => void;
@@ -21,6 +23,7 @@ interface FriendListItemProps {
 const SkeletonList: React.FC<{ numberOfChats: number }> = ({
   numberOfChats,
 }) => {
+
   return (
     <div>
       {Array.from({ length: numberOfChats }, (_, index) => (
@@ -50,12 +53,14 @@ const SkeletonList: React.FC<{ numberOfChats: number }> = ({
 
 const FriendListItem: React.FC<FriendListItemProps> = 
   ({ conv, onFriendClick }) => {
+    const userInfo = useSelector((state: RootState) => state.user.userInfo);
+
     const Details = () =>
       conv?.lastMessage?.createdAt && conv.lastMessage.content ? (
         <div className="flex">
           <div className="flex flex-row max-w-[100px]">
             <Typography className="text-xs text-ellipsis overflow-hidden whitespace-nowrap">
-              {conv.lastMessage.content}
+              {`${conv.lastMessage.sender === userInfo?.id ? "You: ":""}${conv.lastMessage.content}`}
             </Typography>
           </div>
           <Typography className="text-xs px-2">•</Typography>

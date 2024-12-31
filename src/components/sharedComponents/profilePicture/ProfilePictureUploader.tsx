@@ -6,7 +6,6 @@ import {
   DialogTitle,
   Divider,
   IconButton,
-  useMediaQuery,
 } from "@mui/material";
 import Typography from "../Typography";
 import { useTheme } from "@mui/material/styles";
@@ -21,6 +20,7 @@ import { fetchUserInfo } from "../../../redux/slices/user";
 import { showToast } from "../../../utils/toast";
 import CustomButton from "../CustomButton";
 import UploaderPictureDisplay from "./UploaderPictureDisplay";
+import useMediaQuery from "../../responsiveness/useMediaQuery";
 
 interface ProfilePictureUploaderProps {
   open?: boolean;
@@ -33,10 +33,10 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
   setOpen,
   purpose,
 }) => {
+  const isMobile = useMediaQuery(600);
   const navigate = useNavigate();
   const theme = useTheme();
   const hiddenFileInput = useRef<HTMLInputElement>(null);
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [preview, setPreview] = useState("");
   const [uploadLoading, setUploadLoading] = useState(false);
   const [filename, setFilename] = useState("");
@@ -105,7 +105,6 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
       reader.onload = async () => {
         const { width, height } = await getImageDimensions(file);
         setDimensions({ width, height });
-
         setFilename(file.name);
         setImageDetails(reader.result);
         setPreview(URL.createObjectURL(file));
@@ -133,11 +132,12 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
 
   return (
     <Dialog
+      disableScrollLock={false}
       PaperProps={{
         className:
-          "flex lg:w-[60%] lg:h-[60%] sm:w-full sm:h-full bg-white dark:bg-gray-800",
+          "flex lg:w-[60%] lg:h-[60%] w-full h-full bg-white dark:bg-gray-800",
       }}
-      fullScreen={fullScreen}
+      fullScreen={isMobile}
       open={open}
       onClose={onClose}
     >
@@ -153,13 +153,25 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
       <DialogContent>
         <div className="flex flex-col items-center gap-4 overflow-hidden">
           {preview ? (
-            <UploaderPictureDisplay
-              imageSrc={preview}
-              diameter={400}
-              setImagePosition={setImageOffset}
-            />
+            purpose === "profile" ? (
+              <UploaderPictureDisplay
+                imageSrc={preview}
+                diameter={400}
+                setImagePosition={setImageOffset}
+              />
+            ) : (
+              // for cover photo- just show it without the circle mask: 
+              <img
+                src={preview}
+                alt="cover"
+                className="absolute w-[400px] h-auto object-cover"
+              />
+            )
           ) : (
-            <div className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-md bg-gray-50">
+            <div
+              className="flex flex-col items-center justify-center w-full h-40 border-gray-300 rounded-md dark:bg-dark-paper bg-paper-dark"
+              onClick={onChooseFileClick}
+            >
               <AddPhotoAlternateIcon className="text-gray-400 text-6xl" />
               <Typography className="text-gray-500 mt-2">
                 Select an image to preview
@@ -173,24 +185,35 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
             style={{ display: "none" }}
             onChange={onFileChange}
           />
-          <CustomButton
-            variant="contained"
-            color="primary"
-            onClick={onChooseFileClick}
-          >
-            Choose File
-          </CustomButton>
         </div>
       </DialogContent>
       <DialogActions>
-        <CustomButton
-          variant="contained"
-          color="primary"
-          onClick={onUploadPicture}
-          disabled={!imageDetails || uploadLoading}
+        <div
+          className={`w-full flex my-6 mx-4 ${
+            preview ? "justify-between" : "justify-end"
+          }`}
         >
-          {uploadLoading ? "Uploading..." : "Upload"}
-        </CustomButton>
+          {preview && (
+            <CustomButton
+              variant="outlined"
+              color="primary"
+              size={isMobile ? "small" : "medium"}
+              onClick={onChooseFileClick}
+            >
+              Browse...
+            </CustomButton>
+          )}
+          <CustomButton
+            className="py-2"
+            variant="contained"
+            color="primary"
+            size={isMobile ? "small" : "medium"}
+            onClick={onUploadPicture}
+            disabled={!imageDetails || uploadLoading}
+          >
+            {uploadLoading ? "Uploading..." : "Upload"}
+          </CustomButton>
+        </div>
       </DialogActions>
     </Dialog>
   );

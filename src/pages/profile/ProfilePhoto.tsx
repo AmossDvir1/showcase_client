@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
 import ProfilePictureUploader from "../../components/sharedComponents/profilePicture/ProfilePictureUploader";
@@ -29,6 +29,22 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
   const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
   const isMobile = useMediaQuery(600);
 
+  useEffect(() => {
+    if (drawerOpen || uploaderOpen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = "0px"; // Prevent layout shift
+    } else {
+      document.body.style.overflow = "unset";
+      document.body.style.paddingRight = "0px";
+    }
+
+    // Cleanup function
+    return () => {
+      document.body.style.overflow = "unset";
+      document.body.style.paddingRight = "0px";
+    };
+  }, [drawerOpen, uploaderOpen]);
+
   const onMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMenuAnchor(event.currentTarget);
   };
@@ -49,7 +65,6 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
 
   const onViewPictureClick = () => {
     setViewerOpen(true);
-
     // Logic to view current profile picture (e.g., open a modal)
     onMenuClose();
     setDrawerOpen(false);
@@ -83,21 +98,23 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
           onMouseLeave={() => setIsHovered(false)}
         ></PersonIcon>
       ) : (
-<img
-  onClick={(e: React.MouseEvent<HTMLElement>) =>
-    userProfile
-      ? isMobile
-        ? toggleDrawer()
-        : onMenuOpen(e)
-      : setViewerOpen(true)
-  }
-  className="rounded-full w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] hover:brightness-90 object-cover"
-  style={{
-    // objectPosition: `${profilePicture.imageOffset?.x}px ${profilePicture.imageOffset?.y}`, // Apply offset
-  }}
-  src={convertPictureToURI(profilePicture.imageStringBase64)}
-  alt="profilePicture"
-/>
+        <img
+          onClick={(e: React.MouseEvent<HTMLElement>) =>
+            userProfile
+              ? isMobile
+                ? toggleDrawer()
+                : onMenuOpen(e)
+              : setViewerOpen(true)
+          }
+          className="rounded-full w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] hover:brightness-90 object-cover"
+          style={
+            {
+              // objectPosition: `${profilePicture.imageOffset?.x}px ${profilePicture.imageOffset?.y}px`, // Apply offset
+            }
+          }
+          src={convertPictureToURI(profilePicture.imageStringBase64)}
+          alt="profilePicture"
+        />
       )}
       {userProfile && !isMobile && (
         <Menu
