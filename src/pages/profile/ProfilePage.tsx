@@ -83,29 +83,40 @@ const Profile: React.FC = () => {
           userProfile={isCurrentUser}
         ></CoverPhoto>
 
-        <div className="flex flex-row justify-between mb-4">
+        <div className="flex flex-row flex-wrap justify-between mb-4">
           <div className="flex flex-row">
-            <div className="flex xl:ml-20 md:ml-12 ml-4 mt-[-10%] xl:mt-[-10%]">
+            <div className="flex xl:ml-20 md:ml-12 ml-3 mt-[-10%] xl:mt-[-10%]">
               <ProfilePhoto
                 profilePicture={userData?.profilePicture}
                 userProfile={isCurrentUser}
               ></ProfilePhoto>
             </div>
-            <Typography className="flex items-start xl:mx-5 mx-3 !leading-[2rem] pt-3 xl:pt-[20px] text-black text-2xl xl:text-5xl ">
-              {`${userData?.firstName} ${userData?.lastName}`}
-            </Typography>
+            <div className="flex flex-col ml-2">
+              <Typography className="flex items-start xl:mx-5 ml-1 pt-2 xl:pt-[17px] text-black text-xl xl:text-4xl">
+                {`${userData?.firstName} ${userData?.lastName}`}
+              </Typography>
+              {/* Show RelationshipStatusButton below the name on small screens */}
+              {!isCurrentUser && (
+                <div className="md:hidden mt-2">
+                  <RelationshipStatusButton
+                    relationship={relationship}
+                    setRelationship={setRelationship}
+                    userData={userData}
+                  ></RelationshipStatusButton>
+                </div>
+              )}
+            </div>
           </div>
-          <div className="flex flex-row">
-            {!isCurrentUser && (
-              <div className="flex items-start justify-end lg:mr-20 mr-4 pt-3 xl:pt-[20px]">
-                <RelationshipStatusButton
-                  relationship={relationship}
-                  setRelationship={setRelationship}
-                  userData={userData}
-                ></RelationshipStatusButton>
-              </div>
-            )}
-          </div>
+          {/* Show RelationshipStatusButton on the right side for medium and larger screens */}
+          {!isCurrentUser && (
+            <div className="hidden md:flex items-start justify-end lg:mr-20 mr-4 pt-2 xl:pt-[20px]">
+              <RelationshipStatusButton
+                relationship={relationship}
+                setRelationship={setRelationship}
+                userData={userData}
+              ></RelationshipStatusButton>
+            </div>
+          )}
         </div>
         {userInfo && (
           <div className="flex justify-center pt-4 pb-2">

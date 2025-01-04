@@ -71,7 +71,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
   };
 
   return (
-    <div className="rounded-full border-solid dark:border-slate-400 border-white border-4 z-20 xl:h-52 xl:lg:w-52 w-36 h-36">
+    <div className="rounded-full border-solid dark:border-dark-paper-light border-white border-4 z-20 xl:h-52 xl:lg:w-52 w-32 h-32">
       <ProfilePictureUploader
         setOpen={setUploaderOpen}
         open={uploaderOpen}
