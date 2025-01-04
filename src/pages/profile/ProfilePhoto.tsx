@@ -3,7 +3,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
 import ProfilePictureUploader from "../../components/sharedComponents/profilePicture/ProfilePictureUploader";
 import { convertPictureToURI } from "../../utils/utils";
-import { Button, Menu, MenuItem } from "@mui/material";
+import { Avatar, Button, Menu, MenuItem } from "@mui/material";
 import useMediaQuery from "../../components/responsiveness/useMediaQuery";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import PictureViewer from "./PictureViewer";
@@ -71,7 +71,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
   };
 
   return (
-    <div className="rounded-full border-solid border-white border-4 z-20">
+    <div className="rounded-full border-solid dark:border-slate-400 border-white border-4 z-20 xl:h-52 xl:lg:w-52 w-36 h-36">
       <ProfilePictureUploader
         setOpen={setUploaderOpen}
         open={uploaderOpen}
@@ -89,14 +89,15 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={onAddPictureClick}
-          className="w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] bg-gray-300 fill-slate-50 hover:bg-gray-400 object-cover rounded-full relative"
+          className="w-[inherit] h-[inherit] dark:fill-dark-paper fill-slate-50 hover:bg-slate-400 bg-slate-400 rounded-full"
         ></AddIcon>
       ) : !profilePicture ? (
-        <PersonIcon
-          className="w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] bg-gray-300 fill-slate-50 hover:bg-gray-400 object-cover rounded-full relative"
+        <Avatar
+          className=" w-[inherit] h-[inherit] bg-slate-50 dark:bg-dark-paper"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-        ></PersonIcon>
+          src={`${process.env.PUBLIC_URL}/images/icons/profile_pic.png`}
+        />
       ) : (
         <img
           onClick={(e: React.MouseEvent<HTMLElement>) =>
@@ -106,7 +107,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
                 : onMenuOpen(e)
               : setViewerOpen(true)
           }
-          className="rounded-full w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] hover:brightness-90 object-cover"
+          className="rounded-full w-[inherit] h-[inherit] hover:brightness-90 object-cover"
           style={
             {
               // objectPosition: `${profilePicture.imageOffset?.x}px ${profilePicture.imageOffset?.y}px`, // Apply offset

@@ -167,8 +167,14 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
           <div className="flex">
             <div className="mr-2">
               <MiniProfilePicture
-                media={media}
-                userDetails={postData?.user}
+              size="large"
+                link={postData?.user?.urlMapping}
+                imageSrc={
+                  media.find((image) => image?.userId === postData?.user?.id)
+                    ?.imageStringBase64
+                }
+                firstName={postData?.user?.firstName}
+                lastName={postData?.user?.lastName}
               ></MiniProfilePicture>
             </div>
             <div className="flex flex-col">

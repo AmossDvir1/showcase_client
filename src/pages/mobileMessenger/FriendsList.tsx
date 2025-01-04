@@ -78,8 +78,10 @@ const FriendListItem: React.FC<FriendListItemProps> =
       >
         <div className="mr-4">
           <MiniProfilePicture
-            userDetails={conv?.friendDetails}
+            firstName={conv.friendDetails.firstName}
+            lastName={conv.friendDetails.lastName}
             active={conv.isOnline}
+            imageSrc={conv?.friendDetails?.profilePicture?.imageStringBase64}
             size={"medium"}
           />
         </div>

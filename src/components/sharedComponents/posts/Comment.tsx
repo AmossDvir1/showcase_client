@@ -24,14 +24,24 @@ const Comment: React.FC<CommentProps> = ({ post, comment, media = [] }) => {
       <div className="flex">
         <div className="mr-1">
           <MiniProfilePicture
-            media={media}
-            userDetails={commentData.user}
+            link={commentData?.user?.urlMapping}
+            imageSrc={
+              media.find((image) => image?.userId === commentData?.user?.id)
+                ?.imageStringBase64
+            }
+            firstName={commentData.user.firstName}
+            lastName={commentData.user.lastName}
           ></MiniProfilePicture>
         </div>
       </div>
       <div className="flex flex-col">
         <div className="bg-slate-200 dark:bg-dark-paper-light rounded-3xl px-3 pt-3 pb-3 min-w-[12rem] w-[calc(100%)]">
-          {commentData.likes.length > 0 && <LikeIcon className="relative z-10 float-right bottom-5" users={commentData.likes}></LikeIcon>}
+          {commentData.likes.length > 0 && (
+            <LikeIcon
+              className="relative z-10 float-right bottom-5"
+              users={commentData.likes}
+            ></LikeIcon>
+          )}
           <Typography>
             <Link
               className="text-black dark:text-dark-text font-normal"

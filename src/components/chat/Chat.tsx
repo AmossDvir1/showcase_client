@@ -16,7 +16,6 @@ import { useAppDispatch } from "../../redux/hooks";
 import ChatBody from "./ChatBody";
 import MiniProfilePicture from "../sharedComponents/profilePicture/MiniProfilePicture";
 import Typography from "../sharedComponents/Typography";
-import { useWebSocket } from "../../context/WebSocketContext";
 import { useNavigate } from "react-router-dom";
 
 interface ChatProps {
@@ -89,7 +88,9 @@ const Chat: React.FC<ChatProps> = ({ friend, closeChat }) => {
                 {/* Chat Header */}
                 <Box className="flex items-center justify-between p-2 bg-indigo-100 dark:bg-dark-paper-light rounded-t-lg">
                   <MiniProfilePicture
-                    userDetails={friend}
+                  firstName={friend.firstName}
+                  lastName={friend.lastName}
+                  imageSrc={friend.profilePicture?.imageStringBase64}
                     // active={onlineFriends.some((item) => item.id === friend.id)}
                   ></MiniProfilePicture>
 

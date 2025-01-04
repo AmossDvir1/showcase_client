@@ -50,7 +50,7 @@ const BubbleMessage: React.FC<BubbleMessageProps> = ({
       ) : (
         <div className="flex justify-start items-start">
           <div className="mr-[6px] py-1">
-            <MiniProfilePicture userDetails={friend} size="small" />
+            <MiniProfilePicture imageSrc={friend?.profilePicture?.imageStringBase64} firstName={friend.firstName} lastName={friend.lastName} size="small" />
           </div>
           <div className="flex flex-col items-start">
             <div

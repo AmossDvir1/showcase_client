@@ -21,6 +21,7 @@ module.exports = {
         "primary-light": "#8A88D8",
         secondary: "#c4fcff",
         "main-bg": "#f4f6f8",
+        "profile-bg": "#f1f3f5",
         'paper-light':'#fcfcfc',
         'hover':"#e9ecf2",
         paper: "#f2f6fa",

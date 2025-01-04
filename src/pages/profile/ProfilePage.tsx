@@ -77,29 +77,35 @@ const Profile: React.FC = () => {
   const isCurrentUser = userInfo?.urlMapping === userData.urlMapping;
   return (
     <div className="md:min-w-4xl md:max-w-6xl m-auto w-full">
-      <div className="flex flex-col rounded-lg md:bg-paper-light dark:bg-dark-paper-dark pb-8">
+      <div className="flex flex-col rounded-lg md:bg-profile-bg dark:bg-dark-paper-dark pb-8">
         <CoverPhoto
           coverPhoto={userData?.coverPhoto}
           userProfile={isCurrentUser}
         ></CoverPhoto>
 
-        <div className="flex flex-row justify-between">
-          <div className="flex lg:ml-20 xs:ml-4 xs:mt-[-1.5rem] lg:mt-[-3rem]">
-            <ProfilePhoto
-              profilePicture={userData?.profilePicture}
-              userProfile={isCurrentUser}
-            ></ProfilePhoto>
-            <Typography className="flex items-center lg:mx-5 xs:mx-2 text-black xs:text-2xl lg:text-5xl">{`${userData?.firstName} ${userData?.lastName}`}</Typography>
-          </div>
-          {!isCurrentUser && (
-            <div className="flex items-end justify-end lg:mr-20 xs:mr-4 xs:mt-[-1.5rem] lg:mt-[-3rem]">
-              <RelationshipStatusButton
-                relationship={relationship}
-                setRelationship={setRelationship}
-                userData={userData}
-              ></RelationshipStatusButton>
+        <div className="flex flex-row justify-between mb-4">
+          <div className="flex flex-row">
+            <div className="flex xl:ml-20 md:ml-12 ml-4 mt-[-10%] xl:mt-[-10%]">
+              <ProfilePhoto
+                profilePicture={userData?.profilePicture}
+                userProfile={isCurrentUser}
+              ></ProfilePhoto>
             </div>
-          )}
+            <Typography className="flex items-start xl:mx-5 mx-3 !leading-[2rem] pt-3 xl:pt-[20px] text-black text-2xl xl:text-5xl ">
+              {`${userData?.firstName} ${userData?.lastName}`}
+            </Typography>
+          </div>
+          <div className="flex flex-row">
+            {!isCurrentUser && (
+              <div className="flex items-start justify-end lg:mr-20 mr-4 pt-3 xl:pt-[20px]">
+                <RelationshipStatusButton
+                  relationship={relationship}
+                  setRelationship={setRelationship}
+                  userData={userData}
+                ></RelationshipStatusButton>
+              </div>
+            )}
+          </div>
         </div>
         {userInfo && (
           <div className="flex justify-center pt-4 pb-2">
@@ -131,7 +137,7 @@ const Profile: React.FC = () => {
         </div>
         <div className="flex flex-col items-center mx-0 lg:mx-12 mb-2">
           {isCurrentUser && <WritePost></WritePost>}
-        <ProfilePosts userData={userData}></ProfilePosts>
+          <ProfilePosts userData={userData}></ProfilePosts>
         </div>
       </div>
     </div>

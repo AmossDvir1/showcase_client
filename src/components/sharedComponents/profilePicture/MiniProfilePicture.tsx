@@ -1,12 +1,16 @@
 import React, { ReactNode, useState } from "react";
-import { Avatar } from "../Avatar";
+import Avatar from "../Avatar";
 import ActiveBadge from "../ActiveBadge";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 
-type MiniPictureSize = "small" | "medium" | "large";
+type MiniPictureSize = "small" | "medium" | "large" | "xl";
 interface MiniProfilePictureProps {
-  userDetails: UserDetails;
+  firstName: string;
+  lastName: string;
+  imageSrc?: string;
+  link?: string;
+  tooltip?: boolean;
   size?: MiniPictureSize;
-  media?: PictureData[];
   active?: boolean;
 }
 
@@ -19,6 +23,8 @@ const setSize = (size?: MiniPictureSize) => {
       circleSize = 40;
     } else if (size === "large") {
       circleSize = 50;
+    } else if (size === "xl") {
+      circleSize = 75;
     }
   }
   return circleSize;
@@ -41,23 +47,22 @@ const ActiveAvatar: React.FC<ActiveAvatarProps> = ({
 };
 
 const MiniProfilePicture: React.FC<MiniProfilePictureProps> = ({
-  userDetails,
   size,
-  media = [],
+  imageSrc,
+  firstName,
+  lastName,
+  link,
+  tooltip,
   active = false,
-}) => {  
+}) => {
   const circleSize = setSize(size);
 
-  let profilePicBase64 = media?.find((image) => image?.userId === userDetails?.id)?.imageStringBase64 || "";
-  if (!profilePicBase64){
-    profilePicBase64 = userDetails?.profilePicture?.imageStringBase64 || "";
-  }
-  const profilePic = profilePicBase64
-    ? profilePicBase64.startsWith("data:image")
-      ? profilePicBase64 // Already a data URI
-      : `data:image/jpeg;base64,${profilePicBase64}` // Add data URI prefix if missing
+  const profilePic = imageSrc
+    ? imageSrc.startsWith("data:image")
+      ? imageSrc // Already a data URI
+      : `data:image/jpeg;base64,${imageSrc}` // Add data URI prefix if missing
     : "";
-    
+
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
@@ -70,24 +75,32 @@ const MiniProfilePicture: React.FC<MiniProfilePictureProps> = ({
   return (
     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <ActiveAvatar active={active} ripple={isHovered}>
-      {profilePic ? (
+        {profilePic ? (
           <Avatar
-            username={userDetails?.firstName}
+            tooltip={tooltip}
+            firstName={firstName}
+            lastName={lastName}
             className=" border-gray-100"
-            alt="profile"
-            sx={{ width: circleSize, height: circleSize}}
+            link={link}
+            sx={{ width: circleSize, height: circleSize }}
             src={profilePic}
           ></Avatar>
-      ) : (
+        ) : (
           <Avatar
-            username={userDetails?.firstName}
-            alt={userDetails?.firstName?.toUpperCase() || ""}
-            src="/static/images/avatar/1.jpg"
-            className="bg-gradient-to-b from-rose-400 via-fuchsia-500 to-indigo-500"
-            sx={{ width: circleSize, height: circleSize, fontSize: `${circleSize/2}px` }}
+            className="bg-transparent"
+            tooltip={tooltip}
+            firstName={firstName}
+            lastName={lastName}
+            link={link}
+            src={`${process.env.PUBLIC_URL}/images/icons/profile_pic.png`}
+            sx={{
+              width: circleSize,
+              height: circleSize,
+              fontSize: `${circleSize / 2}px`,
+            }}
           />
         )}
-        </ActiveAvatar>
+      </ActiveAvatar>
     </div>
   );
 };

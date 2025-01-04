@@ -20,8 +20,7 @@ import { useAppSelector } from "../../../redux/hooks";
 
 interface WritePostProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
 export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
-
-  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark"
+  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
 
   const dispatch = useDispatch<AppDispatch>();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
@@ -49,11 +48,13 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
       }
     }
 
-    // For other cases (clicking outside the textarea), collapse the component
-    setIsExpanded(false);
+    // For other cases (clicking outside the textarea), collapse the component only if there is no text inside
+    if (postValue.trim() === "") {
+      setIsExpanded(false);
+    }
 
     // Scroll the textarea to the top
-    if (textareaRef?.current?.scrollTop ) {
+    if (textareaRef?.current?.scrollTop) {
       textareaRef.current.scrollTop = 0;
     }
   };
@@ -80,8 +81,11 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
         <div className="flex px-1 pt-1">
           <div className="mx-2">
             <MiniProfilePicture
-              userDetails={userInfo}
+              imageSrc={userInfo.profilePicture?.imageStringBase64}
+              firstName={userInfo.firstName}
+              lastName={userInfo.lastName}
               size="medium"
+              tooltip
               active={false}
             ></MiniProfilePicture>
           </div>
@@ -103,7 +107,7 @@ export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
           variant="outlined"
           loadingText="Posting..."
           loading={loading}
-          disabled={!postValue}
+          disabled={!(postValue.trim().length >= 2)}
           onClick={onCreatePost}
         >
           Post
