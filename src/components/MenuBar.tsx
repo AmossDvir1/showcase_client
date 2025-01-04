@@ -45,7 +45,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
   const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
 
   const auth = useAuth();
-  const isMobile = useMediaQuery(600);
+  const isMobile = useMediaQuery(500);
   const isTablet = useMediaQuery(600);
   const userInfo = useAppSelector((state: RootState) => state.user.userInfo);
   const navigate = useNavigate();
@@ -153,22 +153,22 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
               </MenuItem>
             </Menu>
           </Box>
-          <Typography
-            className="mr-2 flex flex-nowrap xs:tracking-[0.2em] sm:tracking-[0.2em] lg:tracking-[0.4em] xs:text-sm sm:text-sm lg:text-lg text-white decoration-transparent font-semibold"
-            variant="h6"
-            noWrap
-            component="a"
-          >
-            <Link
-              className="flex"
-              underline="none"
-              component="button"
-              onClick={() => navigate("/")}
+            <Typography
+              className="mr-2 flex flex-nowrap xs:tracking-[0.2em] sm:tracking-[0.2em] lg:tracking-[0.4em] xs:text-sm sm:text-sm lg:text-lg text-white decoration-transparent font-semibold"
+              variant="h6"
+              noWrap
+              component="a"
             >
-              <AdbIcon className="flex  mr-1" />
-              {isTablet ? "" : "Showcase".toUpperCase()}
-            </Link>
-          </Typography>
+              <Link
+                underline="none"
+                component="button"
+                className="flex items-center justify-center"
+                onClick={() => navigate("/")}
+              >
+                <AdbIcon className="flex  mr-1" />
+                {isTablet ? "" : "Showcase".toUpperCase()}
+              </Link>
+            </Typography>
           <Box
             className="flex items-center justify-start"
             // sx={{ flexGrow: 2 }}
@@ -217,8 +217,11 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                     item
                     className="flex text-center justify-center cursor-default"
                   >
-                    <MenuItem className="cursor-default hover:bg-transparent mx-2 md:mx-4" 
-                    disableRipple disableGutters>
+                    <MenuItem
+                      className="cursor-default hover:bg-transparent mx-2 md:mx-4"
+                      disableRipple
+                      disableGutters
+                    >
                       <Switch
                         size={isMobile ? "small" : "medium"}
                         isDarkLightStyling
@@ -357,9 +360,11 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                       disableRipple
                     >
                       <MiniProfilePicture
+                        tooltip
                         size="medium"
-                        media={[userInfo.profilePicture]}
-                        userDetails={userInfo}
+                        imageSrc={userInfo?.profilePicture?.imageStringBase64}
+                        firstName={userInfo.firstName}
+                        lastName={userInfo.lastName}
                       ></MiniProfilePicture>
                     </MenuItem>
                   </Grid>

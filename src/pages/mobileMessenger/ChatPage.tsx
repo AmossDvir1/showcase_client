@@ -35,7 +35,9 @@ const ChatPage: React.FC<ChatPageProps> = ({ conv, onBackToFriends }) => {
         </IconButton>
         <div className="px-2">
           <MiniProfilePicture
-            userDetails={conv.friendDetails}
+          firstName={conv?.friendDetails?.firstName}
+          lastName={conv?.friendDetails?.lastName}
+          imageSrc={conv?.friendDetails?.profilePicture?.imageStringBase64}
             active={conv.isOnline}
           ></MiniProfilePicture>
         </div>

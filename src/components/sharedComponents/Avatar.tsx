@@ -1,22 +1,38 @@
 import React from "react";
 import { AvatarProps, Avatar as MuiAvatar } from "@mui/material";
 import { Tooltip } from "./Tooltip";
+import { useNavigate } from "react-router-dom";
 
 interface Props extends AvatarProps {
-  username: string;
+  firstName: string;
+  lastName: string;
+  link?: string;
+  tooltip?: boolean;
 }
-export const Avatar: React.FC<Props> = ({ username, ...rest }) => {
+
+const Avatar: React.FC<Props> = ({ firstName, lastName, link, tooltip = false, ...rest }) => {
+  const navigate = useNavigate();
+  const onAvatarClick = (link: string) => {
+    navigate(`/profile/${link}`);
+  };
+
+  const avatarElement = (
+    <MuiAvatar
+      onClick={link && link !== "" ? () => onAvatarClick(link) : undefined}
+      alt={`${firstName} ${lastName}`}
+      {...rest}
+    />
+  );
+
   return (
     <div>
-      <Tooltip title={username}>
-        <MuiAvatar
-          alt={username?.toUpperCase() || ""}
-          src="/static/images/avatar/1.jpg"
-          className="bg-gradient-to-b from-rose-400 via-fuchsia-500 to-indigo-500 mr-4"
-          sx={{ width: 40, height: 40 }}
-          {...rest}
-        />
-      </Tooltip>
+      {tooltip ? (
+        <Tooltip title={`${firstName} ${lastName}`}>{avatarElement}</Tooltip>
+      ) : (
+        avatarElement
+      )}
     </div>
   );
 };
+
+export default Avatar;

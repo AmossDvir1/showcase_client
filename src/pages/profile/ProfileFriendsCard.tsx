@@ -16,6 +16,7 @@ import { convertPictureToURI } from "../../utils/utils";
 import { getUserFriendsDetails } from "../../controllers/friendsController/getUserFriends";
 import CustomButton from "../../components/sharedComponents/CustomButton";
 import { TextField as MuiTextField } from "@mui/material";
+import MiniProfilePicture from "../../components/sharedComponents/profilePicture/MiniProfilePicture";
 type Friend = {
   username: string;
   firstName: string;
@@ -105,18 +106,14 @@ const ProfileFriendsCard: React.FC<ProfileFriendsCardProps> = ({ userId }) => {
         ) : (
           friends?.length > 0 &&
           friends.slice(0, 6).map((friend) => (
-            <div key={friend.id} className="text-center">
-              {friend.profilePicture ? (
-                <img
-                  src={convertPictureToURI(
-                    friend.profilePicture?.imageStringBase64
-                  )}
-                  alt={`${friend.firstName} ${friend.lastName}`}
-                  className="w-20 h-20 rounded-lg mx-auto object-cover"
+            <div key={friend.id} className="text-center p-1">
+                <MiniProfilePicture
+                  firstName={friend.firstName}
+                  imageSrc={friend.profilePicture?.imageStringBase64}
+                  lastName={friend.lastName}
+                  link={friend.urlMapping}
+                  size="xl"
                 />
-              ) : (
-                <AccountCircleIcon className="fill-slate-400 w-20 h-20 rounded-lg mx-auto"></AccountCircleIcon>
-              )}
               <Typography component={"div"}>
                 <Link
                   className="text-black dark:text-dark-text font-normal"
@@ -187,17 +184,13 @@ const ProfileFriendsCard: React.FC<ProfileFriendsCardProps> = ({ userId }) => {
           <div className="grid grid-cols-2 gap-4">
             {filteredFriends.map((friend) => (
               <div key={friend.id} className="flex items-center gap-2">
-                {friend.profilePicture ? (
-                  <img
-                    src={convertPictureToURI(
-                      friend.profilePicture?.imageStringBase64
-                    )}
-                    alt={`${friend.firstName} ${friend.lastName}`}
-                    className="w-12 h-12 lg:w-16 lg:h-16 rounded-full object-cover"
-                  />
-                ) : (
-                  <AccountCircleIcon className="fill-slate-400 w-12 h-12 lg:w-16 lg:h-16 rounded-full"></AccountCircleIcon>
-                )}
+                <MiniProfilePicture
+                  firstName={friend.firstName}
+                  imageSrc={friend.profilePicture?.imageStringBase64}
+                  lastName={friend.lastName}
+                  link={friend.urlMapping}
+                  size="xl"
+                />
                 <Typography>
                   <Link
                     className="text-black dark:text-dark-text font-normal lg:text-base text-sm"

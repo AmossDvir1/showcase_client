@@ -139,15 +139,21 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         {loading ? (
           <Grid
             container
-            className="justify-center items-center text-center flex flex-row"
+            className={clsx(
+              "justify-center items-center text-center flex flex-row",
+              className // Ensure the loading state inherits the className prop
+            )}
           >
             <Loader />
             <Typography
-              className={`${
-                variant === "outlined"
-                  ? "text-[rgb(0,0,0,0.5)]"
-                  : "text-[rgb(255,255,255,0.5)]"
-              }`}
+              className={clsx(
+                {
+                  "text-[rgb(0,0,0,0.5)]": variant === "outlined",
+                  "text-[rgb(255,255,255,0.5)]": variant !== "outlined",
+                },
+                "dark:text-dark-text px-[1rem] py-[0.4rem]",
+                className // Apply the same className here too if necessary
+              )}
             >
               {loadingText ?? "Loading..."}
             </Typography>

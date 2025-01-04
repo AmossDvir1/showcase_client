@@ -83,7 +83,7 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({
     : "";
 
   return (
-    <div>
+    <div className="h-[15rem] md:h-[22rem] xl:h-[28rem]">
       <ProfilePictureUploader
         setOpen={setUploaderOpen}
         open={uploaderOpen}
@@ -98,19 +98,19 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({
         <Paper
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="flex items-center justify-center bg-paper-dark dark:bg-dark-paper-light w-full max-w-full max-h-[30rem] lg:h-[30rem] xs:h-52 z-10"
+          className="flex items-center justify-center bg-paper-dark dark:bg-dark-paper-light w-full max-w-full h-[inherit] z-10"
         >
           {userProfile && isHovered && (
             <AddIcon
               onClick={onAddPictureClick}
-              className="w-40 h-40 lg:w-40 lg:h-40 xs:w-[6rem] xs:h-[6rem] dark:bg-dark-paper hover:dark:bg-dark-paper-dark dark:fill-dark-paper-light bg-gray-300 fill-slate-50 hover:bg-gray-400 object-cover rounded-full"
+              className="lg:w-40 w-[6rem] lg:h-40 h-[6rem] dark:bg-dark-paper hover:dark:bg-dark-paper-dark dark:fill-dark-paper-light bg-gray-300 fill-slate-50 hover:bg-gray-400 object-cover rounded-full"
             ></AddIcon>
           )}
         </Paper>
       ) : (
         <div
           onClick={onExistingPictureClick}
-          className="hover:brightness-90 w-full h-full bg-[50%_calc(50%-100px)] bg-no-repeat object-cover max-h-[30rem] lg:h-[30rem] xs:h-[20rem]"
+          className="hover:brightness-90 w-full h-[inherit] bg-[50%_50%] bg-no-repeat object-cover"
           style={{
             backgroundImage: `url(${coverPhotoSrc})`,
             backgroundSize: "cover",

@@ -3,6 +3,7 @@ import Profile from "./itemsTypes/Profile";
 import Post from "./itemsTypes/Post";
 import Project from "./itemsTypes/Project";
 import { colors } from "../../../utils/theme";
+import { useAppSelector } from "../../../redux/hooks";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   onItemClick: (selectedIndex: number) => void;
@@ -20,6 +21,8 @@ const ResultItem: FC<Props> = ({
   isFocused = false,
   ...rest
 }): JSX.Element => {
+  const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
+
   const renderItem = () => {
     switch (itemDetails.type) {
       case "profile":
@@ -45,7 +48,7 @@ const ResultItem: FC<Props> = ({
       onMouseDown={() => onItemClick && onItemClick(index)}
       ref={containerRef}
       style={{
-        backgroundColor: isFocused ? colors.hover : "",
+        backgroundColor: isFocused ? isDarkMode? colors.darkPaperLight : colors.hover : "",
       }}
       {...rest}
     >

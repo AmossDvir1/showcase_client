@@ -164,7 +164,11 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
               <img
                 src={preview}
                 alt="cover"
-                className="absolute w-[400px] h-auto object-cover"
+                className={`absolute object-contain ${
+                  dimensions.width < dimensions.height 
+                    ? "max-h-[400px] w-auto" 
+                    : "max-w-[400px] h-auto"
+                } `}
               />
             )
           ) : (

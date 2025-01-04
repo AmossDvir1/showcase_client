@@ -102,7 +102,8 @@ const ChatDrawer: React.FC<ChatDrawerProps> = ({ onMenuBar = false }) => {
                       {userInfo && (
                         <div className="pr-2">
                           <MiniProfilePicture
-                            userDetails={userInfo}
+                          firstName={userInfo.firstName}
+                          lastName={userInfo.lastName}
                             size="small"
                             active={true}
                           ></MiniProfilePicture>
