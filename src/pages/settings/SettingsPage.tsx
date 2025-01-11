@@ -53,19 +53,18 @@ useEffect(() => {
       <Typography variant="h4" className="mb-4">
         Settings
       </Typography>
-      <Box className="w-screen md:w-[600px] rounded-xl bg-gray-50 dark:bg-dark-paper-dark" >
+      <Box className="w-[calc(100vw-10px)] md:w-[600px]  bg-gray-50 dark:bg-dark-paper-dark" >
         <Tabs
         className="p-0 m-0"
           value={activeTab}
           onChange={handleTabChange}
-          // indicatorColor="secondary"
-          // textColor="secondary"
+
           centered
         >
-          <Tab className="px-16 md:px-8 xs:max-md:m-0 xs:max-md:w-[10%]" label="General" />
-          <Tab className="px-16 md:px-8 xs:max-md:m-0 xs:max-md:w-[10%]" label="Profile" />
-          <Tab className="px-16 md:px-8 xs:max-md:w-[10%]" label="Security" />
-          <Tab className="px-16 md:px-8 xs:max-md:w-[10%]" label="Notifications" />
+          <Tab className="md:px-8" label="General" />
+          <Tab className="md:px-8" label="Profile" />
+          <Tab className="md:px-8" label="Security" />
+          <Tab className="md:px-8" label="Notifications" />
         </Tabs>
           <Divider className="w-full flex"></Divider>
 

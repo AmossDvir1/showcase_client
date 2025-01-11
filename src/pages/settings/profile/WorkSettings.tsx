@@ -6,7 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import RemoveIcon from "@mui/icons-material/Remove";
 import dayjs, { Dayjs } from "dayjs";
 import { extractMonthYear } from "../../../utils/utils";
-import { Chip } from "../../../components/sharedComponents/Chip";
+import { Chip } from "../../../components/sharedComponents/chip/Chip";
 import WorkDialog from "./WorkDialog";
 interface WorkSettingsProps {
   workList: IWork[];

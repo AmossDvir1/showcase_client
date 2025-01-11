@@ -1,13 +1,13 @@
 import React from "react";
-import { Button } from "../../components/sharedComponents/Button";
 import Typography from "../../components/sharedComponents/Typography";
-import { Chip } from "../../components/sharedComponents/Chip";
+import { Chip } from "../../components/sharedComponents/chip/Chip";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import WorkIcon from "@mui/icons-material/Work";
 import HomeIcon from "@mui/icons-material/Home";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import { extractMonthYear } from "../../utils/utils";
 import CustomButton from "../../components/sharedComponents/CustomButton";
+import TechnologyChip from "../../components/sharedComponents/chip/TechChipWithPopover";
 type ProfileInfoCardProps = {
   relationshipStatus?: string;
   work?: IWork[];
@@ -47,7 +47,9 @@ const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
             </Typography>
           </div>
         ) : (
-          <Typography className="dark:text-black text-black">Not specified</Typography>
+          <Typography className="dark:text-black text-black">
+            Not specified
+          </Typography>
         )}
       </div>
       <div className="mb-4 flex items-center">
@@ -61,17 +63,14 @@ const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
           Technologies:
         </Typography>
         <div className="flex flex-wrap gap-2">
-          {technologies?.map((tech, index) => (
-            <div key={index}>
-              <Chip
-                iconSrc={tech.icon}
-                id={tech._id}
-                outlineColor={tech.color}
-                label={tech.label}
-                variant="outlined"
-                color="primary"
-              />
-            </div>
+          {technologies?.map((tech) => (
+            <TechnologyChip
+              key={tech._id}
+              id={tech._id}
+              label={tech.label}
+              icon={tech.icon}
+              color={tech.color}
+            />
           ))}
         </div>
       </div>
@@ -82,10 +81,9 @@ const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
         </Typography>
       </div>
       {isCurrentUser && (
-
         <div className="mt-auto">
           <CustomButton
-          fullWidth
+            fullWidth
             className="px-4 py-2 text-sm "
             variant="outlined"
             size="medium"

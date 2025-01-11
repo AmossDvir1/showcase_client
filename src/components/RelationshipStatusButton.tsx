@@ -5,7 +5,7 @@ import { serverReq } from "../API/utils/axiosConfig";
 import { confirmFriendship } from "../controllers/friendsController/confirmFriendship";
 import Loader from "./sharedComponents/Loader";
 import CustomButton from "./sharedComponents/CustomButton";
-import { Chip } from "./sharedComponents/Chip";
+import { Chip } from "./sharedComponents/chip/Chip";
 
 const RequestSent: React.FC = () => {
   return (

@@ -8,7 +8,7 @@ import {
   Box,
 } from "@mui/material";
 import Typography from "../../../components/sharedComponents/Typography";
-import ChipsSelector from "../../../components/sharedComponents/ChipsSelector";
+import ChipsSelector from "../../../components/sharedComponents/chip/ChipsSelector";
 import { showToast } from "../../../utils/toast";
 import { fetchTechnologiesInventory } from "../../../controllers/technologiesController/fetchTechnologiesInventory";
 import { updateUserProfileSettings } from "../../../controllers/userSettingsController/profileSettings/updateUserProfileSettings";

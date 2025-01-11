@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FormControl, IconButton } from "@mui/material";
 import Typography from "../../../components/sharedComponents/Typography";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { Chip } from "../../../components/sharedComponents/Chip";
+import { Chip } from "../../../components/sharedComponents/chip/Chip";
 import GeoDialog from "./GeoDialog";
 import { Country, State, City } from "react-country-state-city/dist/esm/types";
 import EditIcon from "@mui/icons-material/Edit";

@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, ChipProps, Chip as MuiChip } from "@mui/material/";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppSelector } from "../../../redux/hooks";
 
 interface Props extends ChipProps {
   label: string;
@@ -44,7 +44,6 @@ export const Chip: React.FC<Props> = ({
                   borderStyle: "solid",
                 }}
                 className={`bg-transparent`}
-                alt="Natacha"
                 src={iconSrc}
               />
             ),

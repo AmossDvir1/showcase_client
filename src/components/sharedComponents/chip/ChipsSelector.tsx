@@ -8,7 +8,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
 import { Chip } from "./Chip";
-import Typography from "./Typography";
+import Typography from "../Typography";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 interface Props {
   setSelectedChips: React.Dispatch<React.SetStateAction<ChipItem[]>>;
