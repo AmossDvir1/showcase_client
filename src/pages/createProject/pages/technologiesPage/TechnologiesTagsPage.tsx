@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import Typography from "../../../../components/sharedComponents/Typography";
-import ChipsSelector from "../../../../components/sharedComponents/ChipsSelector";
+import ChipsSelector from "../../../../components/sharedComponents/chip/ChipsSelector";
 interface Props {}
 
 export const TechnologiesTagsPage: React.FC<Props> = () => {

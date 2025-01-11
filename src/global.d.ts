@@ -51,6 +51,8 @@ interface ChipItem {
   label: string;
   color?: string;
   icon?: string;
+  friendsUsing?: number; // Friends using the tech
+  totalUsers?: number; // Total users using the tech
 }
 
 type ResultsItemTypes = "profile" | "post" | "project";
@@ -183,4 +185,13 @@ interface ImageOffset {
 interface ImageDimensions {
   width: number;
   height: number;
+}
+
+interface Technology {
+  _id: string;
+  category: string;
+  color?: string;
+  icon?: string;
+  label: string;
+  description: string;
 }

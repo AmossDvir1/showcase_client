@@ -26,6 +26,7 @@ const SwipeableMobileDrawer: React.FC<SwipeableMobileDrawerProps> = ({
   toggleDrawer,
   buttons,
 }) => {
+  const minDrawerHeight = 40 + 40 + 20 + 20 + 4 * buttons.length;
 
   return (
     <SwipeableDrawer
@@ -40,11 +41,13 @@ const SwipeableMobileDrawer: React.FC<SwipeableMobileDrawerProps> = ({
       sx={{
         zIndex: 1500,
         "& .MuiPaper-root": {
-          height: "fit-content", // Adjust drawer height
+           minHeight: `${minDrawerHeight}px`,
+           maxHeight: '90vh',
           py: "40px",
           px: "40px",
           borderTopLeftRadius: "16px",
           borderTopRightRadius: "16px",
+            overflow: 'auto',
         },
       }}
     >
@@ -56,7 +59,7 @@ const SwipeableMobileDrawer: React.FC<SwipeableMobileDrawerProps> = ({
           alignItems: "center",
           paddingRight: "4px",
           paddingLeft: "4px",
-          height: "100%",
+           height: "fit-content",
           borderRadius: "15px",
           paddingTop: "20px",
           paddingBottom: "20px",

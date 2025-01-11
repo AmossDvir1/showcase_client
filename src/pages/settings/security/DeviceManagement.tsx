@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Typography from "../../../components/sharedComponents/Typography";
 import { serverReq } from "../../../API/utils/axiosConfig";
-import { Chip } from "../../../components/sharedComponents/Chip";
+import { Chip } from "../../../components/sharedComponents/chip/Chip";
 import Loader from "../../../components/sharedComponents/Loader";
 import { useAuth } from "../../../context/AuthContext";
 import { LoadingButton } from "@mui/lab";
