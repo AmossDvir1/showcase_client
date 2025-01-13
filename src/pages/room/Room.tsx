@@ -9,28 +9,37 @@ import {
   Stack,
   Divider,
   Grid,
-  Avatar,
   AvatarGroup,
   Skeleton,
 } from "@mui/material";
+import { Avatar as MuiAvatar } from "@mui/material";
 import LinesSkeleton from "../../components/sharedComponents/LinesSkeleton";
-// import Avatar from "../../components/sharedComponents/Avatar";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { fetchUserInfo } from "../../redux/slices/user";
+import Avatar from "../../components/sharedComponents/Avatar";
 
 const Room = () => {
   const isMobile = useMediaQuery(500);
-
+  const dispatch = useAppDispatch();
   const { id } = useParams();
   const [technology, setTechnology] = useState<Technology | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [friends, setFriends] = useState<UserDetails[]>([]);
+  const userInfo = useAppSelector((state) => state.user.userInfo);
 
   useEffect(() => {
-    const fetchTechnology = async () => {
+    const fetchRoomData = async () => {
       try {
         setLoading(true);
-        const response = await serverReq.get("/technologies/", {
+        const response = await serverReq.get(`/rooms/${id}/users`);
+        setFriends(response.data.users);
+
+        const techResponse = await serverReq.get("/technologies/", {
           params: { id },
-        }); // Replace with your actual API endpoint
-        setTechnology(response.data.tech);
+        });
+
+        setTechnology(techResponse.data.tech);
+
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -39,7 +48,7 @@ const Room = () => {
       }
     };
 
-    fetchTechnology();
+    fetchRoomData();
   }, [id]);
 
   return (
@@ -52,7 +61,7 @@ const Room = () => {
             animation="wave"
           ></Skeleton>
         ) : technology ? (
-          <Avatar
+          <MuiAvatar
             className={isMobile ? "w-32 h-32" : "w-56 h-56"}
             src={technology.icon}
           />
@@ -91,30 +100,26 @@ const Room = () => {
           {/*  */}
         </Grid>
         <Grid item xs={12} md={6}>
-          <div className="flex items-center gap-2">
-            <AvatarGroup total={56}>
-              <Avatar
-                className="w-9 h-9 dark:bg-dark-paper bg-paper-dark text-primary dark:text-dark-text"
-                alt="Remy Sharp"
-                src="/static/images/avatar/1.jpg"
-              />
-              <Avatar
-                className="w-9 h-9 dark:bg-dark-paper bg-paper-dark text-primary dark:text-dark-text"
-                alt="Travis Howard"
-                src="/static/images/avatar/2.jpg"
-              />
-              <Avatar
-                className="w-9 h-9 dark:bg-dark-paper bg-paper-dark text-primary dark:text-dark-text"
-                alt="Cindy Baker"
-                src="/static/images/avatar/3.jpg"
-              />
-              <Avatar
-                className="w-9 h-9 dark:bg-dark-paper bg-paper-dark text-primary dark:text-dark-text"
-                alt="Agnes Walker"
-                src="/static/images/avatar/4.jpg"
-              />
-            </AvatarGroup>
-          </div>
+          {loading ? (
+            <Typography>Loading...</Typography>
+          ) : (
+            <div className="flex items-center gap-2">
+              <AvatarGroup total={friends.length}>
+                {friends.map((friend) => (
+                  <Avatar
+                    link={friend.urlMapping}
+                    firstName={friend.firstName}
+                    lastName={friend.lastName}
+                    tooltip
+                    key={friend?.id}
+                    className="w-12 h-12 dark:bg-dark-paper bg-paper-dark text-primary dark:text-dark-text"
+                    alt={friend?.username}
+                    imageSrc={friend?.profilePicture?.imageStringBase64 || ""}
+                  />
+                ))}
+              </AvatarGroup>
+            </div>
+          )}
         </Grid>
       </Grid>
     </div>
