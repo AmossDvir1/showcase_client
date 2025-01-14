@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Box, Divider, IconButton, InputAdornment } from "@mui/material";
 import Typography from "../Typography";
 import { PostMenu } from "./PostMenu";
@@ -27,6 +27,8 @@ import { useAppSelector, useAppDispatch } from "../../../redux/hooks";
 import { RootState } from "../../../redux/rootReducer";
 import { fetchUserInfo } from "../../../redux/slices/user";
 import CustomButton from "../CustomButton";
+import AiSuggestions from "../AiSuggestions";
+import { serverReq } from "../../../API/utils/axiosConfig";
 
 interface PostProps {
   post: Post;
@@ -61,7 +63,11 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
   const [showCommentsOpen, setShowCommentsOpen] = useState(false);
   const [userStr, setUserStr] = useState("");
   const [commentSubmitLoading, setCommentSubmitLoading] = useState(false);
-  const [commentString, setCommentString] = useState("");
+  const [commentString, setCommentString] = useState<string>("");
+  const [commentSuggestion, setCommentSuggestion] = useState("");
+  const [isSuggestionLoading, setIsSuggestionLoading] = useState(false);
+  const [suggestionActive, setSuggestionActive] = useState(false);
+  const textFieldRef = useRef<HTMLDivElement>(null);
 
   const onDeletePost = async () => {
     const res = await deletePost(postData._id);
@@ -104,6 +110,19 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
   const onCommentClick = () => {
     setCommentOpen(!commentOpen);
   };
+  const getSuggestion = async (context: string) => {
+    setIsSuggestionLoading(true);
+    try {
+      const res = await serverReq.post("/ai/suggestions", {
+        context,
+        type: "comment",
+      });
+      setCommentSuggestion(res.data.suggestions);
+      setIsSuggestionLoading(false);
+    } catch (error: any) {
+      setIsSuggestionLoading(false);
+    }
+  };
   const onAddComment = async () => {
     try {
       setCommentSubmitLoading(true);
@@ -121,6 +140,20 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
   const onCancel = () => {
     setValue(previousState);
     setIsEditMode(false);
+  };
+  const handleTextFieldFocus = () => {
+    if (commentString.trim() === "" && !commentSuggestion)
+      getSuggestion(postData.content);
+    setSuggestionActive(true);
+  };
+  const onAiSuggestionClose = () => {
+    setSuggestionActive(false);
+    setCommentSuggestion("");
+  };
+  const handleOnAcceptSuggestion = (val: string) => {
+    setCommentString(val);
+    setSuggestionActive(false);
+    setCommentSuggestion("");
   };
   return isDeleted || !postData ? (
     <></>
@@ -167,7 +200,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
           <div className="flex">
             <div className="mr-2">
               <MiniProfilePicture
-              size="large"
+                size="large"
                 link={postData?.user?.urlMapping}
                 imageSrc={
                   media.find((image) => image?.userId === postData?.user?.id)
@@ -228,8 +261,8 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                       component="button"
                       onClick={() => setShowCommentsOpen(!showCommentsOpen)}
                     >
-                      {`${commentsCount}`}
-                      &nbsp;{`comment${commentsCount === 1 ? "" : "s"}`}
+                      {`${commentsCount}`} 
+                      {`comment${commentsCount === 1 ? "" : "s"}`}
                     </Link>
                   </Typography>
                 </div>
@@ -279,8 +312,21 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
             </div>
           </div>
           <Collapse in={commentOpen}>
-            <div className="flex w-full py-2 bg-transparent rounded-full">
+            <div
+              className="flex flex-col w-full py-2 bg-transparent rounded-full"
+              ref={textFieldRef}
+            >
+              <AiSuggestions
+                suggestions={commentSuggestion}
+                loading={isSuggestionLoading}
+                onAccept={handleOnAcceptSuggestion}
+                onDiscard={onAiSuggestionClose}
+                inputRef={textFieldRef}
+                isExpanded={suggestionActive}
+                onExpandedChange={setSuggestionActive}
+              />
               <MuiTextField
+              className="pt-2"
                 onChange={(e) => setCommentString(e.target.value)}
                 value={commentString}
                 sx={{ borderRadius: "100px" }}
@@ -290,9 +336,9 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                   sx: { borderRadius: "100px", cursor: "default" },
                   inputProps: {
                     className: `input-no-ring lg:text-sm xs:text-xs dark:bg-dark-paper-light
-                      dark:placeholder:text-neutral-400 dark:text-dark-text
-                      text-black 
-                      `,
+                dark:placeholder:text-neutral-400 dark:text-dark-text
+                 text-black 
+               `,
                     style: {
                       borderTopLeftRadius: "100px",
                       borderBottomLeftRadius: "100px",
@@ -332,6 +378,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                     </InputAdornment>
                   ),
                 }}
+                onFocus={handleTextFieldFocus}
               />
             </div>
           </Collapse>
