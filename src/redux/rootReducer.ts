@@ -4,6 +4,7 @@ import globalStateReducer from "./slices/globalState";
 import notificationsReducer from "./slices/notifications";
 import chatReducer from "./slices/chats";
 import themeReducer from "./slices/themeSlice";
+import aiAssistantSlice from "./slices/aiAssistantSlice";
 
 
 const rootReducer = combineReducers({
@@ -11,7 +12,8 @@ const rootReducer = combineReducers({
   notifications: notificationsReducer,
   chats: chatReducer,
   globalState: globalStateReducer,
-  theme: themeReducer
+  theme: themeReducer,
+  aiAssistant: aiAssistantSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

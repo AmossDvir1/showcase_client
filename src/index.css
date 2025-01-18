@@ -73,3 +73,7 @@ input:-webkit-autofill:focus {
 input {
   color-scheme: dark;
 }
+
+.chakra-popover__popper {
+  z-index: 50 !important;
+}
