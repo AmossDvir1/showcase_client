@@ -5,11 +5,13 @@ import {
   styled,
   SwitchProps,
 } from "@mui/material";
+import { colors } from "../../utils/theme";
 
 interface Props extends Omit<SwitchProps, "onChange"> {
   label?: string;
   onChange: (checked: boolean) => void;
   isDarkLightStyling?: boolean;
+  isAIStyling?: boolean;
 }
 
 const DarkLightSwitch = styled(MuiSwitch)(({ theme, size="medium" }) => ({
@@ -68,6 +70,53 @@ const DarkLightSwitch = styled(MuiSwitch)(({ theme, size="medium" }) => ({
   },
 }));
 
+const AISwitch = styled(MuiSwitch)(({ theme, size="medium" }) => ({
+  width: size === "small" ? 44 : 62,
+  height: size === "small" ? 26 : 34,
+  padding: size === "small" ? 5 : 7,
+  "& .MuiSwitch-switchBase": {
+    margin: size === "small" ? 0 : 1,
+    padding: 0,
+    transform: size === "small" ? "translateX(2px)" : "translateX(6px)",
+    "&.Mui-checked": {
+      transform: size === "small" ? "translateX(20px)" : "translateX(22px)",
+      "& .MuiSwitch-thumb:before": {
+        backgroundImage: `url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M7 11L8.08036 8.08036L11 7L8.08036 5.91964L7 3L5.91964 5.91964L3 7L5.91964 8.08036L7 11Z" stroke="white" stroke-width="2" stroke-linecap="" stroke-linejoin=""/> <path d="M16.5 15L17.7154 11.7154L21 10.5L17.7154 9.28459L16.5 6L15.2846 9.28459L12 10.5L15.2846 11.7154L16.5 15Z" stroke="white" stroke-width="2" stroke-linecap="" stroke-linejoin=""/> <path d="M10 21L11.0804 18.0804L14 17L11.0804 15.9196L10 13L8.91964 15.9196L6 17L8.91964 18.0804L10 21Z" stroke="white" stroke-width="2" stroke-linecap="" stroke-linejoin=""/> </svg>')`,
+      },
+      "& + .MuiSwitch-track": {
+        opacity: 1,
+        ...theme.applyStyles("dark", {
+          backgroundColor: "#8796A5",
+        }),
+      },
+    },
+  },
+  "& .MuiSwitch-thumb": {
+    // backgroundColor: colors.primary,
+    width: size === "small" ? 24 : 32,
+    height: size === "small" ? 24 : 32,
+    "&::before": {
+      content: "''",
+      position: "absolute",
+      width: "100%",
+      height: "100%",
+      left: 0,
+      top: 0,
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+    },
+
+  },
+  "& .MuiSwitch-track": {
+    opacity: 1,
+    backgroundColor: "#aab4be",
+    borderRadius: 20 / 2,
+    ...theme.applyStyles("dark", {
+      backgroundColor: "#8796A5",
+    }),
+  },
+}));
+
 export const Switch: React.FC<Props> = (props) => {
   const {
     label,
@@ -76,6 +125,7 @@ export const Switch: React.FC<Props> = (props) => {
     name,
     checked,
     isDarkLightStyling = false,
+    isAIStyling=false,
     ...rest
   } = props;
 
@@ -98,7 +148,13 @@ export const Switch: React.FC<Props> = (props) => {
             checked={checked}
             {...rest}
           ></DarkLightSwitch>
-        ) : (
+        ) :isAIStyling? <AISwitch
+        value="active"
+        color="primary"
+        onChange={handleChange}
+        checked={checked}
+        {...rest}
+      ></AISwitch>: (
           <MuiSwitch
             value="active"
             color="primary"

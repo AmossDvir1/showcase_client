@@ -29,6 +29,7 @@ import { fetchUserInfo } from "../../../redux/slices/user";
 import CustomButton from "../CustomButton";
 import AiSuggestions from "../AiSuggestions";
 import { serverReq } from "../../../API/utils/axiosConfig";
+import { aiAssistantStatus } from "../../../redux/slices/aiAssistantSlice";
 
 interface PostProps {
   post: Post;
@@ -68,6 +69,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
   const [isSuggestionLoading, setIsSuggestionLoading] = useState(false);
   const [suggestionActive, setSuggestionActive] = useState(false);
   const textFieldRef = useRef<HTMLDivElement>(null);
+  const aiEnabled = useAppSelector(aiAssistantStatus);
 
   const onDeletePost = async () => {
     const res = await deletePost(postData._id);
@@ -316,6 +318,7 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
               className="flex flex-col w-full py-2 bg-transparent rounded-full"
               ref={textFieldRef}
             >
+              {aiEnabled && <Collapse in={suggestionActive}>
               <AiSuggestions
                 suggestions={commentSuggestion}
                 loading={isSuggestionLoading}
@@ -325,8 +328,9 @@ export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
                 isExpanded={suggestionActive}
                 onExpandedChange={setSuggestionActive}
               />
+              </Collapse>}
               <MuiTextField
-              className="pt-2"
+                className="pt-2"
                 onChange={(e) => setCommentString(e.target.value)}
                 value={commentString}
                 sx={{ borderRadius: "100px" }}
