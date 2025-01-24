@@ -7,7 +7,7 @@ import { HomePage } from "./pages/HomePage";
 import { SignUp } from "./pages/auth/SignUp";
 import { Login } from "./pages/auth/Login";
 import { UserProjectsDashboard } from "./pages/UserProjectsDashboard";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import Layout from "./components/Layout";
 import ActivationLayout from "./pages/auth/ActivationLayout";
@@ -15,19 +15,20 @@ import Profile from "./pages/profile/ProfilePage";
 import { WebSocketProvider } from "./context/WebSocketContext";
 import SettingsPage from "./pages/settings/SettingsPage";
 import AboutUs from "./pages/AboutUs";
-import { useAppSelector } from "./redux/hooks";
+import { useAppSelector, useAppDispatch } from "./redux/hooks";
 import { useEffect } from "react";
 import { createMuiTheme } from "./utils/theme";
 import MobileMessenger from "./pages/mobileMessenger/MobileMessenger";
 import Room from "./pages/room/Room";
+import { fetchAiAssistantStatus } from "./redux/slices/aiAssistantSlice";
 
 const rootElement = document.getElementById("root");
 
 
 const App = () => {
-
+  const dispatch = useAppDispatch();
   const themeMode = useAppSelector((state) => state.theme.mode);
-  
+  const {checkFinished, isAuthenticated, isActivated} = useAuth();
   const muiTheme = createMuiTheme(themeMode, rootElement);
 
   useEffect(() => {
@@ -38,10 +39,15 @@ const App = () => {
       document.documentElement.classList.remove("dark");
     }
   }, [themeMode]);
+
+  useEffect(() => {
+    if (checkFinished && isAuthenticated && isActivated) {
+      dispatch(fetchAiAssistantStatus());
+    }
+  }, [dispatch, isAuthenticated, checkFinished, isActivated]);
   
   return (
     <StyledEngineProvider injectFirst>
-      <AuthProvider>
         <ThemeProvider theme={muiTheme}>
           <WebSocketProvider>
             <Router>
@@ -85,7 +91,6 @@ const App = () => {
             <ToastContainer />
           </WebSocketProvider>
         </ThemeProvider>
-      </AuthProvider>
     </StyledEngineProvider>
   );
 };

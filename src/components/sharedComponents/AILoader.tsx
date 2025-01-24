@@ -12,7 +12,7 @@ const StarLoader: React.FC<AILoader> = ({ loading }) => {
       animationDelay: 0,
       animationDuration: 2,
       top: "0%",
-      left: "10%",
+      left: "0%",
       rotate: 'rotate(50deg)'
     },
     {
@@ -42,15 +42,15 @@ const StarLoader: React.FC<AILoader> = ({ loading }) => {
   ];
 
   return (
-    <div className="flex justify-center items-center relative w-8 h-8 bg-transparent">
+    <div className="flex justify-center items-center relative w-8 h-6 bg-transparent">
       {/* Inline Keyframes in the component */}
       {loading && (
         <style>
           {`
           @keyframes pulse {
-            0% { transform: scale(0.7); }
+            0% { transform: scale(0.5); }
             50% { transform: scale(1.3); }
-            100% { transform: scale(0.7); }
+            100% { transform: scale(0.5); }
           }
         `}
         </style>
@@ -64,7 +64,6 @@ const StarLoader: React.FC<AILoader> = ({ loading }) => {
           className="absolute"
           style={{
             width: `${star.size}px`,
-            // transform: star.rotate,
             height: `${star.size}px`,
             top: star.top,
             left: star.left,

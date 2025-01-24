@@ -29,7 +29,7 @@ import { fetchUserInfo } from "../../../redux/slices/user";
 import CustomButton from "../CustomButton";
 import AiSuggestions from "../AiSuggestions";
 import { serverReq } from "../../../API/utils/axiosConfig";
-import { aiAssistantStatus } from "../../../redux/slices/aiAssistantSlice";
+import { aiAssistantStatus, fetchAiAssistantStatus } from "../../../redux/slices/aiAssistantSlice";
 
 interface PostProps {
   post: Post;

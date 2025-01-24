@@ -46,26 +46,30 @@ const GeneralSettings: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
-      <Typography variant="h6" className="mb-4 text-black dark:text-black">
+    <>
+      <Typography className="text-gray-800 text-2xl font-medium mb-6">
         General
       </Typography>
       <div className="pl-6">
-      <div className="flex items-center pb-4">
-        <Typography>Dark Mode</Typography>
-        <Switch
-          isDarkLightStyling
-          checked={useAppSelector((state) => state.theme.mode) === "dark"}
-          onChange={(value: boolean) => onThemeSwitchChange(value)}
-        />
+        <div className="flex items-center pb-4">
+          <Typography>Dark Mode</Typography>
+          <Switch
+            type="theme"
+            checked={useAppSelector((state) => state.theme.mode) === "dark"}
+            onChange={(value: boolean) => onThemeSwitchChange(value)}
+          />
+        </div>
+        <div className="flex items-center">
+          <Typography>Enable Showcase AI</Typography>
+          <Switch
+            type="ai"
+            checked={aiEnabledLocal}
+            onChange={onAiEnabledClick}
+          />
+          <AiAssistantInfo />
+        </div>
       </div>
-      <div className="flex items-center">
-        <Typography>Enable Showcase AI</Typography>
-        <Switch isAIStyling checked={aiEnabledLocal} onChange={onAiEnabledClick} />
-        <AiAssistantInfo />
-      </div>
-      </div>
-    </div>
+    </>
   );
 };
 

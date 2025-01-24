@@ -10,7 +10,7 @@ interface TypographyProps extends MuiTypographyProps {
 const Typography: React.FC<TypographyProps> = ({ className, ...props }) => {
   return (
     <MuiTypography
-    className={clsx("text-black dark:text-dark-text", className)} // Combine default and custom classes
+    className={clsx("text-black dark:text-dark-text cursor-default", className)} // Combine default and custom classes
       {...props}
     />
   );

@@ -50,7 +50,7 @@ const AiAssistantInfo: React.FC = () => {
           </div>
         }
         arrow
-        placement="right"
+        placement="bottom"
         componentsProps={{
           tooltip: {
             sx: {

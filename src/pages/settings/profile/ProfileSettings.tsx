@@ -5,109 +5,91 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-  Box,
+  Collapse,
 } from "@mui/material";
 import Typography from "../../../components/sharedComponents/Typography";
 import ChipsSelector from "../../../components/sharedComponents/chip/ChipsSelector";
 import { showToast } from "../../../utils/toast";
-import { fetchTechnologiesInventory } from "../../../controllers/technologiesController/fetchTechnologiesInventory";
 import { updateUserProfileSettings } from "../../../controllers/userSettingsController/profileSettings/updateUserProfileSettings";
-import { Button } from "../../../components/sharedComponents/Button";
 import WorkSettings from "./WorkSettings";
 import Loader from "../../../components/sharedComponents/Loader";
 import CustomButton from "../../../components/sharedComponents/CustomButton";
+import debounce from "lodash/debounce";
 
 import GeoSettings from "./GeoSettings";
-import { City, Country, State } from "react-country-state-city/dist/esm/types";
+import { Switch } from "../../../components/sharedComponents/Switch";
+import useMediaQuery from "../../../components/responsiveness/useMediaQuery";
+import { Chip } from "../../../components/sharedComponents/chip/Chip";
 
 interface ProfileSettingsProps {
-  initialSettings?: IProfileSettings;
+  settings?: IProfileSettings;
+  setSettings: React.Dispatch<React.SetStateAction<IProfileSettings>>;
   loading?: boolean;
+  onSave: (isAutoSave?: boolean) => Promise<any>;
+  loadingSave?: boolean;
+  availableTechnologies: ChipItem[];
 }
 
-const defaultSettings = {
-  bio: "",
-  relationshipStatus: "",
-  technologies: [],
-  work: [],
-  currentCity: { country: "", state: "", city: "" },
-};
-
 const ProfileSettings: React.FC<ProfileSettingsProps> = ({
-  initialSettings = defaultSettings,
+  settings,
   loading = false,
+  availableTechnologies,
+  onSave,
+  loadingSave = false,
+  setSettings,
 }) => {
-  const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
-  const [bio, setBio] = useState<string>(initialSettings?.bio ?? "");
-  const [workList, setWorkList] = useState<IWork[]>(
-    initialSettings?.work ?? []
-  );
+  const isMobile = useMediaQuery(500);
+  const [bio, setBio] = useState<string>(settings?.bio ?? "");
+  const [workList, setWorkList] = useState<IWork[]>(settings?.work ?? []);
+  const [autoSaveEnabled, setAutoSaveEnabled] = useState<boolean>(true);
+  const [isAutoSaving, setIsAutoSaving] = useState<boolean>(false);
   const [currentCity, setCurrentCity] = useState<{
-    country: Country | string;
-    state: State | string;
-    city: City | string;
-  }>(initialSettings?.currentCity ?? { city: "", state: "", country: "" });
+    country: string;
+    state: string;
+    city: string;
+  }>(settings?.currentCity ?? { city: "", state: "", country: "" });
   const [relationshipStatus, setRelationshipStatus] = useState<string>(
-    initialSettings?.relationshipStatus ?? ""
+    settings?.relationshipStatus ?? ""
   );
-  const [availableTechnologies, setAvailableTechnologies] = useState<
-    ChipItem[]
-  >([]);
+
   const [selectedTechnologies, setSelectedTechnologies] = useState<ChipItem[]>(
-    initialSettings?.technologies ?? []
+    settings?.technologies ?? []
   );
 
-  useEffect(() => {
-    const fetchAvailableTechnologies = async () => {
-      try {
-        const techs = await fetchTechnologiesInventory();
-        if (techs) {
-          setAvailableTechnologies(techs);
-        }
-      } catch (err) {
-        console.error("Failed to fetch technologies inventory", err);
-      }
-    };
+  const handleAutoSave = async () => {
+    if (!autoSaveEnabled) return;
 
-    fetchAvailableTechnologies();
-  }, []);
-
-  useEffect(() => {
-    if (initialSettings) {
-      setRelationshipStatus(initialSettings.relationshipStatus ?? "");
-      setBio(initialSettings.bio ?? "");
-      setWorkList(initialSettings.work ?? []);
-      setSelectedTechnologies(initialSettings.technologies ?? []);
-    }
-  }, [initialSettings]);
-
-  const updateProfileSettings = async () => {
+    setIsAutoSaving(true);
     try {
-      setIsSaveLoading(true);
-      const res = await updateUserProfileSettings({
-        technologies: selectedTechnologies,
-        bio,
-        work: workList,
-        relationshipStatus,
-        currentCity: {
-          city: currentCity.city.toString(),
-          state: currentCity.state.toString(),
-          country: currentCity.country.toString(),
-        },
-      });
-      showToast("Settings Saved Successfully", "Save Success", "success");
-      return res.data;
-    } catch (err) {
-      console.log(err);
+      await onSave(true); // Trigger the save logic
     } finally {
-      setIsSaveLoading(false);
+      setIsAutoSaving(false); // Ensure this is reset even if the save fails
     }
   };
 
-  // Handle form submissions
-  const onSave = () => {
-    updateProfileSettings();
-  };
+  // Debounce the save call to optimize performance
+  const debouncedHandleAutoSave = debounce(handleAutoSave, 1000);
+
+  useEffect(() => {
+    if (autoSaveEnabled) {
+      debouncedHandleAutoSave();
+    }
+
+    // Cleanup debounce on unmount
+    return () => {
+      debouncedHandleAutoSave.cancel();
+    };
+  }, [settings]); // Trigger auto-save whenever settings change
+
+  useEffect(() => {
+    if (settings) {
+      setRelationshipStatus(settings.relationshipStatus ?? "");
+      setBio(settings.bio ?? "");
+      setWorkList(settings.work ?? []);
+      setSelectedTechnologies(settings.technologies ?? []);
+    }
+  }, [settings]);
+
   const locationList = {
     country: currentCity.country,
     state: currentCity.state,
@@ -124,14 +106,40 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
       </div>
     );
   return (
-    <Box className="flex flex-col p-4 bg-gray-50 dark:bg-dark-paper rounded-md shadow-md">
-      <Typography
-        variant="h5"
-        className="mb-6 text-primary flex items-center justify-center"
-      >
-        Edit Profile Settings
-      </Typography>
-
+    <>
+      <div className="flex justify-between mb-6">
+        <Typography className="text-gray-800 text-2xl font-medium mb-6">
+          Profile
+        </Typography>
+        {/* AutoSave Switch */}
+        <div className="flex flex-col">
+          <div className="flex justify-end">
+            <Typography className={`${isMobile ? "text-xs" : ""}`}>
+              Auto-save
+            </Typography>
+          </div>
+          <div className="flex items-center justify-between">
+            <Collapse
+              orientation="horizontal"
+              in={autoSaveEnabled}
+            >
+              <Chip
+              className={"w-36"}
+                size={isMobile ? "small" : "medium"}
+                label={isAutoSaving ? "Saving..." : "Auto-save enabled"}
+              ></Chip>
+            </Collapse>
+            <div className="pl-2 items-center justify-center flex">
+              <Switch
+                type="autoSave"
+                size={isMobile ? "small" : "medium"}
+                checked={autoSaveEnabled}
+                onChange={setAutoSaveEnabled}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Bio */}
       <MuiTextField
         label="Bio"
@@ -139,9 +147,9 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
         rows={4}
         variant="outlined"
         fullWidth
-        value={bio}
+        value={settings?.bio}
         inputProps={{ className: "dark:text-dark-text" }}
-        onChange={(e) => setBio(e.target.value)}
+        onChange={(e) => setSettings({ ...settings, bio: e.target.value })}
         className="mb-6 dark:bg-dark-paper-light dark:text-dark-text"
         placeholder="Tell us about yourself..."
       />
@@ -157,8 +165,10 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
             disableAutoFocus: true,
           }}
           label="Relationship Status"
-          value={relationshipStatus}
-          onChange={(e) => setRelationshipStatus(e.target.value)}
+          value={settings?.relationshipStatus}
+          onChange={(e) =>
+            setSettings({ ...settings, relationshipStatus: e.target.value })
+          }
         >
           <MenuItem value="Single">Single</MenuItem>
           <MenuItem value="In a Relationship">In a Relationship</MenuItem>
@@ -168,18 +178,22 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
       </FormControl>
 
       {/* Current city */}
-      <FormControl fullWidth className="mb-6">
-        <Typography className="text-lg">Current City</Typography>
-        <GeoSettings
-          currentCity={currentCity}
-          setCurrentCity={setCurrentCity}
-        />
-      </FormControl>
+      {settings?.currentCity && (
+        <FormControl fullWidth className="mb-6">
+          <Typography className="text-lg">Current City</Typography>
+          <GeoSettings
+            currentCity={settings.currentCity}
+            setCurrentCity={setCurrentCity}
+          />
+        </FormControl>
+      )}
 
-      <WorkSettings
-        workList={workList}
-        setWorkList={setWorkList}
-      ></WorkSettings>
+      {settings?.work && (
+        <WorkSettings
+          workList={settings?.work}
+          setWorkList={setWorkList}
+        ></WorkSettings>
+      )}
 
       {/* Programming Languages */}
       <FormControl fullWidth className="mb-6">
@@ -187,24 +201,26 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
 
         <ChipsSelector
           setSelectedChips={setSelectedTechnologies}
-          selectedChips={selectedTechnologies}
+          selectedChips={settings?.technologies ?? []}
           availableChips={availableTechnologies ?? []}
         ></ChipsSelector>
-      </FormControl>
 
-      {/* Save Button */}
-      <CustomButton
-        className="mt-2 py-1"
-        size="medium"
-        variant="outlined"
-        loading={isSaveLoading}
-        color="primary"
-        fullWidth
-        onClick={onSave}
-      >
-        Save Changes
-      </CustomButton>
-    </Box>
+        <div className="pt-6 flex items-center justify-center h-10">
+          <Collapse in={!autoSaveEnabled}>
+            <CustomButton
+              className="mt-2 py-1"
+              size="medium"
+              variant="outlined"
+              loading={loadingSave}
+              color="primary"
+              onClick={() => onSave(autoSaveEnabled)}
+            >
+              Save Changes
+            </CustomButton>
+          </Collapse>
+        </div>
+      </FormControl>
+    </>
   );
 };
 

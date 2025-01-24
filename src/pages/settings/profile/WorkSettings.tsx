@@ -32,7 +32,15 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
     resetInputs();
     setIsWorkDialogOpen(true);
   };
-  const closeWorkDialog = () => setIsWorkDialogOpen(false);
+  const closeWorkDialog = (
+    event?: any, 
+    reason?: "backdropClick" | "escapeKeyDown"
+  ) => {
+    if (reason === "backdropClick" || reason === "escapeKeyDown") {
+      return; // Do nothing to prevent closing
+    }
+    setIsWorkDialogOpen(false);
+  };
 
   const isAddButtonDisabled = (): boolean => {
     return !jobTitleInput || !workPlaceInput || !startedAtInput;
