@@ -1,76 +1,166 @@
-import React from "react";
-import {
-  CountrySelect,
-  StateSelect,
-  CitySelect,
-} from "react-country-state-city";
-import { City, Country, State } from "react-country-state-city/dist/esm/types";
+import React, { useState, useEffect } from 'react';
+import { serverReq } from '../../API/utils/axiosConfig';
+import { Select, MenuItem, CircularProgress, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
 
-import "react-country-state-city/dist/react-country-state-city.css";
-import Typography from "./Typography";
-
-interface GeoSelectProps {
-  selectedCountry: Country | null;
-  selectedState: State | null;
-  selectedCity: City | null;
-  setSelectedCountry: (country: Country | null) => void;
-  setSelectedState: (state: State | null) => void;
-  setSelectedCity: (city: City | null) => void;
+interface CustomSelectProps {
+  label: string;
+  options: { id: number; name: string }[];
+  value: number | null;
+  onChange: (event: SelectChangeEvent<number>) => void;
+  disabled?: boolean;
+  loading?: boolean;
 }
 
-const GeoSelect: React.FC<GeoSelectProps> = ({
-  selectedCountry,
-  selectedState,
-  selectedCity,
-  setSelectedCountry,
-  setSelectedState,
-  setSelectedCity,
+const CustomSelect: React.FC<CustomSelectProps> = ({
+  label,
+  options,
+  value,
+  onChange,
+  disabled = false,
+  loading = false,
 }) => {
   return (
-    <div style={{ maxWidth: "400px", margin: "0 auto" }}>
-      {/* Country Selector */}
-      <Typography>Select Country</Typography>
-      <CountrySelect
-        autoComplete="off"
-        onChange={(country) => {
-          setSelectedCountry(country as Country); // Save selected country
-          setSelectedState(null); // Reset state when country changes
-          setSelectedCity(null); // Reset city when country changes
-        }}
-        placeHolder="Select Country"
-      />
+    <FormControl fullWidth className="my-4">
+      <InputLabel>{label}</InputLabel>
+      <Select
+        value={value || ''}
+        onChange={onChange}
+        disabled={disabled || loading}
+        className="bg-white"
+      >
+        <MenuItem value="">
+          {loading ? <CircularProgress size={20} /> : `Select a ${label.toLowerCase()}`}
+        </MenuItem>
+        {options.map((option) => (
+          <MenuItem key={option.id} value={option.id}>
+            {option.name}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+};
 
-      {/* State Selector */}
-      <Typography>Select State</Typography>
-      <StateSelect
-        autoComplete="off"
-        countryid={selectedCountry?.id ?? 0} // Pass the selected country ID
-        onChange={(state) => {
-          setSelectedState(state as State); // Save selected state
-          setSelectedCity(null); // Reset city when state changes
-        }}
-        placeHolder="Select State"
-        disabled={!selectedCountry} // Disable if no country selected
-      />
 
-      {/* City Selector */}
-      <Typography>Select City</Typography>
-      <CitySelect
-        autoComplete="off"
-        countryid={selectedCountry?.id ?? 0} // Pass the selected country ID
-        stateid={selectedState?.id ?? 0} // Pass the selected state ID
-        onChange={(city) => setSelectedCity(city as City)} // Save selected city
-        placeHolder="Select City"
-        disabled={!selectedState} // Disable if no state selected
-      />
+interface Country {
+  id: number;
+  name: string;
+}
 
-      {/* Display selected values */}
-      <div style={{ marginTop: "20px" }}>
-        <h4>Selected Location:</h4>
-        <p>Country: {selectedCountry?.name || "None"}</p>
-        <p>State: {selectedState?.name || "None"}</p>
-        <p>City: {selectedCity?.name || "None"}</p>
-      </div>
+interface State {
+  id: number;
+  name: string;
+}
+interface City {
+  id: number;
+  name: string
+}
+
+interface LocationSelectorProps {
+}
+
+
+const GeoSelect: React.FC = () => {
+  const [countries, setCountries] = useState<{ id: number; name: string }[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState<number | null>(null);
+  const [states, setStates] = useState<{ id: number; name: string }[]>([]);
+  const [selectedState, setSelectedState] = useState<number | null>(null);
+  const [cities, setCities] = useState<{ id: number; name: string }[]>([]);
+  const [loading, setLoading] = useState({ countries: false, states: false, cities: false });
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+      setLoading((prev) => ({ ...prev, countries: true }));
+      try {
+        const response = await serverReq.get(`settings/geo/countries`);
+        setCountries(response.data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading((prev) => ({ ...prev, countries: false }));
+      }
+    };
+    fetchCountries();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedCountry) {
+      setStates([]);
+      setCities([]);
+      return;
+    }
+    const fetchStates = async () => {
+      setLoading((prev) => ({ ...prev, states: true }));
+      try {
+        const response = await serverReq.get(`settings/geo/states/${selectedCountry}`);
+        setStates(response.data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading((prev) => ({ ...prev, states: false }));
+      }
+    };
+    fetchStates();
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    if (!selectedState) {
+      setCities([]);
+      return;
+    }
+    const fetchCities = async () => {
+      setLoading((prev) => ({ ...prev, cities: true }));
+      try {
+        const response = await serverReq.get(`settings/geo/cities/${selectedCountry}/${selectedState}`);
+        setCities(response.data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading((prev) => ({ ...prev, cities: false }));
+      }
+    };
+    fetchCities();
+  }, [selectedState, selectedCountry]);
+
+  const handleCountryChange = (event: SelectChangeEvent<number>) => {
+    const countryId = parseInt(event.target.value as string, 10);
+    setSelectedCountry(countryId);
+    setSelectedState(null); // Reset state and city
+    setCities([]);
+  };
+
+  const handleStateChange = (event: SelectChangeEvent<number>) => {
+    const stateId = parseInt(event.target.value as string, 10);
+    setSelectedState(stateId);
+  };
+
+  return (
+    <div className="p-4">
+      {error && <div className="text-red-500">{`Error: ${error}`}</div>}
+      <CustomSelect
+        label="Country"
+        options={countries}
+        value={selectedCountry}
+        onChange={handleCountryChange}
+        loading={loading.countries}
+      />
+      <CustomSelect
+        label="State"
+        options={states}
+        value={selectedState}
+        onChange={handleStateChange}
+        loading={loading.states}
+        disabled={!selectedCountry || states.length === 0}
+      />
+      <CustomSelect
+        label="City"
+        options={cities}
+        value={null} // Update with selected city if needed
+        onChange={() => {}} // Update this handler if city selection is needed
+        loading={loading.cities}
+        disabled={!selectedState || cities.length === 0}
+      />
     </div>
   );
 };

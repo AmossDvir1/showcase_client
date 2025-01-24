@@ -2,16 +2,14 @@ import React, { useState } from "react";
 import { FormControl, IconButton } from "@mui/material";
 import Typography from "../../../components/sharedComponents/Typography";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { Chip } from "../../../components/sharedComponents/chip/Chip";
 import GeoDialog from "./GeoDialog";
-import { Country, State, City } from "react-country-state-city/dist/esm/types";
 import EditIcon from "@mui/icons-material/Edit";
 import RemoveIcon from "@mui/icons-material/Remove";
 
 interface GeoSettingsProps {
-  currentCity: { country: Country | string; state: State | string; city: City | string };
+  currentCity: { country: string; state: string; city: string };
   setCurrentCity: React.Dispatch<
-    React.SetStateAction<{ country: Country | string; state: State | string; city: City | string }>
+    React.SetStateAction<{ country: string; state: string; city: string }>
   >;
 }
 
@@ -20,9 +18,9 @@ const GeoSettings: React.FC<GeoSettingsProps> = ({
   setCurrentCity,
 }) => {
   const [isGeoDialogOpen, setIsGeoDialogOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-  const [selectedState, setSelectedState] = useState<State | null>(null);
-  const [selectedCity, setSelectedCity] = useState<City | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedState, setSelectedState] = useState<string>("");
+  const [selectedCity, setSelectedCity] = useState<string>("");
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   const openGeoDialog = () => {
@@ -34,9 +32,9 @@ const GeoSettings: React.FC<GeoSettingsProps> = ({
   };
 
   const editLocation = () => {
-    setSelectedCountry(currentCity.country as Country);
-    setSelectedState(currentCity.state as State);
-    setSelectedCity(currentCity.city as City);
+    setSelectedCountry(currentCity?.country);
+    setSelectedState(currentCity?.state);
+    setSelectedCity(currentCity?.city );
     setIsEditMode(true);
     setIsGeoDialogOpen(true);
   };
@@ -47,9 +45,9 @@ const GeoSettings: React.FC<GeoSettingsProps> = ({
 
   const onSaveLocation = () => {
     setCurrentCity({
-      country: selectedCountry!,
-      state: selectedState!,
-      city: selectedCity!,
+      country: selectedCountry,
+      state: selectedState,
+      city: selectedCity,
     });
     closeGeoDialog();
     setIsEditMode(false);
@@ -93,18 +91,11 @@ const GeoSettings: React.FC<GeoSettingsProps> = ({
           </div>
         </div>
       </FormControl>
-
-      {/* GeoDialog to add/edit location */}
       <GeoDialog
         isEditMode={isEditMode}
         isOpen={isGeoDialogOpen}
         closeDialog={closeGeoDialog}
-        selectedCountry={selectedCountry}
-        selectedState={selectedState}
-        selectedCity={selectedCity}
-        setSelectedCountry={setSelectedCountry}
-        setSelectedState={setSelectedState}
-        setSelectedCity={setSelectedCity}
+        
       />
     </div>
   );

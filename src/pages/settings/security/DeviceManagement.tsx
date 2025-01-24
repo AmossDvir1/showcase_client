@@ -79,10 +79,10 @@ const DeviceManagement: React.FC = () => {
   if (error) return <Typography className="text-black">{error}</Typography>;
 
   return (
-    <div className="bg-gray-50 dark:bg-dark-paper px-6 pb-6">
-      <div className="max-w-4xl mx-auto">
+    <>
+      <div className="">
         <Typography className="text-gray-800 text-2xl font-medium mb-6">
-          {"Device Management"}
+          {"Devices"}
         </Typography>
         {sessions?.length === 0 ? (
           <Typography className="text-gray-600 text-center">
@@ -190,7 +190,7 @@ const DeviceManagement: React.FC = () => {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

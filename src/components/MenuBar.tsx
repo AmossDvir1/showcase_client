@@ -31,6 +31,7 @@ import { Switch } from "./sharedComponents/Switch";
 import { setThemeMode } from "../redux/slices/themeSlice";
 import { colors } from "../utils/theme";
 import CustomButton from "./sharedComponents/CustomButton";
+import Logo from "../assets/Logo.png";
 
 interface Props {
   userSettings: string[];
@@ -165,6 +166,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                 className="flex items-center justify-center"
                 onClick={() => navigate("/")}
               >
+                {/* <img className="w-16" src={Logo}></img> */}
                 <AdbIcon className="flex  mr-1" />
                 {isTablet ? "" : "Showcase".toUpperCase()}
               </Link>
@@ -224,7 +226,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                     >
                       <Switch
                         size={isMobile ? "small" : "medium"}
-                        isDarkLightStyling
+                        type="theme"
                         onChange={(value: boolean) =>
                           onThemeSwitchChange(value)
                         }
@@ -344,7 +346,7 @@ export const MenuBar: React.FC<Props> = ({ userSettings }) => {
                   >
                     <Switch
                       size={isMobile ? "small" : "medium"}
-                      isDarkLightStyling
+                      type="theme"
                       onChange={(value: boolean) => onThemeSwitchChange(value)}
                       checked={
                         useAppSelector((state) => state.theme.mode) === "dark"
