@@ -40,8 +40,11 @@ const SettingsPage: React.FC = () => {
     !isMobile && activePage === "menu" && setActivePage("general");
   }, [isMobile]);
 
-  const [availableTechnologies, setAvailableTechnologies] = useState<
+  const [availableChips, setAvailableChips] = useState<
     ChipItem[]
+  >([]);
+  const [availableTechnologies, setAvailableTechnologies] = useState<
+    Technology[]
   >([]);
 
   // data fetching:
@@ -64,7 +67,8 @@ const SettingsPage: React.FC = () => {
         setLoadingProfileSettings(true);
         const techs = await fetchTechnologiesInventory();
         if (techs) {
-          setAvailableTechnologies(techs);
+          setAvailableTechnologies(techs)
+          setAvailableChips(techs);
         }
       } catch (err) {
         console.error("Failed to fetch technologies inventory", err);

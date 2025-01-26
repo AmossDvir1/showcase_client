@@ -6,6 +6,7 @@ import {
   InputLabel,
   FormControl,
   Collapse,
+  SelectChangeEvent,
 } from "@mui/material";
 import Typography from "../../../components/sharedComponents/Typography";
 import ChipsSelector from "../../../components/sharedComponents/chip/ChipsSelector";
@@ -20,6 +21,7 @@ import GeoSettings from "./GeoSettings";
 import { Switch } from "../../../components/sharedComponents/Switch";
 import useMediaQuery from "../../../components/responsiveness/useMediaQuery";
 import { Chip } from "../../../components/sharedComponents/chip/Chip";
+import TechnologiesSelectorV2 from "./TechSelector/TechnologiesSelectorV2";
 
 interface ProfileSettingsProps {
   settings?: IProfileSettings;
@@ -27,7 +29,7 @@ interface ProfileSettingsProps {
   loading?: boolean;
   onSave: (isAutoSave?: boolean) => Promise<any>;
   loadingSave?: boolean;
-  availableTechnologies: ChipItem[];
+  availableTechnologies: Technology[];
 }
 
 const ProfileSettings: React.FC<ProfileSettingsProps> = ({
@@ -39,7 +41,6 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
   setSettings,
 }) => {
   const isMobile = useMediaQuery(500);
-  const [bio, setBio] = useState<string>(settings?.bio ?? "");
   const [workList, setWorkList] = useState<IWork[]>(settings?.work ?? []);
   const [autoSaveEnabled, setAutoSaveEnabled] = useState<boolean>(true);
   const [isAutoSaving, setIsAutoSaving] = useState<boolean>(false);
@@ -48,14 +49,12 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
     state: string;
     city: string;
   }>(settings?.currentCity ?? { city: "", state: "", country: "" });
-  const [relationshipStatus, setRelationshipStatus] = useState<string>(
-    settings?.relationshipStatus ?? ""
-  );
 
-  const [selectedTechnologies, setSelectedTechnologies] = useState<ChipItem[]>(
-    settings?.technologies ?? []
-  );
+  const [selectedTechnologies, setSelectedTechnologies] = useState<
+    Technology[]
+  >(settings?.technologies ?? []);
 
+  useEffect(() => console.log(selectedTechnologies), [selectedTechnologies]);
   const handleAutoSave = async () => {
     if (!autoSaveEnabled) return;
 
@@ -67,28 +66,53 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
     }
   };
 
-  // Debounce the save call to optimize performance
   const debouncedHandleAutoSave = debounce(handleAutoSave, 1000);
 
   useEffect(() => {
     if (autoSaveEnabled) {
       debouncedHandleAutoSave();
     }
-
-    // Cleanup debounce on unmount
     return () => {
       debouncedHandleAutoSave.cancel();
     };
-  }, [settings]); // Trigger auto-save whenever settings change
+  }, [settings, autoSaveEnabled, settings?.work]);
+
+  const onBioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (settings) {
+      setSettings({ ...settings, bio: e.target.value });
+    }
+  };
+
+  const onRelationshipStatusChange = (e: SelectChangeEvent<string>) => {
+    if (settings) {
+      setSettings({ ...settings, relationshipStatus: e.target.value });
+    }
+  };
+
+  const onCurrentCityChange = (currentCity: {
+    country: string;
+    state: string;
+    city: string;
+  }) => {
+    if (settings) {
+      setSettings({ ...settings, currentCity: currentCity });
+    }
+  };
 
   useEffect(() => {
-    if (settings) {
-      setRelationshipStatus(settings.relationshipStatus ?? "");
-      setBio(settings.bio ?? "");
-      setWorkList(settings.work ?? []);
-      setSelectedTechnologies(settings.technologies ?? []);
+    if (workList) {
+      setSettings((prev: IProfileSettings) => ({
+        ...prev,
+        work: workList ?? [],
+      }));
     }
-  }, [settings]);
+    if (selectedTechnologies) {
+      setSettings((prev: IProfileSettings) => ({
+        ...prev,
+        technologies: selectedTechnologies ?? [],
+      }));
+    }
+  }, [workList, selectedTechnologies]);
 
   const locationList = {
     country: currentCity.country,
@@ -119,12 +143,9 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
             </Typography>
           </div>
           <div className="flex items-center justify-between">
-            <Collapse
-              orientation="horizontal"
-              in={autoSaveEnabled}
-            >
+            <Collapse orientation="horizontal" in={autoSaveEnabled}>
               <Chip
-              className={"w-36"}
+                className={"w-36"}
                 size={isMobile ? "small" : "medium"}
                 label={isAutoSaving ? "Saving..." : "Auto-save enabled"}
               ></Chip>
@@ -149,7 +170,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
         fullWidth
         value={settings?.bio}
         inputProps={{ className: "dark:text-dark-text" }}
-        onChange={(e) => setSettings({ ...settings, bio: e.target.value })}
+        onChange={onBioChange}
         className="mb-6 dark:bg-dark-paper-light dark:text-dark-text"
         placeholder="Tell us about yourself..."
       />
@@ -166,9 +187,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
           }}
           label="Relationship Status"
           value={settings?.relationshipStatus}
-          onChange={(e) =>
-            setSettings({ ...settings, relationshipStatus: e.target.value })
-          }
+          onChange={onRelationshipStatusChange}
         >
           <MenuItem value="Single">Single</MenuItem>
           <MenuItem value="In a Relationship">In a Relationship</MenuItem>
@@ -190,7 +209,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
 
       {settings?.work && (
         <WorkSettings
-          workList={settings?.work}
+          workList={workList}
           setWorkList={setWorkList}
         ></WorkSettings>
       )}
@@ -199,11 +218,11 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
       <FormControl fullWidth className="mb-6">
         <Typography className="mb-4 text-lg">Programming Languages</Typography>
 
-        <ChipsSelector
-          setSelectedChips={setSelectedTechnologies}
-          selectedChips={settings?.technologies ?? []}
-          availableChips={availableTechnologies ?? []}
-        ></ChipsSelector>
+        <TechnologiesSelectorV2
+          availableTechnologies={availableTechnologies ?? []}
+          setSelectedTechnologies={setSelectedTechnologies}
+          selectedTechnologies={selectedTechnologies}
+        ></TechnologiesSelectorV2>
 
         <div className="pt-6 flex items-center justify-center h-10">
           <Collapse in={!autoSaveEnabled}>
