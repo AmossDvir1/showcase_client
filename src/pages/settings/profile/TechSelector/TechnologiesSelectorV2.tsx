@@ -61,7 +61,7 @@ const DraggableTechnology: React.FC<{
       {...attributes}
       {...listeners}
       style={style}
-      className={`flex items-center p-2 my-2 rounded-md shadow-md 
+      className={`flex items-center p-2 my-2 rounded-md shadow-md touch-none 
         ${
           disabled
             ? "bg-gray-300 cursor-not-allowed dark:bg-dark-paper-light/25"
