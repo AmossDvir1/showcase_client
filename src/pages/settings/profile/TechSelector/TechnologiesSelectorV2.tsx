@@ -11,6 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "../../../../components/sharedComponents/Typography";
 import CustomButton from "../../../../components/sharedComponents/CustomButton";
+import useMediaQuery from "../../../../components/responsiveness/useMediaQuery";
 
 interface Props {
   availableTechnologies: Technology[];
@@ -31,7 +32,7 @@ const DroppablePanel: React.FC<{
       id={id}
       className="w-1/2 p-4 dark:bg-dark-paper bg-paper-dark rounded-md shadow-md flex flex-col h-[60vh]"
     >
-      <Typography className="text-lg font-medium mb-4">{title}</Typography>
+      <Typography className="text-md md:text-lg mb-4">{title}</Typography>
       {children}
     </div>
   );
@@ -68,7 +69,7 @@ const DraggableTechnology: React.FC<{
         }`}
     >
       <img src={tech.icon} alt={tech.label} className="w-6 h-6 mr-4 rounded" />
-      <Typography className="font-medium">{tech.label}</Typography>
+      <Typography className={`text-sm md:text-md ${disabled ? 'cursor-not-allowed':'cursor-move'}`}>{tech.label}</Typography>
     </div>
   );
 };
@@ -86,7 +87,7 @@ const SortableTechnology: React.FC<{
           alt={tech.label}
           className="w-6 h-6 mr-4 rounded"
         />
-        <Typography className="font-medium">{tech.label}</Typography>
+        <Typography className="text-sm md:text-md">{tech.label}</Typography>
       </div>
       <IconButton
         size="small"
@@ -104,6 +105,8 @@ const TechnologiesSelectorV2: React.FC<Props> = ({
   selectedTechnologies,
   setSelectedTechnologies,
 }) => {
+  const isMobile = useMediaQuery(500);
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<string | null>(null);
 
@@ -183,7 +186,8 @@ const TechnologiesSelectorV2: React.FC<Props> = ({
   return (
     <div>
       <CustomButton
-        className="px-4 py-2"
+      size={isMobile ? "small" : "medium"}
+        // className="px-4 py-2"
         onClick={() => setDialogOpen(true)}
       >
         Open Knowledge Selector
@@ -194,6 +198,7 @@ const TechnologiesSelectorV2: React.FC<Props> = ({
         onClose={() => setDialogOpen(false)}
         fullWidth
         maxWidth="md"
+        fullScreen={isMobile}
       >
         <DndContext
           collisionDetection={rectIntersection}
@@ -217,7 +222,7 @@ const TechnologiesSelectorV2: React.FC<Props> = ({
                       <IconButton onClick={handleBack}>
                         <ArrowBackIcon />
                       </IconButton>
-                      <Typography className="text-lg font-medium ml-2">
+                      <Typography className="text-md md:text-lg ml-2">
                         {currentCategory}
                       </Typography>
                     </div>
@@ -233,17 +238,17 @@ const TechnologiesSelectorV2: React.FC<Props> = ({
                   </>
                 ) : (
                   <>
-                    <Typography className="text-lg font-medium mb-4">
+                    <Typography className="text-md md:text-lg mb-4">
                       Select a Category
                     </Typography>
                     <div className="space-y-3 h-full overflow-y-auto">
                       {categorizedTechnologies.map((group) => (
                         <div
                           key={group.category}
-                          className="p-4 dark:bg-dark-paper-light bg-paper rounded-md shadow-md cursor-pointer hover:bg-gray-200"
+                          className="p-2 dark:bg-dark-paper-light bg-paper rounded-md shadow-md cursor-pointer hover:bg-gray-200"
                           onClick={() => handleCategoryClick(group.category)}
                         >
-                          <Typography className="font-medium">
+                          <Typography className="text-sm md:text-md cursor-pointer">
                             {group.category}
                           </Typography>
                         </div>
