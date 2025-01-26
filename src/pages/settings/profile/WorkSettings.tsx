@@ -32,15 +32,7 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
     resetInputs();
     setIsWorkDialogOpen(true);
   };
-  const closeWorkDialog = (
-    event?: any, 
-    reason?: "backdropClick" | "escapeKeyDown"
-  ) => {
-    if (reason === "backdropClick" || reason === "escapeKeyDown") {
-      return; // Do nothing to prevent closing
-    }
-    setIsWorkDialogOpen(false);
-  };
+  const closeWorkDialog = () => setIsWorkDialogOpen(false);
 
   const isAddButtonDisabled = (): boolean => {
     return !jobTitleInput || !workPlaceInput || !startedAtInput;
@@ -67,7 +59,7 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
   const removeRow = (index: number) => {
     setWorkList((prev) => {
       prev.splice(index, 1);
-      return prev;
+      return { ...prev };
     });
   };
 
@@ -81,7 +73,7 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
           primary,
         };
 
-        return prev;
+        return [...prev];
       });
     }
     closeWorkDialog();
@@ -91,15 +83,26 @@ const WorkSettings: React.FC<WorkSettingsProps> = ({
   };
 
   const onAddWork = () => {
-    setWorkList((prev) => [
-      ...prev,
-      {
-        jobTitle: jobTitleInput,
-        workPlace: workPlaceInput,
-        startedAt: startedAtInput.toDate(),
-        primary,
-      },
-    ]);
+    setWorkList((prev) =>
+      prev.length > 0
+        ? [
+            ...prev,
+            {
+              jobTitle: jobTitleInput,
+              workPlace: workPlaceInput,
+              startedAt: startedAtInput.toDate(),
+              primary,
+            },
+          ]
+        : [
+            {
+              jobTitle: jobTitleInput,
+              workPlace: workPlaceInput,
+              startedAt: startedAtInput.toDate(),
+              primary,
+            },
+          ]
+    );
     closeWorkDialog();
     resetInputs();
   };

@@ -147,7 +147,7 @@ interface ICurrentCity {
 }
 
 interface IProfileSettings {
-  technologies?: ChipItem[];
+  technologies?: Technology[];
   bio?: string;
   work?: IWork[] | [];
   relationshipStatus?: string;
