@@ -1,6 +1,5 @@
 import React from "react";
 import Typography from "../../components/sharedComponents/Typography";
-import { Chip } from "../../components/sharedComponents/chip/Chip";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import WorkIcon from "@mui/icons-material/Work";
 import HomeIcon from "@mui/icons-material/Home";
@@ -8,6 +7,8 @@ import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import { extractMonthYear } from "../../utils/utils";
 import CustomButton from "../../components/sharedComponents/CustomButton";
 import TechnologyChip from "../../components/sharedComponents/chip/TechChipWithPopover";
+import { useNavigate } from "react-router-dom";
+
 type ProfileInfoCardProps = {
   relationshipStatus?: string;
   work?: IWork[];
@@ -25,6 +26,7 @@ const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
   technologies,
   isCurrentUser,
 }) => {
+  const navigate = useNavigate();
   const primaryWork = work?.find((work) => work.primary);
   return (
     <div className="bg-paper-light dark:bg-dark-paper shadow-lg border-zinc-200 border-solid border-[1px] p-4 rounded-lg h-full flex flex-col">
@@ -88,7 +90,7 @@ const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({
             variant="outlined"
             size="medium"
             glow={false}
-            // onClick={openDialog}
+            onClick={() => navigate("/settings?tab=profile")}
           >
             Edit Details
           </CustomButton>

@@ -22,7 +22,7 @@ import ResponsiveComponent from "./responsiveness/ResponsiveComponent";
 import NotificationIcon from "./notifications/NotificationIcon";
 import useMediaQuery from "./responsiveness/useMediaQuery";
 import MiniProfilePicture from "./sharedComponents/profilePicture/MiniProfilePicture";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/rootReducer";
 import ChatDrawer from "./chat/ChatDrawer";
 import SwipeableMobileDrawer from "./sharedComponents/SwipeableMobileDrawer";
@@ -32,13 +32,14 @@ import { setThemeMode } from "../redux/slices/themeSlice";
 import { colors } from "../utils/theme";
 import CustomButton from "./sharedComponents/CustomButton";
 import Logo from "../assets/Logo.png";
+import { useDispatch } from "react-redux";
 
 interface Props {
   userSettings: string[];
 }
 
 export const MenuBar: React.FC<Props> = ({ userSettings }) => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   const onThemeSwitchChange = (checked: boolean) => {
     dispatch(setThemeMode(checked ? "dark" : "light")); // Dispatch the action

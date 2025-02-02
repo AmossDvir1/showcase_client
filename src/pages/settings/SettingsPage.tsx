@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
@@ -11,7 +12,6 @@ import ProfileSettings from "./profile/ProfileSettings";
 import DeviceManagement from "./security/DeviceManagement";
 import { Dialog, ListItemButton } from "@mui/material";
 import useMediaQuery from "../../components/responsiveness/useMediaQuery";
-import { useNavigate } from "react-router-dom";
 import { getUserSettings } from "../../controllers/userSettingsController/profileSettings/getUserSettings";
 import { fetchTechnologiesInventory } from "../../controllers/technologiesController/fetchTechnologiesInventory";
 import { updateUserProfileSettings } from "../../controllers/userSettingsController/profileSettings/updateUserProfileSettings";
@@ -26,19 +26,29 @@ const defaultSettings = {
 };
 
 const SettingsPage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const isMobile = useMediaQuery(500);
   const navigate = useNavigate();
+
+    // Get tab from URL or fallback to default
+    const initialTab = searchParams.get("tab") || (isMobile ? "menu" : "general");
+
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
-  const [activePage, setActivePage] = useState<string>(
-    isMobile ? "menu" : "general"
-  );
+  const [activePage, setActivePage] = useState<string>(initialTab);
+
   const [profileSettings, setProfileSettings] =
     useState<IProfileSettings>(defaultSettings);
+
   const [loadingProfileSettings, setLoadingProfileSettings] =
     useState<boolean>(false);
+
   useEffect(() => {
     !isMobile && activePage === "menu" && setActivePage("general");
   }, [isMobile]);
+
+  useEffect(() => {
+    setSearchParams({ tab: activePage }, { replace: true });
+  }, [activePage]);
 
   const [availableChips, setAvailableChips] = useState<
     ChipItem[]

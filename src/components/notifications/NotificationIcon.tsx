@@ -6,12 +6,12 @@ import {
   fetchNotifications,
   markAsRead,
 } from "../../redux/slices/notifications";
-import { useAppDispatch } from "../../redux/hooks";
 import { useAppSelector } from "../../redux/hooks";
 import NotificationsWindow from "./NotificationsWindow";
 import { IconButton } from "@mui/material";
+import { useDispatch } from "react-redux";
 const NotificationIcon = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   const notifications: INotification[] = useAppSelector(
     (state) => state.notifications

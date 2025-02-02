@@ -5,9 +5,10 @@ import {
     markAsRead,
     markAsUnread,
   } from "../../redux/slices/notifications";
+import { useDispatch } from 'react-redux';
 
 const NotificationStatusDot: React.FC<{notification: INotification}>= ({notification}) => {
-    const dispatch = useAppDispatch();
+    const dispatch = useDispatch();
 
     const onDotClick = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
         e.stopPropagation();

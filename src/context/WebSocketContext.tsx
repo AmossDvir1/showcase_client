@@ -42,7 +42,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const [socket, setSocket] = useState<Socket | null>(null);
   const [conversationsIds, setConversationsIds] = useState<ConversationId[]>([]);
   const { isAuthenticated, isActivated, setAccessToken } = useAuth();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
 
   // Function to establish socket connection with latest token
   const establishSocketConnection = useCallback(async () => {
