@@ -72,7 +72,7 @@ const AiAssistantInfo: React.FC = () => {
       >
         <span
           onClick={handleClick}
-          className={`ml-2 text-[#898d96] cursor-pointer hover:opacity-80 transition-opacity duration-300`}
+          className={`ml-2 flex items-center text-[#898d96] cursor-pointer hover:opacity-80 transition-opacity duration-300`}
         >
           <InfoOutlinedIcon fontSize="small" />
         </span>

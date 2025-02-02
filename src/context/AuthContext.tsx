@@ -39,7 +39,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkFinished: false,
   });
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const userInfoStatus = useSelector((state: RootState) => state.user.status);
 

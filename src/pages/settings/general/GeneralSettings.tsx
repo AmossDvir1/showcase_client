@@ -10,12 +10,13 @@ import {
   updateAiAssistantStatus,
 } from "../../../redux/slices/aiAssistantSlice";
 import AiAssistantInfo from "./AiAssistantInfo";
+import { useDispatch } from "react-redux";
 
 const GeneralSettings: React.FC = () => {
   const aiEnabled = useAppSelector(aiAssistantStatus);
   const [aiEnabledLocal, setAiEnabledLocal] = useState(aiEnabled); // Local state for optimistic UI
 
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchAiAssistantStatus());
@@ -59,7 +60,7 @@ const GeneralSettings: React.FC = () => {
             onChange={(value: boolean) => onThemeSwitchChange(value)}
           />
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center ">
           <Typography>Enable Showcase AI</Typography>
           <Switch
             type="ai"

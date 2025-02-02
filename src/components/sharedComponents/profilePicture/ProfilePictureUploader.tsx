@@ -42,7 +42,7 @@ const ProfilePictureUploader: React.FC<ProfilePictureUploaderProps> = ({
   const [filename, setFilename] = useState("");
 
   const [imageOffset, setImageOffset] = useState<ImageOffset>({ x: 0, y: 0 });
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const userInfoStatus = useSelector((state: RootState) => state.user.status);
   const [dimensions, setDimensions] = useState<ImageDimensions>({

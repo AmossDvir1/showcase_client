@@ -4,7 +4,16 @@ import {
   useDraggable,
   useDroppable,
   rectIntersection,
+  DragOverlay,
+  DragEndEvent,
+  DragStartEvent,
 } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from "@dnd-kit/sortable";
 import { Dialog, IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,6 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "../../../../components/sharedComponents/Typography";
 import CustomButton from "../../../../components/sharedComponents/CustomButton";
 import useMediaQuery from "../../../../components/responsiveness/useMediaQuery";
+
 
 interface Props {
   availableTechnologies: Technology[];
@@ -33,7 +43,62 @@ const DroppablePanel: React.FC<{
       className="w-1/2 p-4 dark:bg-dark-paper bg-paper-dark rounded-md shadow-md flex flex-col h-[60vh]"
     >
       <Typography className="text-md md:text-lg mb-4">{title}</Typography>
-      {children}
+      <div className="flex-1 overflow-y-auto">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const TechnologyItem: React.FC<{
+  tech: Technology;
+  disabled?: boolean;
+  isDragging?: boolean;
+  hideDelete?: boolean;
+  onDelete?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => void;
+  dragHandleProps?: any;
+}> = ({ tech, disabled = false, isDragging = false, hideDelete = true, onDelete, dragHandleProps }) => {
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    if (onDelete) {
+      onDelete(e, tech._id);
+    }
+  };
+
+  return (
+    <div
+      className={`flex items-center p-2 my-2 rounded-md shadow-md touch-none 
+        ${
+          disabled
+            ? "bg-gray-300 cursor-not-allowed dark:bg-dark-paper-light/25"
+            : "dark:bg-dark-paper-light bg-paper cursor-move hover:bg-gray-200 dark:hover:bg-dark-paper-light/50"
+        }
+        ${isDragging ? "opacity-50" : "opacity-100"}
+      `}
+    >
+      <div className="flex-grow flex items-center" {...dragHandleProps}>
+        <img src={tech.icon} alt={tech.label} className="w-6 h-6 mr-4 rounded" />
+        <Typography className={`text-sm md:text-md ${disabled ? 'cursor-not-allowed':'cursor-move'}`}>
+          {tech.label}
+        </Typography>
+      </div>
+      {!hideDelete && (
+        <div 
+          className="flex items-center" 
+          onClick={e => e.stopPropagation()}
+          onPointerDown={e => e.stopPropagation()}
+          onMouseDown={e => e.stopPropagation()}
+          onTouchStart={e => e.stopPropagation()}
+        >
+          <IconButton
+            size="small"
+            onClick={handleDelete}
+            className="ml-2 p-0"
+          >
+            <DeleteIcon fontSize="small" />
+          </IconButton>
+        </div>
+      )}
     </div>
   );
 };
@@ -41,61 +106,54 @@ const DroppablePanel: React.FC<{
 const DraggableTechnology: React.FC<{
   tech: Technology;
   disabled?: boolean;
-  onDragStart?: () => void;
-}> = ({ tech, disabled = false, onDragStart }) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+}> = ({ tech, disabled = false }) => {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: tech._id,
     disabled,
+    data: {
+      type: 'available',
+      tech,
+    },
   });
 
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-        opacity: disabled ? 0.5 : 1,
-      }
-    : undefined;
-
   return (
-    <div
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
-      style={style}
-      className={`flex items-center p-2 my-2 rounded-md shadow-md 
-        ${
-          disabled
-            ? "bg-gray-300 cursor-not-allowed dark:bg-dark-paper-light/25"
-            : "dark:bg-dark-paper-light bg-paper cursor-move hover:bg-gray-200 dark:hover:bg-dark-paper-light/50"
-        }`}
-    >
-      <img src={tech.icon} alt={tech.label} className="w-6 h-6 mr-4 rounded" />
-      <Typography className={`text-sm md:text-md ${disabled ? 'cursor-not-allowed':'cursor-move'}`}>{tech.label}</Typography>
+    <div ref={setNodeRef}>
+      <TechnologyItem 
+        tech={tech} 
+        disabled={disabled}
+        isDragging={isDragging}
+        dragHandleProps={{...attributes, ...listeners}}
+      />
     </div>
   );
 };
 
 const SortableTechnology: React.FC<{
   tech: Technology;
-  onDelete: (id: string) => void;
+  onDelete: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => void;
 }> = ({ tech, onDelete }) => {
-  // Remove useSortable and replace with simple sorting
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    isDragging,
+  } = useSortable({
+    id: `selected-${tech._id}`,
+    data: {
+      type: 'selected',
+      tech,
+    },
+  });
+
   return (
-    <div className="flex items-center p-2 my-2 dark:bg-dark-paper-light bg-paper rounded-md shadow-md">
-      <div className="flex-grow flex items-center">
-        <img
-          src={tech.icon}
-          alt={tech.label}
-          className="w-6 h-6 mr-4 rounded"
-        />
-        <Typography className="text-sm md:text-md">{tech.label}</Typography>
-      </div>
-      <IconButton
-        size="small"
-        onClick={() => onDelete(tech._id)}
-        className="ml-2 p-0"
-      >
-        <DeleteIcon fontSize="small" />
-      </IconButton>
+    <div ref={setNodeRef}>
+      <TechnologyItem 
+        tech={tech}
+        isDragging={isDragging}
+        hideDelete={false}
+        onDelete={onDelete}
+        dragHandleProps={{...attributes, ...listeners}}
+      />
     </div>
   );
 };
@@ -106,17 +164,18 @@ const TechnologiesSelectorV2: React.FC<Props> = ({
   setSelectedTechnologies,
 }) => {
   const isMobile = useMediaQuery(500);
-
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<string | null>(null);
-
-  const [disabledTechnologies, setDisabledTechnologies] = useState<string[]>(
-    []
-  );
+  const [disabledTechnologies, setDisabledTechnologies] = useState<string[]>([]);
+  const [activeDragData, setActiveDragData] = useState<{
+    id: string;
+    tech: Technology;
+    type: 'available' | 'selected';
+  } | null>(null);
 
   useEffect(() => {
     if (selectedTechnologies?.length > 0) {
-      setDisabledTechnologies(selectedTechnologies.map((tech:Technology) => tech._id));
+      setDisabledTechnologies(selectedTechnologies.map((tech) => tech._id));
     } else {
       setDisabledTechnologies([]);
     }
@@ -133,36 +192,78 @@ const TechnologiesSelectorV2: React.FC<Props> = ({
     ),
   }));
 
-  const handleDragEnd = (event: any) => {
-    const { active, over, collisions } = event;
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    setActiveDragData({
+      id: active.id as string,
+      tech: active.data.current?.tech as Technology,
+      type: active.data.current?.type as 'available' | 'selected',
+    });
+  };
 
-    // Check if dropped over the selected panel area
-    const isDroppedOnSelectedPanel = collisions?.some(
-      (collision: any) => collision.id === "selected-panel"
-    );
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveDragData(null);
 
-    if (isDroppedOnSelectedPanel) {
-      const draggedTech = availableTechnologies.find(
-        (tech) => tech._id === active.id
+    if (!over) return;
+
+    // Handle sorting within selected panel
+    if (active.data.current?.type === 'selected' && over.id.toString().startsWith('selected-')) {
+      const oldIndex = selectedTechnologies.findIndex(
+        (tech) => `selected-${tech._id}` === active.id
+      );
+      const newIndex = selectedTechnologies.findIndex(
+        (tech) => `selected-${tech._id}` === over.id
       );
 
-      if (
-        draggedTech &&
-        !selectedTechnologies.find((t) => t._id === draggedTech._id)
-      ) {
-        // Create a new object to break the reference
-        const newTech = { ...draggedTech };
+      if (oldIndex !== newIndex) {
+        setSelectedTechnologies((techs) => arrayMove(techs, oldIndex, newIndex));
+      }
+      return;
+    }
 
-        setSelectedTechnologies((prev) => [...prev, newTech]);
+    // Handle dropping from available to selected
+    if (
+      active.data.current?.type === 'available' &&
+      over.id.toString().startsWith('selected-')
+    ) {
+      const draggedTech = active.data.current.tech as Technology;
+      
+      // Only proceed if the technology isn't already selected
+      if (!selectedTechnologies.find((t) => t._id === draggedTech._id)) {
+        // Find the index where we should insert the new item
+        const overIndex = selectedTechnologies.findIndex(
+          (tech) => `selected-${tech._id}` === over.id
+        );
+
+        setSelectedTechnologies((prev) => {
+          const newTechs = [...prev];
+          // Insert the new technology at the target position
+          newTechs.splice(overIndex, 0, draggedTech);
+          return newTechs;
+        });
+        
+        setDisabledTechnologies((prev) => [...prev, draggedTech._id]);
+      }
+    } else if (
+      // Handle dropping on the empty selected panel
+      active.data.current?.type === 'available' &&
+      over.id === 'selected-panel'
+    ) {
+      const draggedTech = active.data.current.tech as Technology;
+      
+      if (!selectedTechnologies.find((t) => t._id === draggedTech._id)) {
+        setSelectedTechnologies((prev) => [...prev, draggedTech]);
         setDisabledTechnologies((prev) => [...prev, draggedTech._id]);
       }
     }
   };
 
-  const handleDeleteTechnology = (techId: string) => {
-    // Find the original technology to re-enable
+  const handleDeleteTechnology = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>,techId: string) => {
+    e.stopPropagation();
+    e.preventDefault();
     const techToReEnable = selectedTechnologies.find(
-      (tech) => `selected-${tech._id}` === techId || tech._id === techId
+      (tech) => tech._id === techId
     );
 
     if (techToReEnable) {
@@ -186,8 +287,7 @@ const TechnologiesSelectorV2: React.FC<Props> = ({
   return (
     <div>
       <CustomButton
-      size={isMobile ? "small" : "medium"}
-        // className="px-4 py-2"
+        size={isMobile ? "small" : "medium"}
         onClick={() => setDialogOpen(true)}
       >
         Open Knowledge Selector
@@ -202,6 +302,7 @@ const TechnologiesSelectorV2: React.FC<Props> = ({
       >
         <DndContext
           collisionDetection={rectIntersection}
+          onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
           <div className="p-4 flex flex-col h-[70vh] overflow-hidden">
@@ -226,15 +327,17 @@ const TechnologiesSelectorV2: React.FC<Props> = ({
                         {currentCategory}
                       </Typography>
                     </div>
-                    {categorizedTechnologies
-                      .find((group) => group.category === currentCategory)
-                      ?.technologies.map((tech) => (
-                        <DraggableTechnology
-                          key={tech._id}
-                          tech={tech}
-                          disabled={disabledTechnologies.includes(tech._id)}
-                        />
-                      ))}
+                    <div className="flex-1 overflow-y-auto">
+                      {categorizedTechnologies
+                        .find((group) => group.category === currentCategory)
+                        ?.technologies.map((tech) => (
+                          <DraggableTechnology
+                            key={tech._id}
+                            tech={tech}
+                            disabled={disabledTechnologies.includes(tech._id)}
+                          />
+                        ))}
+                    </div>
                   </>
                 ) : (
                   <>
@@ -260,16 +363,31 @@ const TechnologiesSelectorV2: React.FC<Props> = ({
 
               {/* Selected Panel */}
               <DroppablePanel id="selected-panel" title="Selected Technologies">
-                {selectedTechnologies.map((tech) => (
-                  <SortableTechnology
-                    key={tech._id}
-                    tech={tech}
-                    onDelete={handleDeleteTechnology}
-                  />
-                ))}
+                <SortableContext
+                  items={selectedTechnologies.map((tech) => `selected-${tech._id}`)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {selectedTechnologies.map((tech) => (
+                    <SortableTechnology
+                      key={`selected-${tech._id}`}
+                      tech={tech}
+                      onDelete={handleDeleteTechnology}
+                    />
+                  ))}
+                </SortableContext>
               </DroppablePanel>
             </div>
           </div>
+
+          <DragOverlay>
+            {activeDragData ? (
+              <TechnologyItem 
+                tech={activeDragData.tech}
+                hideDelete={activeDragData.type === 'available'}
+                onDelete={handleDeleteTechnology}
+              />
+            ) : null}
+          </DragOverlay>
         </DndContext>
       </Dialog>
     </div>

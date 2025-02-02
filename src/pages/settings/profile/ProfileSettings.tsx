@@ -54,7 +54,14 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
     Technology[]
   >(settings?.technologies ?? []);
 
-  useEffect(() => console.log(selectedTechnologies), [selectedTechnologies]);
+  useEffect(
+    () =>
+      settings?.technologies && settings?.technologies?.length > 0
+        ? setSelectedTechnologies(settings?.technologies)
+        : setSelectedTechnologies([]),
+    [settings?.technologies]
+  );
+
   const handleAutoSave = async () => {
     if (!autoSaveEnabled) return;
 

@@ -30,6 +30,7 @@ import CustomButton from "../CustomButton";
 import AiSuggestions from "../AiSuggestions";
 import { serverReq } from "../../../API/utils/axiosConfig";
 import { aiAssistantStatus, fetchAiAssistantStatus } from "../../../redux/slices/aiAssistantSlice";
+import { useDispatch } from "react-redux";
 
 interface PostProps {
   post: Post;
@@ -39,7 +40,7 @@ interface PostProps {
 export const Post: React.FC<PostProps> = ({ post, media = [] }) => {
   const navigate = useNavigate();
   const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const userInfo = useAppSelector((state: RootState) => state.user.userInfo);
   const userInfoStatus = useAppSelector(
     (state: RootState) => state.user.status

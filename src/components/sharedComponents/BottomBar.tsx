@@ -1,16 +1,17 @@
 import React from "react";
-import { Box, Divider } from "@mui/material";
+import { Box } from "@mui/material";
 import ChatDrawer from "../chat/ChatDrawer";
 import Chat from "../chat/Chat";
 import { RootState } from "../../redux/rootReducer";
 import { removeOpenChat } from "../../redux/slices/chats";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppSelector } from "../../redux/hooks";
 import useMediaQuery from "../responsiveness/useMediaQuery";
+import { useDispatch } from "react-redux";
 
 interface BottomBarProps {}
 
 const BottomBar: React.FC<BottomBarProps> = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const isMobile = useMediaQuery(600);
 
   const openChats: UserDetails[] = useAppSelector(

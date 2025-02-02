@@ -15,18 +15,19 @@ import Profile from "./pages/profile/ProfilePage";
 import { WebSocketProvider } from "./context/WebSocketContext";
 import SettingsPage from "./pages/settings/SettingsPage";
 import AboutUs from "./pages/AboutUs";
-import { useAppSelector, useAppDispatch } from "./redux/hooks";
+import { useAppSelector } from "./redux/hooks";
 import { useEffect } from "react";
 import { createMuiTheme } from "./utils/theme";
 import MobileMessenger from "./pages/mobileMessenger/MobileMessenger";
 import Room from "./pages/room/Room";
 import { fetchAiAssistantStatus } from "./redux/slices/aiAssistantSlice";
+import { useDispatch } from "react-redux";
 
 const rootElement = document.getElementById("root");
 
 
 const App = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const themeMode = useAppSelector((state) => state.theme.mode);
   const {checkFinished, isAuthenticated, isActivated} = useAuth();
   const muiTheme = createMuiTheme(themeMode, rootElement);

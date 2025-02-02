@@ -22,7 +22,7 @@ interface WritePostProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
 export const WritePost: React.FC<WritePostProps> = ({ ...rest }) => {
   const isDarkMode = useAppSelector((state) => state.theme.mode) === "dark";
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const userInfoStatus = useSelector((state: RootState) => state.user.status);
 

@@ -24,7 +24,7 @@ const Profile: React.FC = () => {
   }>();
   const [userData, setUserData] = useState<UserProfile | null>(null);
   const [relationship, setRelationship] = useState<RelationshipState>();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const userInfoStatus = useSelector((state: RootState) => state.user.status);
 
